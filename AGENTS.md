@@ -1,0 +1,496 @@
+# AGENTS.md — репозиторий продукта CoLabus
+
+Проект-хозяин (host project) — это проект, над которым вы работаете.
+Ядро CoLabus — инструмент, а не предмет работы.
+Разработка самого ядра ведётся в репозитории разработки, не здесь.
+
+Этот репозиторий — собранный продукт: его содержимое генерирует сборка из репозитория разработки, и правки здесь не
+принимаются. Если вас попросили «изучить план и подготовиться к работе», ваш план — в `.ai/TASK.md` и `.ai/PLAN.md`
+вашего проекта-хозяина, а не здесь. Чтобы работать с ядром, установите его в свой проект (см. `README.md`) и работайте
+в своём проекте.
+
+Ниже — правила протокола в той же редакции, что установщик ставит в проект-хозяин (блок
+`docs/product/host-block/AGENTS.block.md`). Идентификаторы решений расшифрованы в `docs/product/RULES-IN-FORCE.md`.
+
+## AI Collaboration Protocol v1.9.6
+
+Several AI coding assistants work in this repository: GPT/Codex, Claude,
+DeepSeek, Gemini, Qwen, GLM, Mistral, Copilot, and others. They do not share chat
+history. The filesystem is the only channel between them.
+
+Read this file at the start of every session, then read `.ai/TASK.md`.
+
+Chat history is not project memory. Never justify a claim with "we discussed
+this earlier". If it is not in the repository, it did not happen.
+
+---
+
+## 1. Source of truth
+
+Ranked. When two sources disagree, the higher one wins.
+
+1. `.ai/DECISIONS.md` - approved decisions. Binding.
+2. The working tree, plus `git status`, `git diff`, `git log`. What the code
+   actually is.
+3. `.ai/TASK.md` - what is being worked on now, and the open questions.
+4. `.ai/PLAN.md` - the proposed approach. A draft until approved.
+5. `.ai/worklog/` - one journal per session, newest first.
+6. `.ai/ARCHIVE.md` - cold history.
+
+If a higher source contradicts a lower one, the lower one is stale. Fix it or
+say so in your journal. Do not act on the stale version.
+
+`.ai/runtime/` is disposable session state and is not tracked. Nothing there
+is a source of truth.
+
+---
+
+## 2. Authority
+
+- A proposal written by an AI agent is not a decision.
+- A decision exists only as an approved block (e.g. `PROTO-DEC-nnnn` for the
+  protocol core, or `DEC-nnnn` in a product repository) in `.ai/DECISIONS.md`
+  carrying `Approved by:` with a human name. That text records who authorized
+  the work. It is a record, not proof; the owner remains the only one who can
+  approve. An owner approval given in a direct conversation may be transcribed
+  into the block by the session that holds the lock, with a provenance note
+  (for example `Approved by: <name> (direct owner confirmation, YYYY-MM-DD,
+  transcribed by <agent>)`); an agent must never write the line without a
+  direct owner confirmation, and a proposal stays a proposal until then.
+  Proposals belong in `.ai/PLAN.md`; `Proposed` status is forbidden in
+  `DECISIONS.md`.
+- Any agent may challenge any other agent. Record the disagreement in
+  `.ai/TASK.md` under Open questions. Do not silently overwrite.
+- The human owner decides. Ask rather than assume.
+
+### Who does what
+
+`.ai/TASK.md` may carry a `## Roles` section naming one assistant per line:
+
+```markdown
+## Roles
+
+- qwen: implementer
+- deepseek: reviewer, opposes the result before handoff
+- claude: second reviewer only if the two disagree
+- glm: complex reasoning, audits, or multilingual tasks
+- mistral: code reviewer or implementer
+- copilot: reviewer, architectural auditor, or implementer
+```
+
+The owner writes it. Nothing here assigns, rotates or enforces: the role text
+is free, so a priority or a condition can be written into it, and the owner
+changes it per task at will.
+
+At session start each assistant is told its own role. One that is not named is
+told so and told to ask before starting. This exists because the first pilot
+gave one task to two assistants and received two answers to it.
+
+An implementer may not unilaterally mark a task `Status: Completed` in
+`.ai/TASK.md`. Completion requires independent verification by the assigned
+opposing reviewer or the human owner.
+
+For the reusable paired work cycle runbook, see .ai/docs/PAIRED-CYCLE.md.
+
+Assistants can also be called directly from a terminal (`agy`, `codex`, `claude`,
+`copilot`, `vibe`). A call is a dispatch, not a transfer of authority: the called
+agent starts its own session, writes its own journal and records its own evidence,
+terminal output is not Evidence, and a caller that shaped the work may not certify
+it. The contract is .ai/docs/CLI-AGENTS.md and it binds every project.
+
+### Risk-Scaled Adversarial Peer Review (PROTO-DEC-0038)
+
+Review requirements scale by blast radius (superseding PROTO-DEC-0027 item 1 only):
+
+1. **Protocol Core and High-Risk Paths**: For anything under `.ai/`, `.claude/`, hooks,
+   validator, gates, and consumer security/data paths, upon completing implementation
+   of a plan or council decision, the implementer MUST compose an exhaustive, unified
+   adversarial audit prompt covering every item of the implementation. Opposing
+   reviewers hunt for defects, vulnerabilities, edge cases, and regressions, and
+   render explicit verdicts (PASS / FAIL / BLOCKED / RECOMMENDATION). No task touching
+   core protocol paths may be marked `Status: Completed` without this full
+   prompt+report review process. The final check of a high-risk candidate requires no fewer
+   than two parallel independent certifiers (PROTO-DEC-0041 item 2), a single reviewer
+   cannot close a high-risk Completed task, and the certifiers must be outside execution
+   and control (item 1).
+2. **Docs, Config, and Low-Blast-Radius Edits**: Documentation, configuration, and
+   one-line fixes require one independent reviewer statement (a review file or a
+   journal-visible verdict); no separate prompt+report pair is required.
+3. **Artifact Size Caps**: Prompts <= 150 lines, reports <= 250 lines unless an
+   incident warrants expansion (owner-tunable).
+
+For the validator to enforce that gate, a completed task must also include a
+`## Completion gate` section in `.ai/TASK.md` with these fields (in the protocol
+source repository, under `docs/reviews/`; in installed host projects, under an owner-selected
+in-repository path satisfying safe path checks):
+
+```markdown
+- Adversarial review prompt: docs/reviews/<prompt>.md
+- Independent review: docs/reviews/<review>.md
+```
+
+Both files must exist; the prompt must identify the unified adversarial audit
+prompt, and the review must name an independent reviewer and an explicit
+`PASS` or `RECOMMENDATION` verdict. The independent review must carry
+`Mode: CERTIFYING` with a `Receipt-Owner` whose receipt verifies against the
+current tree and whose journal entry explicitly names the review path.
+A `FAIL` or `BLOCKED` verdict cannot certify completion.
+
+A certifying verdict requires four capabilities: `FS_WRITE`, `SHELL_EXEC`,
+`EVIDENCE_SIGN`, and `REPO_READ`. Capability is determined by the orchestrator
+profile, never self-declared. The review header must declare `Mode: CERTIFYING`
+and identify its session in `Receipt-Owner: <owner-name>` (or legacy `Session:`),
+using the owner name output by `protocol-session.cjs start` (distinct from session id).
+Advisory outputs (from models lacking direct repository access or verification
+capability) carry `[MODE: READ-ONLY ADVISORY]` and are persisted only through
+the section 5.5 transcription fallback, always explicitly marked non-certifying.
+An advisory review cannot satisfy the independent-review completion gate.
+
+A `FAIL` or `BLOCKED` verdict requires at least one reproduction per claim;
+otherwise it is advisory and cannot reopen a decision or block completion.
+
+---
+
+## 3. Session start
+
+Mandatory, in order:
+
+1. Read `.ai/TASK.md`.
+2. Run `git status --short --branch` and `git log --oneline -10`.
+3. Take the inventory, not just the diff. `git status` shows what changed; it
+   never shows a tracked file nobody touched, so a large primary source can stay
+   invisible for a whole chain of sessions. Run `git ls-files` and look at what
+   the repository actually holds. When a task names its sources, check that list
+   against the inventory before you trust it, and say in your journal that you
+   did. A scope inherited from a previous prompt is not a verified scope.
+4. Read the recent journals in `.ai/worklog/`, including other agents'.
+5. Read `.ai/DECISIONS.md` when the task touches architecture, data, or
+   external contracts.
+6. If `.ai/TASK.md` says there is no active task, ask the owner. Do not invent
+   a task and do not start refactoring.
+
+For Claude and Codex, an enabled and trusted SessionStart hook injects most of
+this and names your journal file. The injection is bounded; reading omitted
+files is still your job. Codex activation is described in .ai/docs/CODEX.md.
+
+---
+
+## 4. Session end
+
+Mandatory, in order:
+
+1. Review your own diff with `git diff`.
+2. Run the checks in section 7. Report what you actually ran.
+3. Write one entry in your session journal, with all five labels.
+4. Update `.ai/TASK.md` if the state of the task changed. If completing a
+   plan or council decision, compose and dispatch the Unified Adversarial
+   Audit Prompt (§2) before marking `Status: Completed`.
+5. Release the shared-document lock if you hold it.
+6. Do not commit and do not push unless the owner instructed it.
+
+An entry that says only "made changes" is not an entry. Say what changed, what
+you verified, and what is still open. A claim about what you did not change
+must still be true when the session ends.
+
+---
+
+## 5. Session journals
+
+Each session writes exactly one file in `.ai/worklog/`. No session writes to
+another session's file, so two agents can never overwrite each other and no
+lock is needed here.
+
+- Claude/Codex with active hooks: use the journal created by SessionStart.
+  Use its basename without `.md` as the lock owner and evidence owner.
+- Any other assistant, or one whose hooks are not active, starts its session
+  explicitly and receives the same journal and the same context:
+
+```bash
+node .ai/bin/protocol-session.cjs start --agent <name>
+```
+
+  It prints the context, the session id and one owner name. Use that name for
+  the journal, for the lock and for the evidence. `stop --agent <name>
+  --session <id>` runs the same check the Stop hook runs.
+- `README.md` in that directory is not a journal. Every other file is one.
+
+Nothing inside one checkout can stop a session writing into another session's
+journal. The separate files prevent collisions, not forgery. The validator warns
+when a journal holds an entry naming a different agent, which catches a mistake
+and not an intent. Treat the rule as binding on you and the warning as a check
+on accidents.
+
+`node .ai/bin/protocol-session.cjs prune` removes journals that hold no entry.
+A journal with entries is history and is archived by hand under the lock.
+
+Every entry needs all five labels, or the Stop hook will not count it:
+
+```markdown
+## YYYY-MM-DD - short title
+
+Agent:
+
+Action:
+
+Result:
+
+Next step:
+
+Open:
+```
+
+### Extended Analysis & Architecture Reviews
+
+Session journals are strictly bounded operational logs (maximum 150 lines).
+When performing independent audits, deep architectural evaluations, multi-model
+consensus syntheses, or extensive fault-injection probes:
+
+1. **Save the full report in the repository**: Create
+   `docs/reviews/YYYY-MM-DD-<agent>-<short-description>.md` following
+   `templates/reviews/REVIEW.md`. In host projects, the review path is defined by
+   the project owner (DEC-0013/0017).
+2. **Link from the session journal**: In `.ai/worklog/<agent>-<id>.md`, write a
+   standard entry with all five labels referencing the review document, followed
+   by `protocol-handoff.cjs record` to anchor the state with verifiable evidence.
+3. **Chat panel output**: Keep chat messages concise: report only the executive
+   verdict, the path to the review file, and top blocking findings. Never dump
+   full analytical essays into chat history. An audit or council participant
+   persists its prompt and report under `docs/reviews/` before emitting the chat
+   summary; a chat-only audit is non-compliant.
+4. **Mandatory header**: Every review file must declare its baseline:
+   - Reviewed commit SHA (`git rev-parse HEAD`)
+   - Working tree status (`clean` or `dirty`)
+   - Reviewer model name, date (UTC), scope, and verdict
+5. **Chat transcription fallback**: If an assistant operates through a chat panel
+   without direct filesystem access, the human owner or coordinator persists the
+   analysis with the header:
+   `> Transcribed from chat by <owner/agent>, model: <name>, date: <ISO>`
+6. **Immutability**: Review files are permanent historical records. Revisions are
+   published as new files or marked with `Superseded by:` in the header.
+7. **Coverage and independence**: when an analysis walks a corpus and produces one
+   record per unit, `node .ai/bin/protocol-ledger.cjs cover --records <dir>` checks
+   that every unit of the corpus is accounted for, and `dup <dir> <dir>` reports
+   records that two producers share. Both take the corpus from the repository, not
+   from the prompt, and both work on a corpus that is not a git repository. Their
+   output is advisory: it never becomes Evidence and never decides a verdict.
+
+---
+
+## 6. Shared documents have one writer
+
+`.ai/TASK.md`, `.ai/PLAN.md`, `.ai/DECISIONS.md`, `.ai/ARCHIVE.md`, and
+`docs/decisions/REGISTRY.md` are edited by one session at a time, through a
+cooperative lock.
+
+```bash
+node .ai/bin/protocol-lock.cjs acquire --owner <your-session-id>
+node .ai/bin/protocol-lock.cjs release --owner <your-session-id>
+```
+
+The lock is cooperative, not an operating system barrier. It works only if
+every participant takes it.
+
+If a lock operation is interrupted it leaves a gate behind. `acquire` then
+names it as abandoned and tells you to run
+`node .ai/bin/protocol-lock.cjs clear-operation`, which refuses while the
+process that made it is still alive.
+
+If `acquire` reports another owner, do not steal it. Run `status` and read
+`stale` and `heldForMinutes`. Age is a reason to investigate, never a proof:
+a slow live holder looks exactly like a dead one. Confirm the session is
+actually over, then release it with the reported owner name. Releasing a live
+holder's lock destroys their work. If `acquire` reports that the holding process
+is dead, clear it with `clear-lock` or pass `acquire --force` to recover safely.
+`protocol-lock.cjs` supports `--session-pid <pid>` for supervisor processes;
+for transient CLI sessions, lock protection is cooperative and relies on the
+reported owner name rather than transient process liveness.
+
+Other writing rules:
+
+| File                         | Rule                                               |
+| ---------------------------- | -------------------------------------------------- |
+| `.ai/DECISIONS.md`           | append only; a written block is never edited again; proposals belong in `.ai/PLAN.md` |
+| `.ai/TASK.md`                | replace sections; it is short by design             |
+| `.ai/PLAN.md`                | replaced by the session that owns the task          |
+| `.ai/ARCHIVE.md`             | append only                                         |
+| `docs/decisions/REGISTRY.md` | append only; status transitions are appended rows   |
+
+To replace a decision, append a new approved block with a `Supersedes:` line
+naming the old one. Do not edit the old block, not even its status. The
+decision log is the one file safe to trust precisely because nothing in it is
+ever rewritten.
+
+Reopening an accepted decision requires a recorded trigger row in
+`docs/decisions/REGISTRY.md`; without an explicit trigger row, no decision may
+be reopened, and any doubt remains a note in `.ai/TASK.md` or a session journal.
+The registry is append-only and is covered by the shared-document lock. Trigger
+semantics are strictly bounded: `invariant-broken` requires an explicit regression
+proof; `metric-drop` requires a measured drop against an established baseline;
+`new-external-data` requires reproducible external evidence or upstream contract
+changes; `security-finding` requires a reproducible proof of concept or
+CVE/audit reference; `owner-directive` requires an explicit, dated human owner
+confirmation; and `higher-source-contradiction` requires citing the specific
+conflicting path in a higher-ranked source of truth.
+
+---
+
+## 7. Checks and evidence
+
+Before handing off, run the validator and the project's own checks. In the
+protocol source repository (`role: source` in `protocol-manifest.json`), also
+run its regression suite:
+
+```powershell
+node .ai/bin/protocol-validate.cjs --root .
+node .ai/bin/protocol-test.cjs --root .
+```
+
+The validator checks protocol health, encodings, size limits, hook wiring and
+whether Git really ignores session state. In the source repository it also
+checks the installer. Installed projects (`role: installed`) do not contain
+`test-protocol.ps1` or the installer. Run the protocol suite from its source
+repository after changing its tooling; use the host project's own test command
+for product code.
+
+A green validator is not a green project. Run the project's own tests too.
+An installed project may declare `"testCommand": "<cmd>"` in
+`protocol-manifest.json` (e.g. `npm test`, `flutter test`, `pytest`). `record`
+then runs that command and stamps its exit code into the Evidence block.
+
+Then attach evidence to your journal entry instead of asserting a result:
+
+```bash
+node .ai/bin/protocol-handoff.cjs record --owner <your-session-id>
+```
+
+It runs the validator, plus the protocol regression suite in the source role
+(and the configured `testCommand` if present), records their real exit codes,
+and stamps the entry with a digest of the exact tree they ran against.
+
+Never write secret keys, passwords or tokens into a journal. `record` and the
+Stop hook scan the entry and block handoff if unredacted credentials appear.
+
+If an entry was edited after recording to redact an accidental secret or token,
+refresh its entry hash legitimately with:
+
+```bash
+node .ai/bin/protocol-handoff.cjs rehash --owner <your-session-id> --reason "<explanation>"
+```
+
+The next agent re-checks with `node .ai/bin/protocol-handoff.cjs verify`, which
+fails when the tree has moved since the evidence was recorded.
+
+The block also carries a hash of the entry itself with the block removed, so an
+entry cannot be rewritten after it was certified. `verify` recomputes it.
+
+This is the difference between telling the next agent the suite passed and
+letting them confirm it. Prose in a journal is a claim; an Evidence block is a
+record. Never hand-write one.
+
+External tooling and MCP are optional accelerators; they are advisory, never
+Evidence or gate inputs; see PROTOCOL.md.
+
+---
+
+## 8. Size limits
+
+Enforced by `.ai/bin/protocol-validate.cjs`.
+
+| File                       | Limit     | On overflow                        |
+| -------------------------- | --------- | ---------------------------------- |
+| `.ai/TASK.md`              | 80 lines  | cut back to the current task only  |
+| `.ai/worklog/<journal>.md` | 150 lines | move oldest entries to the archive |
+| `.ai/PLAN.md`              | 1000 lines | the task is too big; split it      |
+| `.ai/worklog/` file count  | 300 files | archive the oldest journals        |
+| `docs/reviews/` active     | 400 files / 8 MB | archive non-active reviews to archive/ |
+| `.ai/DECISIONS.md`         | none      | never trimmed, never summarized    |
+| `.ai/ARCHIVE.md`           | none      | never trimmed                      |
+
+Archiving moves text. It never deletes text.
+
+Automatic archiving is executed on `stop` and `record` when a session journal
+exceeds 150 lines, moving older entries into `.ai/ARCHIVE.md` while preserving the
+newest entry.
+
+To archive entries manually from a session journal into `.ai/ARCHIVE.md`:
+
+```bash
+node .ai/bin/protocol-archive.cjs worklog <path-to-journal> [--keep <n>]
+node .ai/bin/protocol-archive.cjs status
+```
+
+
+---
+
+## 9. Before changing code
+
+1. Know the current task.
+2. Read the code you are about to change, not just its name.
+3. Run `git status` and look for another session's uncommitted work. In a
+   shared checkout, a change you did not make may belong to another agent.
+4. Check `.ai/DECISIONS.md` for a constraint that already settles the question.
+   `node .ai/bin/protocol-index.cjs` derives a compact index into
+   `.ai/runtime/`, including which decisions name the path you are about to
+   change. It points at blocks; it never restates them, it is never Evidence,
+   and a hash mismatch means read the file itself.
+5. Write down an assumption in your journal entry when it matters.
+
+Stay inside the task. No unrelated refactors, no drive-by renames, no
+reformatting files you did not otherwise touch.
+
+---
+
+## 10. Git
+
+Git is the durable layer, not a scratchpad.
+
+- Commit at meaningful checkpoints, or when the owner asks.
+- Do not push every intermediate change.
+- Do not rewrite history that has been pushed.
+- Branch for anything bigger than a small fix.
+- Never commit a secret. Keys belong in environment variables.
+
+---
+
+## 11. Encoding
+
+All text files: UTF-8 without a byte order mark, LF line endings. Enforced by
+`.gitattributes` and the validator. The protocol installs no `.editorconfig`,
+because indentation is the host project's decision.
+
+PowerShell scripts are the exception and the trap. Windows PowerShell 5.1 reads
+a `.ps1` file without a byte order mark as the system ANSI codepage. A
+non-ASCII character in such a script is silently corrupted, and a script that
+writes files propagates the corruption into everything it generates.
+
+Rule: keep every `.ps1` file ASCII-only. The validator fails the build if a non-ASCII byte appears in one.
+
+### 11.1 Strict encoding & language contract (PROTO-DEC-0153)
+
+- Files: all tracked text is UTF-8 without BOM, LF. JSON/JSONL included.
+- CLI argv: never pass non-ASCII through cmd.exe or PowerShell command lines (OEM codepage mangles Cyrillic).
+  Prompts for CLI agents are English or delivered via UTF-8 files/stdin with explicit UTF-8.
+- PowerShell: set Input/OutputEncoding to UTF-8; read Cyrillic only with explicit -Encoding UTF8 or
+
+  never use redirection/Out-File for text artifacts (UTF-16 by default).
+- Captured CLI output (codex/agy/vibe logs, call files) is diagnostic only; it may contain console-codepage
+  artifacts and must never be re-published into docs, journals, reviews or Telegram without a clean re-encode.
+- Telegram/owner channel: outgoing text files UTF-8 no BOM; Bot API JSON UTF-8 only ( pattern).
+- Languages: Russian for documentation and owner communication; code, identifiers, commit subjects and CLI
+  prompts stay English/ASCII.
+- Mojibake (for example the sequences for UTF-8-read-as-CP1251) is a data-loss signal: stop propagating it,
+  fix from the clean source or quarantine; the validator carries a mojibake guard (WARN, allowlisted).
+
+
+---
+
+## 12. Never
+
+- Never treat your own proposal as approved.
+- Never delete history to save context. Archive it.
+- Never write to another session's journal.
+- Never edit a decision block that is already written.
+- Never release a lock you did not take without confirming the holder is gone.
+- Never commit secrets.
+- Never report work as verified when you did not run the check.
+

@@ -1,0 +1,6 @@
+{
+  "schema": "mcp-catalog/1",
+  "comment": "Project-owned optional MCP catalog. The mandatory names describe the baseline tool roles, not an installed or verified configuration. Entries remain empty until this project records its own verified pins and connection instructions. No optional recommendation or install command is supplied by default.",
+  "mandatory": ["serena", "codebase-memory", "qmd"],
+  "entries": []
+}

@@ -1,0 +1,164 @@
+{
+  "stateDir": ".ai/runtime/example-missing",
+  "usageFile": "docs/example-missing/USAGE.md",
+  "startLimitMin": 10,
+  "stallMin": 30,
+  "runLimitHours": 12,
+  "slots": [
+    {
+      "id": "m01",
+      "frame": "task:example-m01",
+      "out": "docs/example-missing/results/m01.md",
+      "launch": "docs/example-missing/prompts/m01.md",
+      "route": {
+        "client": "copilot",
+        "model": "kimi-k3",
+        "effort": "high"
+      }
+    },
+    {
+      "id": "m02",
+      "frame": "task:example-m02",
+      "out": "docs/example-missing/results/m02.md",
+      "launch": "docs/example-missing/prompts/m02.md",
+      "route": {
+        "client": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "fallback": {
+        "client": "kilo",
+        "model": "kilo/openai/gpt-6-astra",
+        "effort": "high",
+        "minBalance": 3
+      }
+    },
+    {
+      "id": "m03",
+      "frame": "task:example-m03",
+      "out": "docs/example-missing/results/m03.md",
+      "launch": "docs/example-missing/prompts/m03.md",
+      "route": {
+        "client": "agy",
+        "model": "gemini-3.8-flash-low"
+      }
+    },
+    {
+      "id": "m04",
+      "frame": "task:example-m04",
+      "out": "docs/example-missing/results/m04.md",
+      "launch": "docs/example-missing/prompts/m04.md",
+      "needs": [
+        "m01",
+        "m02",
+        "m03"
+      ],
+      "route": {
+        "client": "copilot",
+        "model": "kimi-k3",
+        "effort": "high"
+      }
+    },
+    {
+      "id": "m05",
+      "frame": "task:example-m05",
+      "out": "docs/example-missing/results/m05.md",
+      "launch": "docs/example-missing/prompts/m05.md",
+      "needs": [
+        "m04"
+      ],
+      "route": {
+        "client": "codex",
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "fallback": {
+        "client": "kilo",
+        "model": "kilo/openai/gpt-6-astra",
+        "effort": "high",
+        "minBalance": 3
+      }
+    },
+    {
+      "id": "m06",
+      "frame": "task:example-m06",
+      "out": "docs/example-missing/results/m06.md",
+      "launch": "docs/example-missing/prompts/m06.md",
+      "needs": [
+        "m04"
+      ],
+      "route": {
+        "client": "agy",
+        "model": "gemini-3.8-flash-low"
+      },
+      "fallback": {
+        "client": "kilo",
+        "model": "kilo/google/gemini-3.8-flash",
+        "effort": "low",
+        "minBalance": 1
+      }
+    },
+    {
+      "id": "m07",
+      "frame": "task:example-m07",
+      "out": "docs/example-missing/results/m07.md",
+      "launch": "docs/example-missing/prompts/m07.md",
+      "needs": [
+        "m05",
+        "m06"
+      ],
+      "route": {
+        "client": "copilot",
+        "model": "kimi-k3",
+        "effort": "high"
+      },
+      "fallback": {
+        "client": "kilo",
+        "model": "deepseek/deepseek-v4-pro"
+      }
+    },
+    {
+      "id": "m08",
+      "frame": "task:example-m08",
+      "out": "docs/example-missing/results/m08.md",
+      "launch": "docs/example-missing/prompts/m08.md",
+      "needs": [
+        "m07"
+      ],
+      "route": {
+        "client": "vibe",
+        "model": "mistral-medium-3.5"
+      }
+    },
+    {
+      "id": "m09",
+      "frame": "task:example-m09",
+      "out": "docs/example-missing/results/m09.md",
+      "launch": "docs/example-missing/prompts/m09.md",
+      "needs": [
+        "m08"
+      ],
+      "when": {
+        "file": "docs/example-missing/results/m08.md",
+        "notMatch": "^Verdict: ACCEPT[ \t\r]*$"
+      },
+      "route": {
+        "client": "kilo",
+        "model": "deepseek/deepseek-v4-pro"
+      }
+    },
+    {
+      "id": "m10",
+      "frame": "task:example-m10",
+      "out": "docs/example-missing/results/m10.md",
+      "launch": "docs/example-missing/prompts/m10.md",
+      "needs": [
+        "m09"
+      ],
+      "route": {
+        "client": "vibe",
+        "model": "mistral-medium-3.5"
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "schema": "pilot-kit/2",
+  "comment": "The pilot kit installed by docs/ops/pilot-install.cjs. roots/templates: the original L6 minimal kit, copied under <destination>/src/<repo-relative path> and <destination>/ (unchanged). groups: the L4, L5 and L6 layers; every root is copied with its relative require() closure to its OWN repo-relative path in the project (anything at a fixed place such as .ai/bin/* lands there, the rest keeps its repository-relative path so relative requires keep working), plus the explicit files; a path is installed once, by the first group that names it. skeletons are written only when the target file is absent and never overwritten (a project-owned journal or registry is kept); a skeleton is either from (a file of this checkout) or content. A root with required false that is absent on the source checkout is listed as pending, never an error. Nothing here is under .ai/core: the kernel records come from protocol-setup.",
+  "destination": "docs/ops/pilot-kit",
+  "roots": [
+    { "path": "docs/ops/launch-record.cjs", "required": true },
+    { "path": "docs/product/launch-records/tools/launch-record-validate.cjs", "required": true },
+    { "path": "docs/ops/served-model.cjs", "required": false },
+    { "path": "docs/ops/seat-check.cjs", "required": false },
+    { "path": "docs/ops/mcp-schema-budget.cjs", "required": true },
+    { "path": "docs/ops/mcp-recommender.cjs", "required": true },
+    { "path": "docs/ops/mcp-catalog.json", "required": true },
+    { "path": "docs/ops/skills/mcp-recommender/SKILL.md", "required": true },
+    { "path": "docs/ops/MCP-REQUIRED-AND-OPTIONAL.md", "required": true },
+    { "path": "docs/ops/channels-doctor.cjs", "required": true },
+    { "path": "docs/ops/channels-keys.cjs", "required": true },
+    { "path": "docs/ops/channels-wizard.cjs", "required": true },
+    { "path": "docs/ops/channels-verify.cjs", "required": true },
+    { "path": "docs/ops/channels-env.cjs", "required": true },
+    { "path": "docs/ops/channels-dedupe.cjs", "required": true },
+    { "path": "docs/ops/channels-guard.cjs", "required": true },
+    { "path": "docs/ops/channels-catalog.json", "required": true },
+    { "path": "docs/ops/CHANNELS.md", "required": true },
+    { "path": "docs/ops/skills/channels-onboarding/SKILL.md", "required": true }
+  ],
+  "templates": [
+    "docs/ops/pilot-kit/README.md",
+    "docs/ops/pilot-kit/run-and-record.cjs",
+    "docs/ops/pilot-kit/pre-push-guard.sample"
+  ],
+  "groups": [
+    {
+      "id": "l4",
+      "title": "L4 dispatch contour: launch-wrapper with the dispatch engine, the packet compiler wiring, the cert/fix launchers, the candidate gate",
+      "roots": [
+        { "path": ".ai/bin/protocol-dispatch.cjs", "required": true },
+        { "path": ".ai/bin/protocol-dispatch/executor.cjs", "required": true },
+        { "path": ".ai/bin/protocol-runrecord.cjs", "required": true },
+        { "path": ".ai/bin/protocol-signals.cjs", "required": true },
+        { "path": "docs/ops/repo-paths.cjs", "required": true },
+        { "path": "docs/ops/launch-wrapper.cjs", "required": true },
+        { "path": "docs/ops/launch-packet.cjs", "required": true },
+        { "path": "docs/ops/cert-launch.cjs", "required": true },
+        { "path": "docs/ops/fix-launch.cjs", "required": true },
+        { "path": "docs/ops/ops-guard.cjs", "required": true }
+      ],
+      "files": [
+        "docs/ops/CANDIDATES-TEMPLATE.md",
+        "docs/ops/PILOT-L4-L6.md"
+      ],
+      "skeletons": [
+        { "path": ".ai/runtime/CANDIDATES.md", "from": "docs/ops/pilot-kit/skeletons/CANDIDATES.md" }
+      ]
+    },
+    {
+      "id": "l5",
+      "title": "L5 owner-facing tooling: state-brief, the owner-words journal and the owner-card form",
+      "roots": [
+        { "path": "docs/ops/state-brief.cjs", "required": true }
+      ],
+      "files": [
+        "docs/ops/OWNER-WORDS-JOURNAL.md",
+        "docs/ops/OWNER-CARD-FORM.md",
+        "docs/ops/PILOT-NEXT-STEPS.md"
+      ],
+      "skeletons": [
+        { "path": "docs/ops/owner-words.md", "from": "docs/ops/pilot-kit/skeletons/owner-words.md" },
+        { "path": "docs/ops/OWNER-ADDENDA.md", "from": "docs/ops/pilot-kit/skeletons/OWNER-ADDENDA.md" },
+        { "path": "docs/ops/pilot-profile.json", "content": "{\n  \"schema\": \"pilot-profile/1\",\n  \"stateBrief\": { \"tasks\": [] }\n}\n" },
+        { "path": "docs/product/launch-records/launches/LAUNCHES.jsonl", "content": "" }
+      ]
+    },
+    {
+      "id": "l6",
+      "title": "L6 launch statistics: stats, fill, backfill, the record validator, seat-check",
+      "roots": [
+        { "path": "docs/product/launch-records/tools/launch-stats.cjs", "required": true },
+        { "path": "docs/product/launch-records/tools/launch-fill.cjs", "required": true },
+        { "path": "docs/product/launch-records/tools/launch-record-backfill.cjs", "required": true },
+        { "path": "docs/product/launch-records/tools/launch-record-validate.cjs", "required": true },
+        { "path": "docs/ops/seat-check.cjs", "required": true }
+      ],
+      "files": [
+        "docs/product/launch-records/launches/LAUNCH-RECORD-EXT.md"
+      ],
+      "skeletons": []
+    }
+  ]
+}

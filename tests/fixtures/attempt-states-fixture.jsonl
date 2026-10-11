@@ -1,0 +1,8 @@
+{"scope": "patch:example", "root_cause": "RC-000", "attempt": 1, "candidate": "0123456789012345678901234567890123456781", "status": "verified", "disposition": "fixed-and-verified", "exit": 0, "state": "PASS"}
+{"scope": "patch:example", "root_cause": "RC-000b", "attempt": 1, "candidate": "0123456789012345678901234567890123456781", "status": "verified", "disposition": "refuted", "exit": 0, "state": "PASS"}
+{"scope": "patch:example", "root_cause": "RC-001", "attempt": 1, "candidate": "0123456789012345678901234567890123456782", "status": "failed", "disposition": "confirmed", "exit": 1, "state": "FAILED"}
+{"scope": "patch:example", "root_cause": "RC-001", "attempt": 2, "candidate": "0123456789012345678901234567890123456781", "status": "failed", "disposition": "confirmed", "exit": 1, "state": "EXHAUSTED"}
+{"scope": "patch:example", "root_cause": "RC-001", "attempt": 3, "candidate": "0123456789012345678901234567890123456783", "status": "failed", "disposition": "confirmed", "exit": 1, "state": "STOP"}
+{"scope": "patch:example", "root_cause": "RC-002", "attempt": 1, "candidate": "0123456789012345678901234567890123456783", "status": "unknown", "disposition": "deferred-by-owner", "decision": "PROTO-DEC-9001", "exit": 0, "state": "OWNER-EXCEPTION"}
+{"scope": "patch:example", "root_cause": "RC-FIXTURE-005", "attempt": 1, "candidate": "0123456789012345678901234567890123456784", "status": "unknown", "disposition": "deferred-by-owner", "decision": "PROTO-DEC-9002", "exit": 0, "state": "OWNER-EXCEPTION"}
+{"scope": "patch:example", "root_cause": "RC-003", "attempt": 1, "candidate": "0123456789012345678901234567890123456784", "status": "unknown", "disposition": "deferred-by-owner", "exit": 2, "state": "UNKNOWN"}

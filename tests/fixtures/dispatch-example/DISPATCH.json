@@ -1,0 +1,206 @@
+{
+  "stateDir": ".ai/runtime/example-run",
+  "usageFile": "docs/example-run/USAGE.md",
+  "startLimitMin": 45,
+  "stallMin": 60,
+  "runLimitHours": 12,
+  "slots": [
+    {
+      "id": "s01",
+      "frame": "task:example-s01",
+      "out": "docs/example-run/results/S01.md",
+      "launch": "docs/example-run/prompts/run/s01.md",
+      "route": {
+        "client": "agy",
+        "model": "gemini-3.8-flash-high"
+      }
+    },
+    {
+      "id": "s02",
+      "frame": "task:example-s02",
+      "out": "docs/example-run/results/S02.md",
+      "launch": "docs/example-run/prompts/run/s02.md",
+      "route": {
+        "client": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "xhigh"
+      }
+    },
+    {
+      "id": "s03",
+      "frame": "task:example-s03",
+      "out": "docs/example-run/results/S03.md",
+      "launch": "docs/example-run/prompts/run/s03.md",
+      "route": {
+        "client": "kilo",
+        "model": "deepseek/deepseek-flash"
+      }
+    },
+    {
+      "id": "s04",
+      "frame": "task:example-s04",
+      "out": "docs/example-run/results/S04.md",
+      "launch": "docs/example-run/prompts/run/s04.md",
+      "route": {
+        "client": "vibe",
+        "model": "mistral-medium-3.5"
+      }
+    },
+    {
+      "id": "s05",
+      "frame": "task:example-s05",
+      "out": "docs/example-run/results/S05.md",
+      "launch": "docs/example-run/prompts/run/s05.md",
+      "needs": [
+        "s01",
+        "s02",
+        "s03",
+        "s04"
+      ],
+      "route": {
+        "client": "kimi",
+        "model": "moonshot-ai/kimi-k2.7-code-highspeed"
+      }
+    },
+    {
+      "id": "s06",
+      "frame": "task:example-s06",
+      "out": "docs/example-run/results/S06.md",
+      "launch": "docs/example-run/prompts/run/s06.md",
+      "needs": [
+        "s01",
+        "s02",
+        "s03",
+        "s04"
+      ],
+      "route": {
+        "client": "mimo",
+        "model": "xiaomi/mimo-v2.6-pro",
+        "effort": "high"
+      }
+    },
+    {
+      "id": "s07",
+      "frame": "task:example-s07",
+      "out": "docs/example-run/results/S07.md",
+      "launch": "docs/example-run/prompts/run/s07.md",
+      "needs": [
+        "s05",
+        "s06"
+      ],
+      "route": {
+        "client": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "xhigh"
+      }
+    },
+    {
+      "id": "s08",
+      "frame": "task:example-s08",
+      "out": "docs/example-run/results/S08.md",
+      "launch": "docs/example-run/prompts/run/s08.md",
+      "needs": [
+        "s07"
+      ],
+      "route": {
+        "client": "agy",
+        "model": "gemini-3.8-flash-high"
+      }
+    },
+    {
+      "id": "s09",
+      "frame": "task:example-s09",
+      "out": "docs/example-run/results/S09.md",
+      "launch": "docs/example-run/prompts/run/s09.md",
+      "needs": [
+        "s07"
+      ],
+      "route": {
+        "client": "kilo",
+        "model": "deepseek/deepseek-flash"
+      }
+    },
+    {
+      "id": "s10",
+      "frame": "task:example-s10",
+      "out": "docs/example-run/results/S10.md",
+      "launch": "docs/example-run/prompts/run/s10.md",
+      "route": {
+        "client": "kimi",
+        "model": "moonshot-ai/kimi-k2.7-code-highspeed"
+      }
+    },
+    {
+      "id": "s11",
+      "frame": "task:example-s11",
+      "out": "docs/example-run/results/S11.md",
+      "launch": "docs/example-run/prompts/run/s11.md",
+      "route": {
+        "client": "mimo",
+        "model": "xiaomi/mimo-v2.6-pro",
+        "effort": "high"
+      }
+    },
+    {
+      "id": "s12",
+      "frame": "task:example-s12",
+      "out": "docs/example-run/results/S12.md",
+      "launch": "docs/example-run/prompts/run/s12.md",
+      "needs": [
+        "s10",
+        "s11"
+      ],
+      "route": {
+        "client": "claude",
+        "model": "claude-opus-5-5",
+        "effort": "high"
+      }
+    },
+    {
+      "id": "s13",
+      "frame": "task:example-s13",
+      "out": "docs/example-run/results/S13.md",
+      "launch": "docs/example-run/prompts/run/s13.md",
+      "route": {
+        "client": "vibe",
+        "model": "mistral-medium-3.5"
+      }
+    },
+    {
+      "id": "s14",
+      "frame": "task:example-s14",
+      "out": "docs/example-run/results/S14.md",
+      "launch": "docs/example-run/prompts/run/s14.md",
+      "notBefore": "2026-09-27T00:42:30+03:00",
+      "route": {
+        "client": "agy",
+        "model": "gemini-3.8-flash-high"
+      }
+    },
+    {
+      "id": "s15",
+      "frame": "task:example-s15",
+      "out": "docs/example-run/results/S15.md",
+      "launch": "docs/example-run/prompts/run/s15.md",
+      "route": {
+        "client": "manual",
+        "model": "operator"
+      }
+    },
+    {
+      "id": "s16",
+      "frame": "task:example-s16",
+      "out": "docs/example-run/results/S16.md",
+      "launch": "docs/example-run/prompts/run/s16.md",
+      "needs": [
+        "s14",
+        "s15"
+      ],
+      "route": {
+        "client": "codex",
+        "model": "gpt-5.6-sol",
+        "effort": "medium"
+      }
+    }
+  ]
+}
