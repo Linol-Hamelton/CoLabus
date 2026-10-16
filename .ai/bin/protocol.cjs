@@ -1,0 +1,360 @@
+#!/usr/bin/env node
+'use strict';
+
+// Unified Operator CLI for AI Collaboration Protocol (v1.9.0)
+// Provides unified `doctor`, `status`, and command dispatching.
+
+const fs = require('node:fs');
+const path = require('node:path');
+const childProcess = require('node:child_process');
+const hooks = require('./protocol-hooks.cjs');
+
+function findRoot(dir = process.cwd()) {
+  let current = path.resolve(dir);
+  while (true) {
+    if (fs.existsSync(path.join(current, 'AGENTS.md')) && fs.existsSync(path.join(current, '.ai'))) {
+      return current;
+    }
+    const parent = path.dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+  return path.resolve(dir);
+}
+
+// SOL01: no shell anywhere. Commands are argv arrays passed to spawnSync with
+// shell:false, so no /bin/sh or cmd.exe ever expands $PSVersionTable or a path.
+function runArgv(argv, cwd) {
+  try {
+    const r = childProcess.spawnSync(argv[0], argv.slice(1), {
+      cwd, stdio: ['ignore', 'pipe', 'pipe'], encoding: 'utf8',
+      shell: false, windowsHide: true,
+    });
+    if (r.error) return { ok: false, error: r.error.message, output: '' };
+    if (r.status !== 0) return { ok: false, error: `exit status ${r.status}`, output: (r.stdout || '').trim() };
+    return { ok: true, output: (r.stdout || '').trim() };
+  } catch (err) {
+    return { ok: false, error: err.message, output: '' };
+  }
+}
+
+const PS_VERSION_ARGV = ['-NoProfile', '-Command', '$PSVersionTable.PSVersion.ToString()'];
+
+function probePowerShell(root) {
+  return {
+    powershell: runArgv(['powershell', ...PS_VERSION_ARGV], root),
+    pwsh: runArgv(['pwsh', ...PS_VERSION_ARGV], root),
+  };
+}
+
+function doctor(root) {
+  console.log('AI Collaboration Protocol - Health Diagnostic (doctor)');
+  console.log(`Repository Root: ${root}\n`);
+  let issues = 0;
+
+  // 1. Runtime dependencies
+  console.log('=== 1. Runtime Environment ===');
+  const nodeVer = process.version;
+  const nodeMajor = parseInt(nodeVer.replace('v', '').split('.')[0], 10);
+  if (nodeMajor >= 18) {
+    console.log(`[PASS] Node.js: ${nodeVer} (>= 18.0.0 required)`);
+  } else {
+    console.log(`[FAIL] Node.js: ${nodeVer} is too old (>= 18.0.0 required)`);
+    issues++;
+  }
+
+  const gitRes = runArgv(['git', '--version'], root);
+  if (gitRes.ok) {
+    console.log(`[PASS] Git: ${gitRes.output}`);
+  } else {
+    console.log('[FAIL] Git executable not found in PATH');
+    issues++;
+  }
+
+  const { powershell: psRes, pwsh: pwshRes } = probePowerShell(root);
+  if (pwshRes.ok) {
+    console.log(`[PASS] PowerShell Core (pwsh): ${pwshRes.output}`);
+  } else if (psRes.ok) {
+    console.log(`[PASS] Windows PowerShell: ${psRes.output}`);
+  } else {
+    console.log('[FAIL] Neither pwsh nor powershell found in PATH');
+    issues++;
+  }
+
+  // 2. Protocol workspace structure
+  console.log('\n=== 2. Protocol Structure & Manifest ===');
+  const manifestPath = path.join(root, 'protocol-manifest.json');
+  if (fs.existsSync(manifestPath)) {
+    try {
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      console.log(`[PASS] protocol-manifest.json present (role: ${manifest.role || 'unknown'}, version: ${manifest.protocolVersion || 'unknown'})`);
+    } catch {
+      console.log('[FAIL] protocol-manifest.json is invalid JSON');
+      issues++;
+    }
+  } else {
+    console.log('[FAIL] protocol-manifest.json missing');
+    issues++;
+  }
+
+  const coreDocs = ['AGENTS.md', '.ai/TASK.md', '.ai/PLAN.md', '.ai/DECISIONS.md', '.ai/ARCHIVE.md'];
+  for (const doc of coreDocs) {
+    const full = path.join(root, doc);
+    if (fs.existsSync(full)) {
+      console.log(`[PASS] ${doc} present`);
+    } else {
+      console.log(`[FAIL] ${doc} missing`);
+      issues++;
+    }
+  }
+
+  // 3. Concurrency and Lock Health
+  console.log('\n=== 3. Lock & Operation Gate Status ===');
+  const lockModule = require('./protocol-lock.cjs');
+  try {
+    const lockStatus = lockModule.operate(root, 'status');
+    if (lockStatus.lock) {
+      console.log(`[WARN] Lock held by: ${lockStatus.lock.owner} (held for ${lockStatus.lock.heldForMinutes || 0}m, alive: ${lockStatus.lock.alive})`);
+    } else {
+      console.log('[PASS] Shared writer lock is free (lock: null)');
+    }
+    if (lockStatus.operationInProgress) {
+      console.log('[WARN] Operation gate is currently active');
+    } else {
+      console.log('[PASS] Operation gate clean');
+    }
+  } catch (err) {
+    console.log(`[FAIL] Lock inspection error: ${err.message}`);
+    issues++;
+  }
+
+  // 4. Document size limits
+  console.log('\n=== 4. Document Limits ===');
+  const archiveModule = require('./protocol-archive.cjs');
+  archiveModule.archiveStatus(root);
+
+  // 5. Merkle chain integrity audit
+  console.log('\n=== 5. Merkle Chain & Integrity Audit ===');
+  const handoffModule = require('./protocol-handoff.cjs');
+  const worklogDir = path.join(root, '.ai', 'worklog');
+  if (fs.existsSync(worklogDir)) {
+    const journals = fs.readdirSync(worklogDir)
+      .filter(name => name.endsWith('.md') && name !== 'README.md');
+    let chainErrors = 0;
+    let unauthenticatedCount = 0;
+    for (const j of journals) {
+      const jPath = path.join(worklogDir, j);
+      const chain = handoffModule.verifyJournalChain(root, jPath, true);
+      if (!chain.ok) {
+        console.log(`[FAIL] .ai/worklog/${j}: ${chain.reason}`);
+        chainErrors++;
+        issues++;
+      }
+      const ev = handoffModule.readEvidence(jPath);
+      if (ev && !ev.authenticated) {
+        unauthenticatedCount++;
+      }
+    }
+    if (chainErrors === 0) {
+      console.log(`[PASS] Merkle chains verified across ${journals.length} journal(s) (deep audit)`);
+    }
+    if (unauthenticatedCount > 0) {
+      let role = 'installed';
+      const manifestPath = path.join(root, 'protocol-manifest.json');
+      if (fs.existsSync(manifestPath)) {
+        try {
+          const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+          role = manifest.role || 'installed';
+        } catch {}
+      }
+      if (role === 'source') {
+        console.log(`[WARN] Legacy unauthenticated Evidence receipts: ${unauthenticatedCount} journal(s) (re-record to upgrade to format 2)`);
+      } else {
+        console.log(`[INFO] Legacy unauthenticated Evidence receipts: ${unauthenticatedCount} journal(s)`);
+      }
+    }
+  }
+
+  console.log('\n======================================');
+  if (issues === 0) {
+    console.log('Verdict: Protocol Healthy. All checks passed.');
+  } else {
+    console.log(`Verdict: Issues Found (${issues} failure(s)). Inspect details above.`);
+    process.exitCode = 1;
+  }
+}
+
+function status(root) {
+  console.log('AI Collaboration Protocol - Status');
+  console.log(`Root: ${root}\n`);
+  const lockModule = require('./protocol-lock.cjs');
+  const lockStatus = lockModule.operate(root, 'status');
+  console.log(`Lock: ${lockStatus.lock ? lockStatus.lock.owner + ' (alive: ' + lockStatus.lock.alive + ')' : 'free'}`);
+
+  const archiveModule = require('./protocol-archive.cjs');
+  archiveModule.archiveStatus(root);
+}
+
+function clean(root, options = {}) {
+  // Report only unless --apply is given (CLEANUP-C): --dry-run always wins over --apply.
+  const dryRun = !options.apply || Boolean(options.dryRun);
+  console.log('AI Collaboration Protocol - Maintenance & Cleanup');
+  console.log(`Repository Root: ${root}`);
+  console.log(dryRun
+    ? 'Mode: report only, nothing is changed. Run "clean --apply" to apply.\n'
+    : 'Mode: apply. Files are moved into .ai/runtime/pruned and .ai/runtime/quarantine, never deleted.\n');
+  const sessionModule = require('./protocol-session.cjs');
+
+  let errors = 0;
+
+  console.log('--- 1. Quarantining empty journals ---');
+  const pruneArgs = ['prune', '--root', root];
+  if (dryRun) pruneArgs.push('--dry-run');
+  if (options.force) pruneArgs.push('--force');
+  try { sessionModule.main(pruneArgs); } catch (e) {
+    process.stderr.write(`Prune error: ${e.message}\n`);
+    errors++;
+  }
+
+  console.log('\n--- 2. Cleaning runtime snapshots & temporary files ---');
+  const cleanArgs = ['cleanup-runtime', '--root', root];
+  if (dryRun) cleanArgs.push('--dry-run');
+  else cleanArgs.push('--apply');
+  if (options.force) cleanArgs.push('--force');
+  try { sessionModule.main(cleanArgs); } catch (e) {
+    process.stderr.write(`Cleanup error: ${e.message}\n`);
+    errors++;
+  }
+
+  if (errors > 0) {
+    process.exitCode = 1;
+  }
+}
+
+function telemetry(root) {
+  console.log('AI Collaboration Protocol - Telemetry & Efficiency Metrics');
+  console.log(`Repository Root: ${root}\n`);
+
+  const worklogDir = path.join(root, '.ai', 'worklog');
+  const archivePath = path.join(root, '.ai', 'ARCHIVE.md');
+
+  const journals = fs.existsSync(worklogDir)
+    ? fs.readdirSync(worklogDir).filter(name => name.endsWith('.md') && name !== 'README.md')
+    : [];
+
+  let activeEntries = 0;
+  let certifiedEntries = 0;
+  let chainedEntries = 0;
+  const agentCounts = {};
+
+  function processText(text) {
+    const sections = text.split(/(?=^## \d{4}-\d{2}-\d{2})/m);
+    for (const section of sections) {
+      if (!hooks.DATE_HEADING_REGEX.test(section)) continue;
+      activeEntries++;
+      const agentMatch = section.match(/^Agent:\s*([^\r\n]+)/m);
+      if (agentMatch) {
+        const agent = agentMatch[1].trim().toLowerCase();
+        agentCounts[agent] = (agentCounts[agent] || 0) + 1;
+      }
+      if (/^Evidence:/m.test(section)) {
+        certifiedEntries++;
+      }
+      if (/^[ \t]*-[ \t]+parent-entry:[ \t]*sha256:[a-f0-9]{64}/m.test(section)) {
+        chainedEntries++;
+      }
+    }
+  }
+
+  for (const j of journals) {
+    try {
+      const content = fs.readFileSync(path.join(worklogDir, j), 'utf8');
+      processText(content);
+    } catch { }
+  }
+
+  let archivedCount = 0;
+  if (fs.existsSync(archivePath)) {
+    try {
+      const archiveText = fs.readFileSync(archivePath, 'utf8');
+      const matches = archiveText.match(new RegExp(hooks.DATE_HEADING_M_REGEX.source, 'mg'));
+      if (matches) archivedCount = matches.length;
+    } catch { }
+  }
+
+  console.log('=== Collaboration Overview ===');
+  console.log(`Active Journals:    ${journals.length}`);
+  console.log(`Active Entries:     ${activeEntries}`);
+  console.log(`Archived Entries:   ${archivedCount}`);
+  console.log(`Total Hand-offs:    ${activeEntries + archivedCount}`);
+  console.log(`Certified Evidence: ${certifiedEntries} entries`);
+  console.log(`Merkle Chained:     ${chainedEntries} entries\n`);
+
+  console.log('=== Activity by Assistant ===');
+  const sortedAgents = Object.entries(agentCounts).sort((a, b) => b[1] - a[1]);
+  if (sortedAgents.length) {
+    for (const [agent, count] of sortedAgents) {
+      const bar = '#'.repeat(Math.min(count, 30));
+      console.log(`  ${agent.padEnd(14)} : ${count.toString().padStart(3)} [${bar}]`);
+    }
+  } else {
+    console.log('  No agent entries recorded yet.');
+  }
+
+  console.log('\n=== Storage & Runtime Footprint ===');
+  const runtimeDir = path.join(root, '.ai', 'runtime');
+  if (fs.existsSync(runtimeDir)) {
+    const runtimeFiles = fs.readdirSync(runtimeDir).filter(f => !fs.statSync(path.join(runtimeDir, f)).isDirectory());
+    console.log(`Active Runtime Artifacts: ${runtimeFiles.length} file(s)`);
+  }
+}
+
+function printUsage() {
+  console.log(`AI Collaboration Protocol CLI (v1.9.0)
+
+Usage: node .ai/bin/protocol.cjs <command> [options]
+
+Commands:
+  doctor       Run diagnostic health check of tools, locks, and workspace
+  status       Display active lock holder and document storage limits
+  clean        Report empty journals and orphaned/stale runtime files; with --apply move them into .ai/runtime/pruned
+               and .ai/runtime/quarantine/<stamp> (nothing is deleted; restore: protocol-session.cjs restore-runtime)
+               clean [--apply] [--dry-run] [--force]
+  telemetry    Display collaboration statistics, agent participation, and integrity metrics
+  help         Show this help message
+`);
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  const command = args[0];
+  const root = findRoot();
+  const options = {
+    dryRun: args.includes('--dry-run'),
+    apply: args.includes('--apply'),
+    force: args.includes('--force'),
+  };
+
+  if (command === 'doctor') {
+    doctor(root);
+  } else if (command === 'status') {
+    status(root);
+  } else if (command === 'clean') {
+    clean(root, options);
+  } else if (command === 'telemetry') {
+    telemetry(root);
+  } else if (command === 'help' || !command || command === '--help' || command === '-h') {
+    printUsage();
+  } else {
+    console.error(`Unknown command: ${command}`);
+    printUsage();
+    process.exit(1);
+  }
+}
+
+if (require.main === module) {
+  main();
+}
+
+module.exports = { doctor, status, clean, telemetry, findRoot, runArgv, probePowerShell };
+

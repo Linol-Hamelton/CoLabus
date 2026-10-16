@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "id", "mode", "tool", "userAgent", "capturedAt", "requests", "sources", "counts", "unmatched", "records", "hash"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["price-snapshot/1"] },
+    "id": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "mode": { "type": "string", "enum": ["live", "replay"] },
+    "tool": { "type": "string", "enum": ["price-snapshot", "route-price.cjs"] },
+    "userAgent": { "type": ["string", "null"] },
+    "capturedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z$" },
+    "requests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "lists", "vercelEndpoints", "vercelEndpointCap", "vercelEndpointWanted"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "lists": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "vercelEndpoints": { "type": "integer", "minimum": 0, "maximum": 16 },
+        "vercelEndpointCap": { "type": "integer", "minimum": 0, "maximum": 16 },
+        "vercelEndpointWanted": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["platform", "kind", "url", "fetchedAt", "status", "bytes", "rawSha256", "records"],
+        "properties": {
+          "platform": { "type": "string", "enum": ["openrouter", "vercel", "huggingface"] },
+          "kind": { "type": "string", "enum": ["list", "endpoints"] },
+          "url": { "type": "string", "pattern": "^https://" },
+          "fetchedAt": { "type": "string" },
+          "status": { "type": "integer" },
+          "bytes": { "type": "integer", "minimum": 0 },
+          "rawSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "records": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "counts": { "type": "object" },
+    "unmatched": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["platform", "platformModelId", "reason"],
+        "properties": { "platform": { "type": "string" }, "platformModelId": { "type": "string" }, "reason": { "type": "string" } }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["platform", "platformModelId", "platformSlug", "canonicalId", "canonicalVia", "variant", "provider", "priceKind", "modelType", "inputPerM", "outputPerM", "cachedInputPerM", "contextLength", "quantization", "supportsTools", "free", "flags", "fetchedAt", "sourceUrl", "rawSha256"],
+        "properties": {
+          "platform": { "type": "string", "enum": ["openrouter", "vercel", "huggingface"] },
+          "platformModelId": { "type": "string", "minLength": 1 },
+          "platformSlug": { "type": ["string", "null"] },
+          "canonicalId": { "type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*$" },
+          "canonicalVia": { "type": ["string", "null"], "enum": ["rule", "table", null] },
+          "variant": { "type": "string", "minLength": 1 },
+          "provider": { "type": ["string", "null"] },
+          "priceKind": { "type": "string", "enum": ["list", "endpoint"] },
+          "modelType": { "type": ["string", "null"] },
+          "inputPerM": { "type": ["string", "null"], "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+          "outputPerM": { "type": ["string", "null"], "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+          "cachedInputPerM": { "type": ["string", "null"], "pattern": "^[0-9]+(\\.[0-9]+)?$" },
+          "contextLength": { "type": ["integer", "null"], "minimum": 0 },
+          "quantization": { "type": ["string", "null"] },
+          "supportsTools": { "type": ["boolean", "null"] },
+          "free": { "type": "boolean" },
+          "flags": { "type": "array", "items": { "type": "string" } },
+          "fetchedAt": { "type": "string" },
+          "sourceUrl": { "type": "string", "pattern": "^https://" },
+          "rawSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

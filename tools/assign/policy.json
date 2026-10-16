@@ -1,0 +1,21 @@
+{
+  "schema": "assign-policy/1",
+  "reason": "Configured assignment policy; thresholds are author interpretation pending independent review",
+  "scope": { "lines": [[30, 1], [150, 2], [500, 4], [2000, 6]], "files": [[1, 1], [5, 2], [15, 4], [50, 7]], "overflowTier": 9 },
+  "riskFloor": { "A": 6, "B": 1 },
+  "failedRounds": [[2, 8], [4, 9]],
+  "splitTier": 8,
+  "defects": [[1, 6], [3, 8], [7, 9]],
+  "unknownTier": 9,
+  "discoveryTier": 7,
+  "verification": { "light": 1, "targeted": 4, "heavy": 7 },
+  "coupling": [[1, 4], [3, 7], [6, 9]],
+  "importantTier": 8,
+  "designTier": 8,
+  "routeMaxAgeMs": 900000,
+  "dailyCeilings": { "cash": "15", "vibe": "22", "reserveFraction": "0.2", "reason": "Policy: cash 15 USD/day, Vibe at most 22 during introduction then 6; lower live policy is mandatory; this cap cannot authorize the introductory allowance" },
+  "topModel": { "modelIds": ["gpt-6-astra"], "minTier": 8, "minFailedRounds": 2, "forbiddenKinds": ["mechanical"], "reason": "Policy: expensive Astra only for persistent hard fixes, designated important artifacts or design; mechanical tasks use inexpensive models" },
+  "singleSeat": { "modelPrefix": "xiaomi/mimo-", "clients": ["mimo", "cline"], "reason": "Owner route budget: one MiMo seat at a time across transports; model prefix detects alternate clients, cline is dedicated MiMo route in this registry" },
+  "reviewExcludedMakers": ["Mistral"],
+  "reviewReason": "Policy: Mistral cannot review or certify"
+}
