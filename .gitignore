@@ -1,0 +1,29 @@
+# Claude Code local overrides (personal, never shared)
+.claude/settings.local.json
+
+# Editor and OS noise
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+*.swp
+*~
+
+# Scratch space for agents. Nothing here is project state.
+.ai/scratch/
+.ai/runtime/
+.ai/backups/
+
+# Durable local system outcomes; exported only with explicit consent.
+.ai/outcomes/
+
+# Never track secrets.
+.env
+.env.*
+*.key
+*.pem
+docs/product/launch-records/launches/pending/
+
+# local indexes and tool state rebuilt by IDE servers (a 25 MB graph database must never be staged)
+.codebase-memory/
+.mimocode/

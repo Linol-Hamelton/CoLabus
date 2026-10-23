@@ -1,0 +1,742 @@
+{
+  "schema": "clients/1",
+  "clients": {
+    "claude": {
+      "binary": "claude",
+      "models": [
+        "claude-opus-5-5",
+        "claude-sonnet-5",
+        "claude-haiku-4-5",
+        "claude-fable-5-1"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": ".claude/settings.json",
+        "resume": true
+      },
+      "command": [
+        "claude",
+        "-p",
+        "{message}",
+        "--model",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "--effort",
+            "{effort}"
+          ]
+        },
+        "--permission-mode",
+        "acceptEdits",
+        "--allowedTools",
+        "Read",
+        "Grep",
+        "Glob",
+        "Write",
+        "Edit",
+        "Bash(node:*)",
+        "Bash(git:*)",
+        "Bash(powershell:*)"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "resume": {
+        "command": [
+          "claude",
+          "-r",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "codex": {
+      "binary": "codex",
+      "models": [
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-5.6-luna",
+        "gpt-6-astra"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "~/.codex/config.toml",
+        "hooks": ".codex/hooks.json",
+        "resume": true
+      },
+      "command": [
+        "codex",
+        "exec",
+        "-m",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "-c",
+            "model_reasoning_effort={effort}"
+          ]
+        },
+        "--approve-for-me",
+        "--skip-git-repo-check",
+        "-C",
+        "{workdir}",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "codex",
+          "debug",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "config",
+        "values": [
+          "none",
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ]
+      },
+      "resume": {
+        "command": [
+          "codex",
+          "exec",
+          "resume",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "codex-tokens",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "agy": {
+      "binary": "agy",
+      "models": [
+        "gemini-3.8-flash-high",
+        "gemini-3.7-flash-high",
+        "gemini-3.6-flash-high",
+        "gemini-3.1-pro-high",
+        "claude-sonnet-4-6",
+        "claude-opus-4-6-thinking"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "agy",
+        "-p",
+        "{message}",
+        "--model",
+        "{model}",
+        "--mode",
+        "accept-edits",
+        "--add-dir",
+        "{workdir}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "agy",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "model-id",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "agy",
+          "--conversation",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "copilot": {
+      "binary": "copilot",
+      "models": [
+        "claude-sonnet-5",
+        "claude-opus-5",
+        "gpt-5.3-codex",
+        "gemini-3.5-flash",
+        "grok-4.5",
+        "kimi-k3",
+        "kimi-k2.7-code",
+        "mai-code-1.1-flash"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "copilot",
+        "-p",
+        "{message}",
+        "--model",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "--reasoning-effort",
+            "{effort}"
+          ]
+        },
+        "-C",
+        "{workdir}",
+        "--no-ask-user",
+        "--allow-tool=write",
+        "--allow-tool=shell(git:*)",
+        "--allow-tool=shell(node:*)",
+        "--allow-tool=shell(powershell:*)",
+        "--allow-tool=shell(Get-Content:*)",
+        "--allow-tool=shell(Get-ChildItem:*)",
+        "--allow-tool=shell(Select-String:*)",
+        "--allow-tool=shell(Test-Path:*)",
+        "--allow-tool=shell(Measure-Object:*)",
+        "--deny-tool=shell(git commit)",
+        "--deny-tool=shell(git push)",
+        "--deny-tool=shell(git tag)"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "none",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "resume": {
+        "command": [
+          "copilot",
+          "--resume={sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "copilot-credits",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "vibe": {
+      "binary": "vibe",
+      "models": [
+        "mistral-medium-3.5",
+        "mistral-large",
+        "zai-glm-5-3"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "~/.vibe/config.toml [[mcp_servers]]",
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "vibe",
+        "-p",
+        "{message}",
+        "--enabled-tools",
+        "read_file",
+        "--enabled-tools",
+        "grep",
+        "--enabled-tools",
+        "write_file",
+        "--enabled-tools",
+        "edit",
+        "--enabled-tools",
+        "bash",
+        "--auto-approve",
+        "--trust",
+        "--max-turns",
+        "400",
+        "--output",
+        "streaming",
+        "--workdir",
+        "{workdir}"
+      ],
+      "model": {
+        "how": "none",
+        "listing": null
+      },
+      "effort": {
+        "how": "config",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "vibe",
+          "--resume",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "kilo": {
+      "binary": "kilo",
+      "models": [
+        "deepseek/deepseek-flash",
+        "kilo/qwen/qwen3.8-27b:free",
+        "kilo/stepfun/step-3.7-flash:free",
+        "kilo/nvidia/nemotron-3-super-120b-a12b:free",
+        "openai-compatible/deepseek/deepseek-v4-flash"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "kilo",
+        "run",
+        "-m",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "--variant",
+            "{effort}"
+          ]
+        },
+        "--auto",
+        "--dir",
+        "{workdir}",
+        "--title",
+        "{title}",
+        "--format",
+        "json",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "kilo",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "high",
+          "max",
+          "minimal"
+        ]
+      },
+      "resume": {
+        "command": [
+          "kilo",
+          "--session",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "kilo-json",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "kimi": {
+      "binary": "kimi",
+      "command": [
+        "kimi",
+        "-p",
+        "{message}",
+        {
+          "if": "model",
+          "args": [
+            "-m",
+            "{model}"
+          ]
+        },
+        "--output-format",
+        "stream-json"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "config",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "kimi",
+          "-S",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "mimo": {
+      "binary": "mimo",
+      "models": [
+        "xiaomi/mimo-v2.6-flash",
+        "xiaomi/mimo-v2.6-pro",
+        "xiaomi/mimo-v2.5"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "mimo",
+        "run",
+        "{message}",
+        {
+          "if": "model",
+          "args": [
+            "-m",
+            "{model}"
+          ]
+        },
+        {
+          "if": "effort",
+          "args": [
+            "--variant",
+            "{effort}"
+          ]
+        },
+        "--yolo",
+        "--format",
+        "json"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "mimo",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "high",
+          "max",
+          "minimal"
+        ]
+      },
+      "resume": {
+        "command": [
+          "mimo",
+          "run",
+          "--session",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "kilo-json",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "cline": {
+      "binary": "cline",
+      "models": [
+        "cline-free/mimo-v2.6-flash"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "cline mcp",
+        "hooks": "~/.cline/hooks (hooks-dir flag)",
+        "resume": true
+      },
+      "command": [
+        "cline",
+        "-c",
+        "{workdir}",
+        {
+          "if": "model",
+          "args": [
+            "-m",
+            "{model}"
+          ]
+        },
+        {
+          "if": "effort",
+          "args": [
+            "--thinking",
+            "{effort}"
+          ]
+        },
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "none",
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ]
+      },
+      "resume": {
+        "command": [
+          "cline",
+          "--id",
+          "{sessionId}"
+        ],
+        "sessionId": "listed by cline history (not captured in the 2026-10-05 probe)"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "goose": {
+      "binary": "goose",
+      "models": [
+        "anthropic/claude-sonnet-4"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "goose mcp",
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "goose",
+        "run",
+        "-t",
+        "{message}",
+        "--no-session",
+        "-q"
+      ],
+      "model": {
+        "how": "config",
+        "listing": null
+      },
+      "effort": {
+        "how": "unknown",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "goose",
+          "run",
+          "--resume",
+          "--session-id",
+          "{sessionId}"
+        ],
+        "sessionId": "session id from goose session / run output (not captured in the 2026-10-05 probe, which used --no-session)"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "opencode": {
+      "binary": "opencode",
+      "models": [
+        "cerebras/qwen-3.8-27b"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "opencode mcp",
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "opencode",
+        "run",
+        "-m",
+        "{model}",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "opencode",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "unknown",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "opencode",
+          "run",
+          "--session",
+          "{sessionId}"
+        ],
+        "sessionId": "session id via `opencode session` / export (not captured in the 2026-10-05 probe)"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "qwen": {
+      "binary": "qwen",
+      "models": [
+        "qwen3.8-max",
+        "qwen3.8-flash",
+        "qwen3.8-2.4t-a95b"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "qwen",
+        "-m",
+        "{model}",
+        "--bare",
+        "--auth-type",
+        "openai",
+        "--approval-mode",
+        "yolo",
+        "--output-format",
+        "text",
+        "--max-session-turns",
+        "{turns}",
+        "-p",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "none",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "qwen",
+          "--resume",
+          "{sessionId}"
+        ],
+        "sessionId": "the session id of the client's own session store; the launcher never reads it"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "webbee": {
+      "binary": "webbee",
+      "models": [],
+      "capabilities": {
+        "fileWrite": "unknown",
+        "mcp": null,
+        "hooks": null,
+        "resume": false
+      },
+      "command": [],
+      "model": {
+        "how": "unknown",
+        "listing": null
+      },
+      "effort": {
+        "how": "unknown",
+        "values": null
+      },
+      "resume": {
+        "command": [],
+        "sessionId": null
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    }
+  }
+}

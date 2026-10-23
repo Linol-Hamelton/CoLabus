@@ -1,0 +1,42 @@
+#!/bin/sh
+# pre-push-guard.sample: refuses to push the pilot kernel branch (kernel-pilot-*) unless you say so on purpose.
+# The branch kernel-pilot-* holds the installed kernel, the session journals and the launch records of the pilot. It must NOT go to a PUBLIC
+# repository. Install (inside the project, by you; the pilot installer never writes into .git):
+#   cp docs/ops/pilot-kit/pre-push-guard.sample .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+# Bypass for ONE push, when the remote is private and you decided so:
+#   ALLOW_KERNEL_PILOT_PUSH=1 git push ...
+# It refuses when a pushed ref (local or remote side) is named refs/heads/kernel-pilot-*, and when a pushed commit contains the tip of a
+# local kernel-pilot-* branch (for example a merge of the pilot branch pushed as main). Deleting a remote branch is allowed.
+# Limits: git push --no-verify skips every hook; a commit copied by cherry-pick is a new commit and is not recognised; the hook is local
+# to this clone (a hook is not part of the repository).
+# Git calls it as: pre-push <remote-name> <remote-url>, with lines "<local ref> <local sha> <remote ref> <remote sha>" on stdin.
+if [ "${ALLOW_KERNEL_PILOT_PUSH:-}" = "1" ]; then
+  echo "pre-push-guard: ALLOW_KERNEL_PILOT_PUSH=1 is set, the check is skipped for this push." >&2
+  exit 0
+fi
+zero=0000000000000000000000000000000000000000
+refused=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -n "$local_ref" ] || continue
+  [ "$local_sha" = "$zero" ] && continue
+  case "$local_ref:$remote_ref" in
+    refs/heads/kernel-pilot-*:*|*:refs/heads/kernel-pilot-*)
+      echo "pre-push-guard: REFUSED: '$local_ref' -> '$remote_ref' is a kernel-pilot branch." >&2
+      refused=1
+      continue
+      ;;
+  esac
+  for tip in $(git for-each-ref --format='%(objectname)' 'refs/heads/kernel-pilot-*'); do
+    if git merge-base --is-ancestor "$tip" "$local_sha" 2>/dev/null; then
+      echo "pre-push-guard: REFUSED: '$local_ref' contains the tip of a local kernel-pilot-* branch (${tip}); the pilot kernel, journals and launch records would be published." >&2
+      refused=1
+      break
+    fi
+  done
+done
+if [ "$refused" = "1" ]; then
+  echo "pre-push-guard: the kernel-pilot-* branch must NOT be pushed to a public repository (see docs/ops/PILOT-NEXT-STEPS.md)." >&2
+  echo "pre-push-guard: if the remote is private and you decided to push, run this one push as: ALLOW_KERNEL_PILOT_PUSH=1 git push ..." >&2
+  exit 1
+fi
+exit 0

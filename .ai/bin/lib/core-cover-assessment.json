@@ -1,0 +1,1273 @@
+{
+  "schema": "core-cover-assessment/1",
+  "provenance": "Explicit author judgement; not independent certification",
+  "mapSha": "7631c4afce6127f70bb8b69084f8c61ad55cbe81135147ce6a9c518357fcf5a7",
+  "assessmentSha": "8a3e4911d36207b011113c89537608a533dbafca208352748f884d9d23675519",
+  "groups": [
+    {
+      "id": "AR-001",
+      "lines": [
+        5,
+        7
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-01",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Файловая система и отсутствие общей памяти.",
+      "sourceSha": "370c1644305fc109090745d1bf2d6582fdf5bf40f38b0589b7b350abcfa130fd",
+      "mapSha": "e062a4680ff3eef4baf4ae748ba3004ce9e1b0766c368c8504685c9ae48ca9b3"
+    },
+    {
+      "id": "AR-002",
+      "lines": [
+        9,
+        9
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "P-L2-010",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Вход AGENTS затем TASK не воспроизведён: lifecycle начинается с TASK; миграционное изменение чтения требует доставки.",
+      "sourceSha": "f1829d7e8088064e7d4e423c33fbc58de360392378c1f671df54ac384a459e18",
+      "mapSha": "6d9a8f6da04a4f10446bc0da8d7cf2046d848e2b917c7f07b42845e030510a43"
+    },
+    {
+      "id": "AR-003",
+      "lines": [
+        11,
+        12
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-08",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Чат не является памятью.",
+      "sourceSha": "3fb98eb1a95bd3c7bc360ff4288e890bacefb9d7025d7e2e2410c997612fdacd",
+      "mapSha": "d1dafd426fa0cf0dfeca9ee770f59c907d27df6f07a8db620d6d089ac5ee865c"
+    },
+    {
+      "id": "AR-004",
+      "lines": [
+        18,
+        26
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-03",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Шесть уровней источников.",
+      "sourceSha": "86b3e1d5f0463af2ed23f81a9247207d9462fd2a2e05a13969d7769fca383d3f",
+      "mapSha": "a1ce84c0904a9cebc95982b09bf280010ebd6873ef8896b911a7c013b4336b61"
+    },
+    {
+      "id": "AR-005",
+      "lines": [
+        28,
+        29
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-03",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        },
+        {
+          "id": "P-L0-003",
+          "recordId": "P-L0-003",
+          "bodySha": "e179e40f7bd2e5b32518a721294b820c65bcb5ed534948d2db5348291f6362b1"
+        }
+      ],
+      "note": "Конфликт и запрет действовать по нижнему источнику.",
+      "sourceSha": "4d52e46ea0db0fad41f6a8aa3a2d8c4b26becb2a4b3275481514415c1bfdef09",
+      "mapSha": "6eadbbf20bfb9ed6a254bed64bfe44c261fc62be5649f76ca2970e3ea3e4a1eb"
+    },
+    {
+      "id": "AR-006",
+      "lines": [
+        31,
+        32
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L3-001.5",
+          "recordId": "P-L3-001",
+          "bodySha": "1724bb6fa572106fecba60e857ebd7ae162282334f2b922809ad37b24df29379"
+        }
+      ],
+      "note": "Есть правило derived outputs; общего правила для всего runtime нет, P-L5-003 отсутствует.",
+      "sourceSha": "31bce2d8e62fa7c2de6e101d7be7d5a5bc1b9008839b11c82a0f3dcd780334ab",
+      "mapSha": "738f8df515beb54a154091a1f0aef72cefb4b16671feb68215c2fadd210594bd"
+    },
+    {
+      "id": "AR-007",
+      "lines": [
+        38,
+        38
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-04",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Решает только владелец.",
+      "sourceSha": "f0997842170a30b074810094fb1acf15322ab4f047815ddaf7b6d26c56f86195",
+      "mapSha": "603296bf84da4cd3b7998073db1495e4167e16f359cfd58125abd7d33b398934"
+    },
+    {
+      "id": "AR-008",
+      "lines": [
+        39,
+        42
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-18.1",
+          "recordId": "P-L0-005",
+          "bodySha": "733e19100702b36a8c8de8e333dbe49215d76d37edebbc2d516299d8aa18acac"
+        }
+      ],
+      "note": "Approved by — запись человеческого подтверждения.",
+      "sourceSha": "55426eab4b82cb2de55e5bf14e41510830b9fe94fe938e4064fd14d760fe8eb8",
+      "mapSha": "966337f1fa736004e388be89047cac7494c55e5f8294f51bb7be470917562d9d"
+    },
+    {
+      "id": "AR-009",
+      "lines": [
+        43,
+        47
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-18.2",
+          "recordId": "P-L0-005",
+          "bodySha": "733e19100702b36a8c8de8e333dbe49215d76d37edebbc2d516299d8aa18acac"
+        }
+      ],
+      "note": "Прямая транскрипция под lock с provenance.",
+      "sourceSha": "8a0875689c776f437ac5014d413205de78a1636d01fdbdb84435d0554b4b1474",
+      "mapSha": "5024693f3440de050db46ce057ccc02e802362dcdb589f35cd7da558fe345a60"
+    },
+    {
+      "id": "AR-010",
+      "lines": [
+        48,
+        49
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-18.3",
+          "recordId": "P-L0-005",
+          "bodySha": "733e19100702b36a8c8de8e333dbe49215d76d37edebbc2d516299d8aa18acac"
+        }
+      ],
+      "note": "Предложения отдельно от DECISIONS.",
+      "sourceSha": "d4fff5e846fdff26c9ef02e1665fdc7b3a6cd0bb33fbbfdb767012df6c96ae7b",
+      "mapSha": "207aec303761b071168240b38976e32a6c757e29ce9dc026542a069cb298d55b"
+    },
+    {
+      "id": "AR-011",
+      "lines": [
+        50,
+        51
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-04",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Право оспорить; запись в open questions.",
+      "sourceSha": "8377c3a6e2a0cce5de4b4ba72f5cea1eca9cbebf292325ac1fa90f1e9ec161d2",
+      "mapSha": "c327af16c7c5609ff36f87bdf98e81005cf696577f093be0dabca521718d60dd"
+    },
+    {
+      "id": "AR-012",
+      "lines": [
+        52,
+        52
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-04",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        },
+        {
+          "id": "P-L0-002",
+          "recordId": "P-L0-002",
+          "bodySha": "0eb1a823e116e8ae27d9c8ba8c6e114dd16c0112a2710e554ca51ab996adbe8d"
+        }
+      ],
+      "note": "Полномочия владельца и эскалация.",
+      "sourceSha": "5b30fd656eae558529d215b9029b32285c7a73d15829e07bf96144523140250d",
+      "mapSha": "d2ea259ba1459c559b32d4f3ef3ca3bc28cf7163f3f08fa8230016f4b1d4a25d"
+    },
+    {
+      "id": "AR-013",
+      "lines": [
+        56,
+        71
+      ],
+      "state": "changed",
+      "anchors": [
+        {
+          "id": "SCHEMA-assignment",
+          "recordId": "SCHEMA-assignment",
+          "bodySha": "521bdebe98aa2b4767bb74c9794ccba4f10410b38e8f9a50b399ec220bb1c69f"
+        }
+      ],
+      "note": "Утверждённая замена свободного Roles на грамматику; D/E карты. Не эквивалентный перенос исходного текста.",
+      "sourceSha": "592f4d559fc43febc07195f6228fcc205d92d5798cb81d28b10156fea4a48087",
+      "mapSha": "9314dc3bafd8b505166d503d711f06babe73d602fc965e28d463366af39af2c0"
+    },
+    {
+      "id": "AR-014",
+      "lines": [
+        73,
+        75
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "P-L1-001",
+          "recordId": "P-L1-001",
+          "bodySha": "2a8472926f3bef86780e37b26ad58df4d126118cbe2c221de97562508dd96cb9"
+        }
+      ],
+      "note": "Ориентация и назначенная роль; неизвестное назначение останавливает работу.",
+      "sourceSha": "70025f757f78ecca8a9b9a1f842047448515dbe98aa85b1418d10cac04eafdb6",
+      "mapSha": "4402cbf75ab3692a3feb73b30e397ffd96757b1cf95b2006d64d23a9e1aab319"
+    },
+    {
+      "id": "AR-015",
+      "lines": [
+        77,
+        79
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "ROLE-implementer",
+          "recordId": "ROLE-implementer",
+          "bodySha": "669a14a82db871dae704da26d468ad5e934b3fa4ce7d2233baee8ddbac3a37d1"
+        }
+      ],
+      "note": "Автор не принимает собственный результат.",
+      "sourceSha": "8a452eb95621f97849e5e19eaae7d75fdfe9c831c6a275428c27f6fde957edec",
+      "mapSha": "18c33e1629869a062d135e2096adeefd9456aa7fb5866262a3c9f65e824b8153"
+    },
+    {
+      "id": "AR-016",
+      "lines": [
+        81,
+        81
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "S-002",
+          "recordId": "S-002",
+          "bodySha": "4616e22d65d77f051f0fe2a80ff539f372f8b0c98890c7709a935020e40dc687"
+        }
+      ],
+      "note": "Указатель на парный цикл.",
+      "sourceSha": "8999926b0b5d930e3223239cb870b67b15e2abdbbc3d6c2738a27290625c244a",
+      "mapSha": "1eb08cc43f6cb0dfc2f41a0d3e7ad93297a59c5a0d0a9f3779dd1cb492b951a7"
+    },
+    {
+      "id": "AR-017",
+      "lines": [
+        83,
+        87
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "P-L2-006",
+          "recordId": "P-L2-006",
+          "bodySha": "4b56f000aa5442bb8d89b246cb3fa17efd9b4f0cd7a6d050582fdb5a40016ba4"
+        },
+        {
+          "id": "R-L0-04",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        },
+        {
+          "id": "R-L0-05",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Dispatch, собственный журнал, stdout не Evidence, caller не сертификатор.",
+      "sourceSha": "f3cc370fe7073325d1f7e38022ffc745053635ba23761e34615dc34f912665d5",
+      "mapSha": "2d5ac66346d62738531fbc821a0c451546313d1d9a5f88fea49246b143ef0135"
+    },
+    {
+      "id": "AR-018",
+      "lines": [
+        91,
+        103
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "P-L2-004",
+          "recordId": "P-L2-004",
+          "bodySha": "3a7184b390e396e43687e0d7062885d9c9ec929eae6aa02cbbac933a5edfc129"
+        },
+        {
+          "id": "S-002",
+          "recordId": "S-002",
+          "bodySha": "4616e22d65d77f051f0fe2a80ff539f372f8b0c98890c7709a935020e40dc687"
+        },
+        {
+          "id": "R-L0-05",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Общий adversarial prompt, prompt persisted в фазе 4 S-002; пара вне контроля.",
+      "sourceSha": "bd768c028b0936b4c8e917744e1427e7a4a08fbc97d96b1de505c2f242730a3e",
+      "mapSha": "fa88c936b28878c6f03f4f4613a0e3d1477e0023f673f8133d5b00f2f59a200e"
+    },
+    {
+      "id": "AR-019",
+      "lines": [
+        104,
+        106
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L1-002.4",
+          "recordId": "P-L1-002",
+          "bodySha": "8a3bd5e6d38b1b4a197903c5e152aaa25750a070a593a004dfd1a959f5965fc7"
+        }
+      ],
+      "note": "Один независимый reviewer для малого риска; фактический дом отличается от RULE-MAP.",
+      "sourceSha": "c0aba5b9395711e9834120a65a256779fd8f714056f0ebc2fb8ed1ae7333a375",
+      "mapSha": "0c17d6d71aae0070d6f15bf8b8e42e6e72546793eef738a456deb6f873701cc1"
+    },
+    {
+      "id": "AR-020",
+      "lines": [
+        107,
+        108
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L7-001.11",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        }
+      ],
+      "note": "Лимиты prompt/report.",
+      "sourceSha": "5172139bebcdda86a8ee1eaa601e9ebe66b400986cd675b1e90bec14afee2542",
+      "mapSha": "51751c4221b397244d775bca68912facabe4560b1c3dbd6ffaca87afd0af87c6"
+    },
+    {
+      "id": "AR-021",
+      "lines": [
+        110,
+        125
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "P-L2-004",
+          "recordId": "P-L2-004",
+          "bodySha": "3a7184b390e396e43687e0d7062885d9c9ec929eae6aa02cbbac933a5edfc129"
+        },
+        {
+          "id": "ROLE-certifier",
+          "recordId": "ROLE-certifier",
+          "bodySha": "1a5dd2cd87b2186b72eada0fb1cdf73e79149dd20fc2b1f7e6cd4f24ef2708e7"
+        }
+      ],
+      "note": "Режим и receipt есть; обязательный раздел TASK и два поля путей Completion gate в записи не заданы.",
+      "sourceSha": "662d944714824784629937676023afbd6be9c3228de81c34c11723de5c2e3b6e",
+      "mapSha": "db6f47b770303ef4ab05ea84442759d73135da3ee44d062c3d4f3c698f0f3da0"
+    },
+    {
+      "id": "AR-022",
+      "lines": [
+        127,
+        131
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L1-certifier.3",
+          "recordId": "ROLE-certifier",
+          "bodySha": "1a5dd2cd87b2186b72eada0fb1cdf73e79149dd20fc2b1f7e6cd4f24ef2708e7"
+        },
+        {
+          "id": "ROLE-certifier",
+          "recordId": "ROLE-certifier",
+          "bodySha": "1a5dd2cd87b2186b72eada0fb1cdf73e79149dd20fc2b1f7e6cd4f24ef2708e7"
+        }
+      ],
+      "note": "Четыре capabilities от orchestrator и Receipt-Owner.",
+      "sourceSha": "4adb98f01798544531db7a919344fd030705d912481ffbf2e99398496719e1f4",
+      "mapSha": "12b40d0bbe18f8c958458cb4f4c430472632b0acd61d213d709234c0a6de5c52"
+    },
+    {
+      "id": "AR-023",
+      "lines": [
+        132,
+        135
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L7-001.10",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        },
+        {
+          "id": "P-L2-004",
+          "recordId": "P-L2-004",
+          "bodySha": "3a7184b390e396e43687e0d7062885d9c9ec929eae6aa02cbbac933a5edfc129"
+        }
+      ],
+      "note": "Advisory/transcription не закрывают gate.",
+      "sourceSha": "39a69f91cb44dfa841eaa7a950bbb097268f78bc06504ea0a609fedfd9365fda",
+      "mapSha": "cd3d2f4f4760024f56cc6852ce8bff1f4e79e23552539857db5b95562343a868"
+    },
+    {
+      "id": "AR-024",
+      "lines": [
+        137,
+        138
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-004.7",
+          "recordId": "P-L2-004",
+          "bodySha": "3a7184b390e396e43687e0d7062885d9c9ec929eae6aa02cbbac933a5edfc129"
+        }
+      ],
+      "note": "Reproduction на каждый FAIL/BLOCKED claim.",
+      "sourceSha": "7f8f15d1c20e83cd9b1403ed1d0d9ed591a7fa16243f17aa6df514a66e49a012",
+      "mapSha": "608d2d7c1122ab95699af2a1c09a9395eb3121212d3d018b0290bcb5a4143be3"
+    },
+    {
+      "id": "AR-025",
+      "lines": [
+        144,
+        147
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-010.1",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "TASK/status/log.",
+      "sourceSha": "b7433f2da29be9d358019a849e66284822e9d4b8f657386b9f3a93ae899adc53",
+      "mapSha": "ca417e2e5318a672787f6107a3bdf736507703e6ec9054140b1a9e97612bd263"
+    },
+    {
+      "id": "AR-026",
+      "lines": [
+        148,
+        153
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-16",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Inventory и проверка source list.",
+      "sourceSha": "e8083458decf34f439690715850832d5c566993a81a5acf21852efdef500e3ce",
+      "mapSha": "a58b64a58e854da4ccabae610e73eb6b0f4493e9c2fc17353cae780574744922"
+    },
+    {
+      "id": "AR-027",
+      "lines": [
+        154,
+        156
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-010.1",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Журналы и DECISIONS при architecture/data/contracts.",
+      "sourceSha": "027cfcbbbb2de9b871dbeafc55f39e54dfe7d0c5ede5563347ef4224dbf99372",
+      "mapSha": "0bb2603144bb0bece0b0ef574d8eb3417e25199565e60b3a74b195a23b5677c6"
+    },
+    {
+      "id": "AR-028",
+      "lines": [
+        157,
+        158
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "P-L0-002",
+          "recordId": "P-L0-002",
+          "bodySha": "0eb1a823e116e8ae27d9c8ba8c6e114dd16c0112a2710e554ca51ab996adbe8d"
+        },
+        {
+          "id": "P-L2-010",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Нет задания — остановиться.",
+      "sourceSha": "e4c8141f144d9403f8cb63d776540e95bbe63f2d362d12d848a91b57bf9ac416",
+      "mapSha": "32123b65ed0d69dfdf2c59da2ef04466e5585c8c08d2a02bc4cb0efbb290de5c"
+    },
+    {
+      "id": "AR-029",
+      "lines": [
+        160,
+        162
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-010.3",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Ограниченная инъекция; пропущенное читать самому. Паспорт TOOL-protocol-hooks отсутствует, смысл есть в lifecycle.",
+      "sourceSha": "9ffae69ec88308d3a2125c6364150ec9b539258e4b15502fa29c2a78db11c613",
+      "mapSha": "f6e5d8ab2cb8c9e07ec56569e84333b5177a383da9e8c0822ac2086742ebabb1"
+    },
+    {
+      "id": "AR-030",
+      "lines": [
+        168,
+        177
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-010.4",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        },
+        {
+          "id": "R-L2-010.5",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        },
+        {
+          "id": "S-002",
+          "recordId": "S-002",
+          "bodySha": "4616e22d65d77f051f0fe2a80ff539f372f8b0c98890c7709a935020e40dc687"
+        }
+      ],
+      "note": "Конец сессии; prompt/certification в S-002.",
+      "sourceSha": "ed4bfd51202de33ec67ac7b3048c6c346fb20c5eddfb9cb3fce24677bb3269fa",
+      "mapSha": "57f282eb778cd87a700327e88bd7256cf7def644bfd64c781f7fc1e31d7adfde"
+    },
+    {
+      "id": "AR-031",
+      "lines": [
+        179,
+        181
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-011.3",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        }
+      ],
+      "note": "Честный журнал и отрицательные заявления.",
+      "sourceSha": "e1f06d6c96ad7f7e21de8dd9a5d5a647f29db0ba9e577ce2a89c21bf3c30b380",
+      "mapSha": "bb70e4f79d3eb30e217e1eee785c3247d229ecb661c7cab2100c1b16f3ccdbb1"
+    },
+    {
+      "id": "AR-032",
+      "lines": [
+        187,
+        189
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-011.1",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        },
+        {
+          "id": "R-L0-07",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Один журнал, не трогать чужой.",
+      "sourceSha": "9be04091e72d9ac2444343f1473ec44e8b813ad951f1ef6a8de5c7b1aece980f",
+      "mapSha": "394295127736919ecd47bc3a267377ae1c6b116e848df4801693343c8e3b27eb"
+    },
+    {
+      "id": "AR-033",
+      "lines": [
+        191,
+        202
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-010.2",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Session identity от hooks/session start.",
+      "sourceSha": "716ba0b5cd3f2d9eb38564544dd71b53395fd7f6b6dd0ba631eea79191956959",
+      "mapSha": "4ecc8d20da58c9eda03d87960fd07fc543dba4045c29de120b148f94de44afe8"
+    },
+    {
+      "id": "AR-034",
+      "lines": [
+        203,
+        203
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-011.4",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        }
+      ],
+      "note": "README не журнал.",
+      "sourceSha": "684522a9ac615cb75d6fe89f48e0e875e4b484afbed92bc8d062290c7c5c91f4",
+      "mapSha": "1de88d1b3b274e72b788383f5c978e1466ef82f7d223568ced76f76906872193"
+    },
+    {
+      "id": "AR-035",
+      "lines": [
+        205,
+        209
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-011.1",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        },
+        {
+          "id": "P-L7-001",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        }
+      ],
+      "note": "Запрет чужого журнала и CM-45 в Existing checks L7. Дом предупреждения отсутствует в заявленном P-L2-011.",
+      "sourceSha": "c87c83e49c7e4b897953d5c0d1039f800f3cacc326cc587a1fdba0378dbd08df",
+      "mapSha": "b72aacf669426afef0cd1c449b9e8bcf0580cb397a781b51f9745852c5b23775"
+    },
+    {
+      "id": "AR-036",
+      "lines": [
+        211,
+        212
+      ],
+      "state": "missing",
+      "anchors": [],
+      "note": "Prune только пустых журналов и ручной архив под lock; P-L5-002 отсутствует.",
+      "sourceSha": "e836469f680637b88736a8cf6fac8aa8c9ab9e6c11fef9f7faf1b2ac8cc19453",
+      "mapSha": "8f4d07090d85f4f7f8c9dad857073bd195215dad7e08a68fab0318743b4b41e8"
+    },
+    {
+      "id": "AR-037",
+      "lines": [
+        214,
+        228
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-011.2",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        }
+      ],
+      "note": "Все пять меток; формат заголовка в шагах P-L2-011.",
+      "sourceSha": "1ece8d5cd55365f5a4ecc0df85ce8965ed6816cf60e52bfb92b6e772118619c9",
+      "mapSha": "6de074e3cbc8a8dc943c772c194a54dcb54067da0f7f67339d551269419d0105"
+    },
+    {
+      "id": "AR-038",
+      "lines": [
+        232,
+        232
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L2-011.5",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        }
+      ],
+      "note": "150 строк журнала есть в другой записи, P-L5-002 отсутствует.",
+      "sourceSha": "f70d2f9f9dda414c5a7d3a78aa41afb25d22e18fcff78fb61403acc82389a6d0",
+      "mapSha": "eca01d5902fd6f95184ae7ab09cd975f51a8a6736f93bccb184289f1463f16ca"
+    },
+    {
+      "id": "AR-039",
+      "lines": [
+        233,
+        251
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L7-001.3",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        },
+        {
+          "id": "R-L7-001.5",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        }
+      ],
+      "note": "Отчёт, журнал, короткий чат, mandatory header.",
+      "sourceSha": "65cbb308065ed8f249d11b05fe419dfaa0818a9fd0f1a339a759e492149a0d15",
+      "mapSha": "438ba415661763edad1ea9c3e715edd0e2bc11002c4557a3a13f587705be3504"
+    },
+    {
+      "id": "AR-040",
+      "lines": [
+        252,
+        255
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L7-001.10",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        }
+      ],
+      "note": "Транскрипция и её маркировка.",
+      "sourceSha": "228986800579579c63b5d111a0babb1f339f5b3f5712a4d056c193defad61a4b",
+      "mapSha": "c625cbd9fb9cefb80c7492ee3c3bb9f30ae4de2a115ecfa6f46a1d2d9f96d184"
+    },
+    {
+      "id": "AR-041",
+      "lines": [
+        256,
+        257
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L7-001.4",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        }
+      ],
+      "note": "Неизменяемые reviews.",
+      "sourceSha": "19640dc424e5486183a3a4b98137d45ac55285516065354c4099814de0b771bd",
+      "mapSha": "059a2747599c93989710c200398df768465eed9e9c1b0064b55515fa694d7c8d"
+    },
+    {
+      "id": "AR-042",
+      "lines": [
+        258,
+        263
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "TOOL-protocol-ledger",
+          "recordId": "TOOL-protocol-ledger",
+          "bodySha": "993f2863859acb283d069684a39f52650b57f7ff4a5099ed8fdef0e07e44f2d0"
+        }
+      ],
+      "note": "Cover/dup corpus advisory.",
+      "sourceSha": "57243a289a196d8de9a93e9485f16e1c5be8239671f17ca7bd45f7d63f6ff897",
+      "mapSha": "b7332e1abf79e7b9d8d3302bd83aa014f15758379039d362200deb9d2cd5588c"
+    },
+    {
+      "id": "AR-043",
+      "lines": [
+        269,
+        294
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L0-07",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        },
+        {
+          "id": "P-L2-010",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Общий lock и запрет stealing есть; acquire/release, abandoned operation, PID/stale recovery без P-L5-001 не перенесены.",
+      "sourceSha": "a9b0058fac49e73957d0ba345ad892e1f236ba4307d69c82158da7cd20218ed3",
+      "mapSha": "31f8a71ef03e5ac1bde3f94ad11d3a66f8d51f62832fd21732b281a63d1e1f0e"
+    },
+    {
+      "id": "AR-044",
+      "lines": [
+        296,
+        304
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "P-L0-005",
+          "recordId": "P-L0-005",
+          "bodySha": "733e19100702b36a8c8de8e333dbe49215d76d37edebbc2d516299d8aa18acac"
+        },
+        {
+          "id": "P-L2-010",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Append-only DECISIONS/REGISTRY есть; вся таблица shared documents (TASK/PLAN/ARCHIVE) без P-L5-001 не перенесена.",
+      "sourceSha": "09eef03e11081b0a5467b457f4d4fbb1dece176cedb88d42243b99c02efb4534",
+      "mapSha": "950558c6c19c86bacacc67c5ea22aca92c09faf68a73b2c99a6ab88864ca35c2"
+    },
+    {
+      "id": "AR-045",
+      "lines": [
+        306,
+        309
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-18.4",
+          "recordId": "P-L0-005",
+          "bodySha": "733e19100702b36a8c8de8e333dbe49215d76d37edebbc2d516299d8aa18acac"
+        }
+      ],
+      "note": "Новый Supersedes block.",
+      "sourceSha": "f89d54f1b1a6fc79d13b49a91c410bfd20b70a12bed57138f291f7d4d7b2970c",
+      "mapSha": "ba3d0cdebdd9ea22c4da24047eea01394cafc507288b17cd0744e180fb8a8ffe"
+    },
+    {
+      "id": "AR-046",
+      "lines": [
+        311,
+        321
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-18.5",
+          "recordId": "P-L0-005",
+          "bodySha": "733e19100702b36a8c8de8e333dbe49215d76d37edebbc2d516299d8aa18acac"
+        }
+      ],
+      "note": "Шесть reopen trigger и доказательства.",
+      "sourceSha": "ccbb653df693c8d7b647a02afdc219897fc0f00702ded9c97d61a81fd284031d",
+      "mapSha": "1a31140505f4a184bfad2192d3f4acb62bb121f4a89c413b66fc1aeac4dd57c4"
+    },
+    {
+      "id": "AR-047",
+      "lines": [
+        327,
+        346
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L2-010.4",
+          "recordId": "P-L2-010",
+          "bodySha": "aad17fba4fe9761de4ce31bd713fdad7d7b12e51e07e97251756b4b4d15507a7"
+        }
+      ],
+      "note": "Validator/source/host tests есть; installed testCommand и полный record-контракт не перенесены; TOOL-validate отсутствует.",
+      "sourceSha": "a2336c8fa0a6f21a3e7c3c1ae94226039c4ff55cfbcf51bedd4b3304a22d114f",
+      "mapSha": "f6f2842cad3d7d72363d4edc770751d67f6aed0f3de47b7c60369e306c2ebef7"
+    },
+    {
+      "id": "AR-048",
+      "lines": [
+        348,
+        356
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "P-L2-011",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        }
+      ],
+      "note": "Record attachment есть; автоматический запуск validator/suite/testCommand и stamped tree digest не имеют SCHEMA-evidence.",
+      "sourceSha": "967ea17cc404ed029ee5657971329811233c8ed0a2e8ce62f2bd1ae7a67a39b8",
+      "mapSha": "aad1c63573c03b430d4bacf8fd9ceaf9736f536422b8f081b51db7b0f40cff81"
+    },
+    {
+      "id": "AR-049",
+      "lines": [
+        358,
+        359
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L0-07",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Запрет секретов есть; сканирование record/Stop отдельно не описано правилом ядра.",
+      "sourceSha": "8e9741bf74db87c600911fc87316372d141a6b7e741b5e8cffc082e6a5448d82",
+      "mapSha": "7d023baae7ad6aee79ad32af141f78019fb06e746725cc618dd973bd6f633d18"
+    },
+    {
+      "id": "AR-050",
+      "lines": [
+        361,
+        366
+      ],
+      "state": "missing",
+      "anchors": [],
+      "note": "Rehash после редактирования для редактуры секрета; SCHEMA-evidence отсутствует.",
+      "sourceSha": "e31b74d5adcb0dc26e9a378e2c0c95190b813082a4a24f392b3d4972693efb80",
+      "mapSha": "0e0c4ca79c6f2e34e5b5283a95879721daf1a75aa61ca35498e5cd2d808fdec4"
+    },
+    {
+      "id": "AR-051",
+      "lines": [
+        368,
+        376
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L2-004.1",
+          "recordId": "P-L2-004",
+          "bodySha": "3a7184b390e396e43687e0d7062885d9c9ec929eae6aa02cbbac933a5edfc129"
+        }
+      ],
+      "note": "Entry hash/candidate digest упомянуты; verify дерева, self hash и запрет hand-written Evidence как полный контракт не перенесены.",
+      "sourceSha": "f126b3b1d76cce4e24881ef7c2f44e767f1769ee4d61f2c39745e00edf4bda7e",
+      "mapSha": "50c63006bf5a01a8791879de26301e3f3a906d58efc7cc7502406e3b53523ce4"
+    },
+    {
+      "id": "AR-052",
+      "lines": [
+        378,
+        379
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L3-001.4",
+          "recordId": "P-L3-001",
+          "bodySha": "1724bb6fa572106fecba60e857ebd7ae162282334f2b922809ad37b24df29379"
+        }
+      ],
+      "note": "External tooling/MCP advisory.",
+      "sourceSha": "252251cf356b16214adfd380e37d052f162c7a98e07701aa23a92935d3510a87",
+      "mapSha": "a0738d531b308e2c104530ebc2d357cf28f53a8d07b1355a31b8790ad092e29c"
+    },
+    {
+      "id": "AR-053",
+      "lines": [
+        385,
+        408
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "P-L7-001",
+          "recordId": "P-L7-001",
+          "bodySha": "c9a206de8797f9a1e49cf6a8b31a7d922e0a9e94b85b4d2d141aa49eea034dfa"
+        },
+        {
+          "id": "R-L2-011.6",
+          "recordId": "P-L2-011",
+          "bodySha": "7f37702623336518a42f6c6ea75e6555eb4ef80e568f84d2696de0ce1b4b87d1"
+        }
+      ],
+      "note": "Лимиты таблицей есть в L7 Existing checks; автоматический archive action упомянут, но manual CLI/status и весь lifecycle переноса отсутствуют без P-L5-002.",
+      "sourceSha": "b2bfefb84fb63357fede351148555a2b73ea94a41e8c30eefdb6162514975f09",
+      "mapSha": "de911707d7f027d8ab96c3762e077d90622aee14d64575b9e65cc89e4aa428f4"
+    },
+    {
+      "id": "AR-054",
+      "lines": [
+        415,
+        424
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "P-L9-001",
+          "recordId": "P-L9-001",
+          "bodySha": "14fe2a7c3e14c49fd9f7d919540502f3d327cd6d2bd2e1b0c23d5288247c22b9"
+        }
+      ],
+      "note": "Task/read/status/scope есть; обязанность decisions-index перед code change и journal assumption не перенесена полностью.",
+      "sourceSha": "3a780d7d5ec6f2087be812a50414897923cbe09d56a8af3738720be27b185704",
+      "mapSha": "2fb2e27b947a0460f008350934ebe1daaeac392ca0b6397cd16d9a8e97a273c5"
+    },
+    {
+      "id": "AR-055",
+      "lines": [
+        426,
+        427
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L9-001.2",
+          "recordId": "P-L9-001",
+          "bodySha": "14fe2a7c3e14c49fd9f7d919540502f3d327cd6d2bd2e1b0c23d5288247c22b9"
+        }
+      ],
+      "note": "Не делать сторонние рефакторинги.",
+      "sourceSha": "dd58655aa3725f856562816b51ebb29d138363001062c9358fc77a4badc5fbd9",
+      "mapSha": "83b55c02970fbf8d7ed5fc1244609b20c7c0247d79e119a549d4913e7cde7308"
+    },
+    {
+      "id": "AR-056",
+      "lines": [
+        433,
+        437
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L9-001.6",
+          "recordId": "P-L9-001",
+          "bodySha": "14fe2a7c3e14c49fd9f7d919540502f3d327cd6d2bd2e1b0c23d5288247c22b9"
+        }
+      ],
+      "note": "Owner word для Git есть; meaningful checkpoints, не пушить каждый шаг, не переписывать pushed history как нормы отсутствуют.",
+      "sourceSha": "e8a27e8f8f790ae870fb9daf4b8afbe111ad4acae0796d7f7d156d8c22e21db6",
+      "mapSha": "3b08a6db8931a83f98f8545e2b7e1cd5ec80412c3130e3c1a15e57b70d6fe1f6"
+    },
+    {
+      "id": "AR-057",
+      "lines": [
+        438,
+        438
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L9-001.3",
+          "recordId": "P-L9-001",
+          "bodySha": "14fe2a7c3e14c49fd9f7d919540502f3d327cd6d2bd2e1b0c23d5288247c22b9"
+        }
+      ],
+      "note": "Branch для крупного изменения.",
+      "sourceSha": "3267be0d8921ba854d25dc6c9c98b3a06d56f2cce82fe663c2f435728972aec4",
+      "mapSha": "953e74131f72df3d2fc2f8be100f39368afc82bb50e280b98c253880db7fe3d4"
+    },
+    {
+      "id": "AR-058",
+      "lines": [
+        439,
+        439
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L0-07",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Не писать секреты есть; обязательное хранение ключей в environment в ядре не задано.",
+      "sourceSha": "6efcda0f062623cbd598c7283b0049ff2ac2bfbea0aea4a7449346cb349d0a13",
+      "mapSha": "1dc39c5e562bf113eebe564e2245704ca1660b832ce3f134343a027fac348c90"
+    },
+    {
+      "id": "AR-059",
+      "lines": [
+        445,
+        455
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L9-001.7",
+          "recordId": "P-L9-001",
+          "bodySha": "14fe2a7c3e14c49fd9f7d919540502f3d327cd6d2bd2e1b0c23d5288247c22b9"
+        }
+      ],
+      "note": "UTF-8 no BOM/LF, ASCII-only PS1; исходные объяснения не отдельные обязанности.",
+      "sourceSha": "09cad38b719ad26bf9107e43452ad92e1fa4fb4cf96134ba0d14e5513527cb12",
+      "mapSha": "dfa39367671e6f4c8c6f65d6444dd7512ee2953eff4e7eb9475c6e1c7f09ec09"
+    },
+    {
+      "id": "AR-060",
+      "lines": [
+        477,
+        483
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L0-07",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        },
+        {
+          "id": "R-L0-04",
+          "recordId": "P-L0-000",
+          "bodySha": "634a74cd9129c92d48fc47368e912a99c05c7d14a56ae86973bbf606abf4a8fa"
+        }
+      ],
+      "note": "Never; текущий диапазон 477-483 вместо старого 461-467.",
+      "sourceSha": "4b212006c94c507ade08b38febf1b481462e81b1400babd4bf789c370e8c7833",
+      "mapSha": "95e13e24b4c27fae99f16ce16e6e8c1081d3d5109eb547580fc1494379f47e5a"
+    },
+    {
+      "id": "AR-061",
+      "lines": [
+        458,
+        458
+      ],
+      "state": "covered",
+      "anchors": [
+        {
+          "id": "R-L9-001.7",
+          "recordId": "P-L9-001",
+          "bodySha": "14fe2a7c3e14c49fd9f7d919540502f3d327cd6d2bd2e1b0c23d5288247c22b9"
+        }
+      ],
+      "note": "Новый Files пункт 11.1 — частный случай общего encoding rule.",
+      "sourceSha": "3a802c15b6f7fdc921ac7876f6150e485883c966eb0d16b729c06f376bb460f8",
+      "mapSha": null
+    },
+    {
+      "id": "AR-062",
+      "lines": [
+        459,
+        460
+      ],
+      "state": "missing",
+      "anchors": [],
+      "note": "Новый запрет non-ASCII argv cmd/PowerShell; UTF-8 prompt file/stdin — нет нормативного дома.",
+      "sourceSha": "01aa02505bc0b5f03767594a40847e73ec748232ddc886e6295647cad2a25944",
+      "mapSha": null
+    },
+    {
+      "id": "AR-063",
+      "lines": [
+        461,
+        463
+      ],
+      "state": "missing",
+      "anchors": [],
+      "note": "Новые Input/OutputEncoding, explicit UTF-8 read/write и запрет Out-File — нет дома.",
+      "sourceSha": "bc6a52fff73f7c336bf96818c0358c57b3f2129d61bff798b93908e4b0e48ec3",
+      "mapSha": null
+    },
+    {
+      "id": "AR-064",
+      "lines": [
+        464,
+        465
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "R-L2-006.3",
+          "recordId": "P-L2-006",
+          "bodySha": "4b56f000aa5442bb8d89b246cb3fa17efd9b4f0cd7a6d050582fdb5a40016ba4"
+        }
+      ],
+      "note": "Console output не Evidence; запрет перепубликации без clean re-encode нигде в операционных правилах не записан.",
+      "sourceSha": "203c3a90bcff178cbbac9ff1c4e21c1d9c3bb729dfaa88c431fa333c65717fbc",
+      "mapSha": null
+    },
+    {
+      "id": "AR-065",
+      "lines": [
+        466,
+        466
+      ],
+      "state": "missing",
+      "anchors": [],
+      "note": "Telegram/owner JSON UTF-8 only — нет дома.",
+      "sourceSha": "98bd3767953606a62460fcf1165886d33b20472b94d780c735ceda999b7f90b6",
+      "mapSha": null
+    },
+    {
+      "id": "AR-066",
+      "lines": [
+        467,
+        468
+      ],
+      "state": "missing",
+      "anchors": [],
+      "note": "Русская документация/owner communication, English code/CLI prompts — нет дома.",
+      "sourceSha": "7c59f9261a9503e3bb325844c949b1d8c80ff03c7ba2abd6aaff3f265053b228",
+      "mapSha": null
+    },
+    {
+      "id": "AR-067",
+      "lines": [
+        469,
+        470
+      ],
+      "state": "partial",
+      "anchors": [
+        {
+          "id": "P-L9-001",
+          "recordId": "P-L9-001",
+          "bodySha": "14fe2a7c3e14c49fd9f7d919540502f3d327cd6d2bd2e1b0c23d5288247c22b9"
+        }
+      ],
+      "note": "Mojibake WARN отмечен в Execution map; обязанность stop/fix/quarantine не перенесена.",
+      "sourceSha": "71fc5c5d44517ea95671298e53158c0b3e9346c39a92bbfd6d3d256f0abcab0e",
+      "mapSha": null
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "schema": "assign-policy/2",
+  "reason": "Configured assignment policy",
+  "riskFloor": {
+    "A": 6,
+    "B": 1
+  },
+  "failedRounds": [
+    [
+      2,
+      8
+    ],
+    [
+      4,
+      9
+    ]
+  ],
+  "splitTier": 8,
+  "defects": [
+    [
+      1,
+      6
+    ],
+    [
+      3,
+      8
+    ],
+    [
+      7,
+      9
+    ]
+  ],
+  "unknownTier": 9,
+  "discoveryTier": 7,
+  "verification": {
+    "light": 1,
+    "targeted": 4,
+    "heavy": 7
+  },
+  "coupling": [
+    [
+      1,
+      4
+    ],
+    [
+      3,
+      7
+    ],
+    [
+      6,
+      9
+    ]
+  ],
+  "importantTier": 8,
+  "designTier": 8,
+  "factors": [
+    "protectedPaths",
+    "novelty",
+    "reversibility",
+    "ambiguity",
+    "coupling",
+    "independentJudgement"
+  ],
+  "sumTiers": [
+    1,
+    2,
+    2,
+    3,
+    4,
+    4,
+    5,
+    6,
+    6,
+    7,
+    8,
+    8,
+    9
+  ],
+  "hardFloors": {
+    "certification": 7,
+    "kernel": 7,
+    "protected": 4
+  },
+  "pathFloors": {
+    "A": 7,
+    "B": 1
+  },
+  "rubric": {
+    "factors": {
+      "protectedPaths": {
+        "label": "Protected paths",
+        "scores": [
+          "none",
+          "tests or kernel documents",
+          "`.ai/`, validator, gates, hooks"
+        ]
+      },
+      "novelty": {
+        "label": "Novelty",
+        "scores": [
+          "precedent exists",
+          "partial",
+          "none"
+        ]
+      },
+      "reversibility": {
+        "label": "Reversibility",
+        "scores": [
+          "trivial revert",
+          "revert with migration",
+          "irreversible or external"
+        ]
+      },
+      "ambiguity": {
+        "label": "Ambiguity",
+        "scores": [
+          "no open question",
+          "1-2",
+          "≥ 3 or conflicting sources"
+        ]
+      },
+      "coupling": {
+        "label": "Coupling",
+        "scores": [
+          "one layer",
+          "two layers",
+          "≥ 3 layers"
+        ]
+      },
+      "independentJudgement": {
+        "label": "Independent judgement",
+        "scores": [
+          "the work follows a precise specification or a fixed procedure",
+          "review or critique that another participant checks",
+          "a judgement others rely on without re-deriving it: certification, architecture, or a high-responsibility synthesis, specification or audit"
+        ]
+      }
+    },
+    "basis": "Volume is not a factor: the tier follows uncertainty and the consequence of an error (PROTO-DEC-0074 item 4, 0075 item 8). The six factors operationalize the four parameters of 0075 item 8: Novelty and Ambiguity (uncertainty and reasoning depth), Reversibility and Protected paths (the consequence of an error), Coupling (cross-system coupling) and Independent judgement (the independent judgement required). Context window, modality, tools, route capability and language support are hard constraints, checked when the route is resolved, not scored.",
+    "reviewOnly": "Hard floors: a certification is at least T7, and so is a task that directly creates, changes or applies a candidate kernel record, kernel code or protocol tooling. A research, design or review frame that produces only advisory artefacts does not take that floor because its result may later change the kernel, and a review-only task takes the rubric's tier unless another rule sets a higher floor (PROTO-DEC-0072). A protected path is at least T4."
+  },
+  "topCost": {
+    "models": [
+      "claude-fable-5-1",
+      "gpt-6-astra"
+    ],
+    "reason": "PROTO-DEC-0199 item 1: top-cost models are launched only at a real dead end or for the most responsible decision; --top-cost records that attestation for this plan"
+  },
+  "routeMaxAgeMs": 900000,
+  "dailyCeilings": {
+    "cash": "15",
+    "vibe": "22",
+    "reserveFraction": "0.2",
+    "reason": "Policy: cash 15 USD/day, Vibe at most 22 during introduction then 6; lower live policy is mandatory; this cap cannot authorize the introductory allowance"
+  },
+  "topModel": {
+    "modelIds": [
+      "gpt-6-astra"
+    ],
+    "minTier": 8,
+    "minFailedRounds": 2,
+    "forbiddenKinds": [
+      "mechanical"
+    ],
+    "reason": "Policy: expensive Astra only for persistent hard fixes, designated important artifacts or design; mechanical tasks use inexpensive models"
+  },
+  "singleSeat": {
+    "modelPrefix": "xiaomi/mimo-",
+    "clients": [
+      "mimo",
+      "cline"
+    ],
+    "reason": "Owner route budget: one MiMo seat at a time across transports; model prefix detects alternate clients, cline is dedicated MiMo route in this registry"
+  },
+  "reviewExcludedMakers": [
+    "Mistral"
+  ],
+  "reviewReason": "Policy: Mistral cannot review or certify",
+  "_generated": {
+    "generated": true,
+    "source": "docs/ops/selection-policy.json",
+    "sha256": "d08bdfcbfa0f2518620984739a58cbde932e563c84086ec84b30aed232dd758f"
+  }
+}

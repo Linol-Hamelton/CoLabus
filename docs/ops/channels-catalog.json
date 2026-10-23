@@ -1,0 +1,12 @@
+{
+  "schema": "channels-catalog/1",
+  "comment": "Project-owned connection catalog. No channel or machine observation is supplied as verified. Populate channels with the project's own verified public connection instructions before using channel setup tools; never store key values here.",
+  "keyNaming": {
+    "prefix": "KEYSTORE_",
+    "pattern": "KEYSTORE_<SERVICE>_<ALIAS>",
+    "service": "[A-Z0-9]+ (no underscore)",
+    "alias": "[A-Za-z][A-Za-z0-9]{0,23}, stored upper case",
+    "rule": "one key per (service, account); a second alias for the same service needs --second-account"
+  },
+  "channels": []
+}

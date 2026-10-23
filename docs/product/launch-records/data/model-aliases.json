@@ -1,0 +1,291 @@
+{
+  "sv": "model-aliases/1",
+  "aliases": [
+    {
+      "key": "claude opus 5.5",
+      "modelId": "claude-opus-5-5"
+    },
+    {
+      "key": "claude fable 5.1",
+      "modelId": "claude-fable-5-1"
+    },
+    {
+      "key": "claude sonnet 5",
+      "modelId": "claude-sonnet-5"
+    },
+    {
+      "key": "claude haiku 4.5",
+      "modelId": "claude-haiku-4-5"
+    },
+    {
+      "key": "claude opus 5",
+      "modelId": "claude-opus-5"
+    },
+    {
+      "key": "gpt 5.6 sol",
+      "modelId": "gpt-5.6-sol"
+    },
+    {
+      "key": "gpt 5.6 terra",
+      "modelId": "gpt-5.6-terra"
+    },
+    {
+      "key": "gpt 5.6 luna",
+      "modelId": "gpt-5.6-luna"
+    },
+    {
+      "key": "gpt 6 astra",
+      "modelId": "gpt-6-astra"
+    },
+    {
+      "key": "gpt 5.3 codex",
+      "modelId": "gpt-5.3-codex"
+    },
+    {
+      "key": "gemini 3.8 flash",
+      "modelId": "gemini-3.8-flash"
+    },
+    {
+      "key": "gemini 3.7 flash",
+      "modelId": "gemini-3.7-flash"
+    },
+    {
+      "key": "gemini 3.6 flash",
+      "modelId": "gemini-3.6-flash"
+    },
+    {
+      "key": "gemini 3.5 flash",
+      "modelId": "gemini-3.5-flash"
+    },
+    {
+      "key": "gemini 3.1 pro preview",
+      "modelId": "gemini-3.1-pro"
+    },
+    {
+      "key": "deepseek v4.1 flash",
+      "modelId": "deepseek-flash"
+    },
+    {
+      "key": "deepseek v4 pro 0813",
+      "modelId": "deepseek-v4-pro"
+    },
+    {
+      "key": "mistral medium 3.5",
+      "modelId": "mistral-medium-3.5"
+    },
+    {
+      "key": "mistral large",
+      "modelId": "mistral-large"
+    },
+    {
+      "key": "glm 5.3",
+      "modelId": "zai-glm-5-3"
+    },
+    {
+      "key": "grok 4.5",
+      "modelId": "grok-4.5"
+    },
+    {
+      "key": "kimi k3",
+      "modelId": "kimi-k3"
+    },
+    {
+      "key": "kimi k2.7 code",
+      "modelId": "kimi-k2.7-code"
+    },
+    {
+      "key": "mai code 1.1 flash",
+      "modelId": "mai-code-1.1-flash"
+    },
+    {
+      "key": "mimo v2.6 flash",
+      "modelId": "xiaomi/mimo-v2.6-flash"
+    }
+  ],
+  "routeAliases": [
+    {
+      "client": "claude",
+      "model": "claude-opus-5-5",
+      "modelId": "claude-opus-5-5"
+    },
+    {
+      "client": "claude",
+      "model": "claude-sonnet-5",
+      "modelId": "claude-sonnet-5"
+    },
+    {
+      "client": "claude",
+      "model": "claude-haiku-4-5",
+      "modelId": "claude-haiku-4-5"
+    },
+    {
+      "client": "claude",
+      "model": "claude-fable-5-1",
+      "modelId": "claude-fable-5-1"
+    },
+    {
+      "client": "codex",
+      "model": "gpt-5.6-sol",
+      "modelId": "gpt-5.6-sol"
+    },
+    {
+      "client": "codex",
+      "model": "gpt-5.6-terra",
+      "modelId": "gpt-5.6-terra"
+    },
+    {
+      "client": "codex",
+      "model": "gpt-5.6-luna",
+      "modelId": "gpt-5.6-luna"
+    },
+    {
+      "client": "codex",
+      "model": "gpt-6-astra",
+      "modelId": "gpt-6-astra"
+    },
+    {
+      "client": "agy",
+      "model": "gemini-3.8-flash-high",
+      "modelId": "gemini-3.8-flash",
+      "effort": "high"
+    },
+    {
+      "client": "agy",
+      "model": "gemini-3.7-flash-high",
+      "modelId": "gemini-3.7-flash",
+      "effort": "high"
+    },
+    {
+      "client": "agy",
+      "model": "gemini-3.6-flash-high",
+      "modelId": "gemini-3.6-flash",
+      "effort": "high"
+    },
+    {
+      "client": "agy",
+      "model": "gemini-3.1-pro-high",
+      "modelId": "gemini-3.1-pro",
+      "effort": "high"
+    },
+    {
+      "client": "agy",
+      "model": "claude-sonnet-4-6",
+      "modelId": "claude-sonnet-4-6"
+    },
+    {
+      "client": "agy",
+      "model": "claude-opus-4-6-thinking",
+      "modelId": "claude-opus-4-6-thinking"
+    },
+    {
+      "client": "copilot",
+      "model": "claude-sonnet-5",
+      "modelId": "claude-sonnet-5"
+    },
+    {
+      "client": "copilot",
+      "model": "claude-opus-5",
+      "modelId": "claude-opus-5"
+    },
+    {
+      "client": "copilot",
+      "model": "gpt-5.3-codex",
+      "modelId": "gpt-5.3-codex"
+    },
+    {
+      "client": "copilot",
+      "model": "gemini-3.5-flash",
+      "modelId": "gemini-3.5-flash"
+    },
+    {
+      "client": "copilot",
+      "model": "grok-4.5",
+      "modelId": "grok-4.5"
+    },
+    {
+      "client": "copilot",
+      "model": "kimi-k3",
+      "modelId": "kimi-k3"
+    },
+    {
+      "client": "copilot",
+      "model": "kimi-k2.7-code",
+      "modelId": "kimi-k2.7-code"
+    },
+    {
+      "client": "copilot",
+      "model": "mai-code-1.1-flash",
+      "modelId": "mai-code-1.1-flash"
+    },
+    {
+      "client": "vibe",
+      "model": "mistral-medium-3.5",
+      "modelId": "mistral-medium-3.5"
+    },
+    {
+      "client": "vibe",
+      "model": "mistral-large",
+      "modelId": "mistral-large"
+    },
+    {
+      "client": "vibe",
+      "model": "zai-glm-5-3",
+      "modelId": "zai-glm-5-3"
+    },
+    {
+      "client": "kilo",
+      "model": "deepseek/deepseek-flash",
+      "modelId": "deepseek-flash"
+    },
+    {
+      "client": "kilo",
+      "model": "kilo/qwen/qwen3.8-27b:free",
+      "modelId": "kilo/qwen/qwen3.8-27b:free"
+    },
+    {
+      "client": "kilo",
+      "model": "kilo/stepfun/step-3.7-flash:free",
+      "modelId": "kilo/stepfun/step-3.7-flash:free"
+    },
+    {
+      "client": "kilo",
+      "model": "kilo/nvidia/nemotron-3-super-120b-a12b:free",
+      "modelId": "kilo/nvidia/nemotron-3-super-120b-a12b:free"
+    },
+    {
+      "client": "kilo",
+      "model": "openai-compatible/deepseek/deepseek-v4-flash",
+      "modelId": null
+    },
+    {
+      "client": "mimo",
+      "model": "xiaomi/mimo-v2.6-flash",
+      "modelId": "xiaomi/mimo-v2.6-flash"
+    },
+    {
+      "client": "mimo",
+      "model": "xiaomi/mimo-v2.6-pro",
+      "modelId": "xiaomi/mimo-v2.6-pro"
+    },
+    {
+      "client": "mimo",
+      "model": "xiaomi/mimo-v2.5",
+      "modelId": "xiaomi/mimo-v2.5"
+    },
+    {
+      "client": "cline",
+      "model": "cline-free/mimo-v2.6-flash",
+      "modelId": "xiaomi/mimo-v2.6-flash"
+    },
+    {
+      "client": "goose",
+      "model": "anthropic/claude-sonnet-4",
+      "modelId": "anthropic/claude-sonnet-4"
+    },
+    {
+      "client": "opencode",
+      "model": "cerebras/qwen-3.8-27b",
+      "modelId": "cerebras/qwen-3.8-27b"
+    }
+  ]
+}

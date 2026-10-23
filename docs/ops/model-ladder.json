@@ -1,0 +1,10 @@
+{
+  "schema": "ladder/2",
+  "asOf": null,
+  "note": "No host model ranking or maker order has been supplied. Automatic recommendations are unavailable. Configure and verify the host's own selection evidence and explicit routes before dispatch.",
+  "source": {},
+  "sources": {},
+  "makerOrder": {},
+  "rows": [],
+  "rungs": []
+}

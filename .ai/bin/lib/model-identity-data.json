@@ -1,0 +1,8 @@
+{
+  "sv": "model-identity-data/1",
+  "note": "Closed supplement of model-identity.cjs. A model spelling that launch records use but that no registry list names. Identity only: it asserts that the spelling is one model, never which model a client served. Everything else comes from model-aliases.json (routeAliases, idEquivalents, makerRules) and from clients.json launchAliases; this file adds nothing a registry already says.",
+  "launchModels": [
+    {"model": "gpt-6.1-sol","basis": "Closed identity supplement; an exact model spelling, never evidence of the served model."},
+    {"model": "claude-sonnet-5-5","basis": "Closed identity supplement; an exact model spelling, never evidence of the served model."}
+  ]
+}
