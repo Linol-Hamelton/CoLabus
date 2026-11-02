@@ -1,0 +1,12 @@
+# CM-70 advisory allowlist of this project.
+# One repository-relative path per line. Blank lines and lines starting with
+# '#' are ignored. A trailing '*' matches any suffix.
+#
+# A match silences only decoder-note WARN lines (ZERO_WIDTH, NBSP, BIDI, ...)
+# for that path. It never suppresses a FAIL, a mojibake WARN, or a host
+# invalid-UTF-8 advisory. Protocol-owned code with a real invisible-character
+# finding is fixed in code, never listed here (PROTO-DEC-0153 item 6).
+#
+# List a file here only when its text carries a deliberate invisible-character
+# corpus or is a captured record that cannot be rewritten; say why in a comment
+# line above the entry.

@@ -1,0 +1,73 @@
+{
+  "schema": "ops-tools/1",
+  "comment": "Defaults of the operator tools. Paths below are names under the work root, never absolute paths; the work root comes from protocol-manifest.json workRoot, else from the directory above the main checkout. The project selection sets (common tests, heavy tests and their trigger paths) are not defaults: the project keeps them in its own file and the operator may override any section in the local file under the work root (shallow merge by section). The launcher and its wrapper are NOT named here: a shipped file may not point at a development-only path. The author launcher refuses with LAUNCHER-NOT-CONFIGURED until --wrapper and --engine (or the local config) name them.",
+  "author": {
+    "baseRef": "origin/v2.0.0",
+    "defaultDepth": 1,
+    "manifestTestOnly": [
+      "tests",
+      "testTiers"
+    ],
+    "ignore": [
+      "^\\.ai/worklog/",
+      "^\\.ai/ARCHIVE\\.md$",
+      "^docs/reviews/"
+    ],
+    "common": [],
+    "heavy": {}
+  },
+  "paths": {
+    "receipts": "author-checks",
+    "prompts": "author-prompts",
+    "tmp": "author-check-tmp",
+    "localConfig": "ops-tools.local.json"
+  },
+  "seat": {
+    "maxAgeHours": 6,
+    "endMarker": "_(DONE|NO_VERDICT|BLOCKED)( |$)|terminal record not written|REFUSED",
+    "defaultCap": 18,
+    "pollMs": 20000,
+    "waitTimeoutMs": 2700000,
+    "verifyTimeoutMs": 180000,
+    "verifyPollMs": 5000
+  },
+  "heavy": {
+    "comment": "Heavy-run gate (PROTO-DEC-0249 items 2 and 3). A heavy run is a protocol-test internal runner or a direct node --test of the product-real or the product-build test file. nodeVersion is the documented runtime prefix; the queue and the train flag live under the work root.",
+    "cap": 2,
+    "minFreeGb": 8,
+    "nodeVersion": "22.21",
+    "waitMinutes": 720,
+    "pollMs": 60000,
+    "trainFlagHours": 6,
+    "queueDir": "heavy-queue",
+    "trainFlag": "heavy-train-waiting.flag"
+  },
+  "cleanup": {
+    "comment": "Landing cleanup (PROTO-DEC-0249 item 4). archiveRoot is an absolute directory outside the working tree or null (then the archive goes under the work root); the inventory file older than inventoryMaxHours is refused; a temp root of an ended seat is removed only after tempRetentionDays. A tree whose path matches ownerSessionPattern belongs to a session the owner runs by hand and is never removed; protectedBranches are never deleted (the base branch of the line is protected as well).",
+    "archiveRoot": null,
+    "archiveName": "archive",
+    "inventoryMaxHours": 6,
+    "tempRetentionDays": 3,
+    "ownerSessionPattern": "owner",
+    "protectedBranches": [
+      "main",
+      "master"
+    ]
+  },
+  "legacy": {
+    "comment": "The old file names of the untracked operator tools. A forwarding stub is written only by an explicit --write run; the tool never overwrites a real implementation without --force.",
+    "names": [
+      "author-check.cjs",
+      "author-select.cjs",
+      "precert-check.cjs",
+      "seat-count.cjs",
+      "wait-slot.cjs",
+      "seat-verify.cjs",
+      "cand-add.cjs",
+      "author-launch.cjs",
+      "heavy-gate.cjs",
+      "wt-inventory.cjs",
+      "landing-cleanup.cjs"
+    ]
+  }
+}

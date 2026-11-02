@@ -1,0 +1,14 @@
+{
+  "schema": "seat-caps/1",
+  "comment": "Per-client caps are data. First matching name pattern wins: kimi and cline before claude. Unknown clients use defaultCap; zero disables admission.",
+  "defaultCap": 2,
+  "clients": [
+    { "name": "mimo", "cap": 0, "patterns": ["mimo"] },
+    { "name": "vibe", "cap": 2, "patterns": ["vibe", "-glm$", "five-.*-glm"] },
+    { "name": "kilo", "cap": 4, "patterns": ["kilofree", "-kilo-", "-kilo$", "-ds$", "-nemo$", "-nsuper$", "-evid$", "kilo"] },
+    { "name": "codex", "cap": 3, "patterns": ["codex", "sol"] },
+    { "name": "cline", "cap": 3, "patterns": ["cline"] },
+    { "name": "kimi", "cap": 3, "patterns": ["kimi"] },
+    { "name": "claude", "cap": 4, "patterns": ["sonnet", "opus", "claude"] }
+  ]
+}

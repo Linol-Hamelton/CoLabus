@@ -1,0 +1,179 @@
+{
+  "$id": "docs/ops/route-state.schema.json",
+  "$schema": "route-state/json-schema-subset-1",
+  "title": "ROUTE-STATE record, schema route-state/1 (PROTO-DEC-0235)",
+  "vocabulary": [
+    "type (string | number | integer | boolean | object | array | null, or an array of these)",
+    "const",
+    "enum",
+    "required",
+    "properties",
+    "additionalProperties (false only)",
+    "items",
+    "minItems",
+    "maxItems",
+    "minLength",
+    "maxLength",
+    "minimum",
+    "maximum",
+    "pattern",
+    "$ref (a local pointer under $defs)"
+  ],
+  "notes": [
+    "Every field of a route is an object with an explicit tag: declared or measured. A field without a tag, or with the tag of the other kind, is refused by the one reader (tools/operator-knowledge/route-state.cjs).",
+    "The field name decides the kind: balance, limit, plan and price are declared fields and only tools/operator-knowledge/declare.cjs writes them; probe and performance are measured fields and only tools/operator-knowledge/refresh.cjs writes them.",
+    "A declared field names the owner act that declared it (a decision id, or owner message|answer|directive|word with the date) and the moment the value stops being a fact: expiresAt. A measured field names measuredAt, expiresAt and the writer in source.",
+    "An expired declared value is not a value: stateAt returns null for it. Only the fields named in requiredDeclared decide availability; an expired or future-dated OPTIONAL declared field is informational and never changes the route state. Nothing carries an old value forward.",
+    "Every string of the record - a value, a key, a source, a reason - is one line of visible, well-formed text. The one reader refuses a line break, a control character, an invisible/format character and a lone surrogate with RECORD_STRING, and both writers use the same function.",
+    "performance is advisory history (verdict share, wall time, tokens). Its expiry prevents old numbers from being carried forward, but it never decides the availability of the route; only probe and the fields named in requiredDeclared do.",
+    "probe.value.reason is a closed set of names, never raw client output: TIMEOUT, SPAWN_FAILED, EXIT_NONZERO, NO_ANSWER, AUTH_FAILED, QUOTA_EXCEEDED, PAYMENT_OVERDUE, NO_CREDITS, RATE_LIMITED, invalid-model-name, temp-unavailable, SERVED_MISMATCH, SERVED_FAMILY_MISMATCH. reason is null exactly when ok is true. probe.value.at is the envelope's measuredAt (F06).",
+    "probe.value.served (PROBE-SERVED-MODEL) is the model id the probe PROVED answered, and servedSource says from where (client-banner, launcher-model, agent-result, client-log); never from the words of the model. Both keys are written together: served null goes with servedSource none (the served model is not proven), a string goes with a source other than none. A probe that is ok but names no proven served model, and every probe written before these keys existed, reads unproven: stateAt adds SERVED_UNPROVEN and the route is never ok. An ok probe whose served model is not the route model is refused by the reader (RECORD_PROBE_SERVED); a proven mismatch is written as a failed probe (SERVED_MISMATCH, or SERVED_FAMILY_MISMATCH when the maker families differ).",
+    "The schema is a JSON Schema subset checked by the one reader; a sample violating each rule must fail in the tests of the reader.",
+    "coverage (optional, PROTO-DEC-0240 item 2) is the operator's record that every route in use has a row. While it is absent or complete is false, a launch whose client and model match no route is admitted with a recorded transition line; complete=true makes the same launch a refusal (ROUTE_UNKNOWN). recordedBy names who recorded it, recordedAt when."
+  ],
+  "type": "object",
+  "required": ["schema", "generatedAt", "routes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "type": "string", "const": "route-state/1" },
+    "generatedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/route" }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["complete", "recordedBy", "recordedAt"],
+      "additionalProperties": false,
+      "properties": {
+        "complete": { "type": "boolean" },
+        "recordedBy": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "recordedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" }
+      }
+    }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": ["id", "client", "model", "billing", "concurrencyCap", "roles", "rules", "requiredDeclared", "fields"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+        "client": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+        "model": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "billing": { "type": "string", "enum": ["subscription", "api-key", "free", "aggregator"] },
+        "concurrencyCap": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" }
+        },
+        "rules": {
+          "type": "array",
+          "maxItems": 16,
+          "items": { "type": "string", "minLength": 1, "maxLength": 400 }
+        },
+        "requiredDeclared": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": { "type": "string", "enum": ["balance", "limit", "plan", "price"] }
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "balance": { "$ref": "#/$defs/declared" },
+            "limit": { "$ref": "#/$defs/declared" },
+            "plan": { "$ref": "#/$defs/declared" },
+            "price": { "$ref": "#/$defs/declared" },
+            "probe": { "$ref": "#/$defs/measuredProbe" },
+            "performance": { "$ref": "#/$defs/measuredPerformance" }
+          }
+        }
+      }
+    },
+    "declared": {
+      "type": "object",
+      "required": ["tag", "value", "declaredBy", "declaredAt", "expiresAt", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "tag": { "type": "string", "const": "declared" },
+        "value": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "declaredBy": {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^((PROTO-)?DEC-[0-9]{4}|owner (message|answer|directive|word) [0-9]{4}-[0-9]{2}-[0-9]{2})$"
+        },
+        "declaredAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "expiresAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
+    "measuredProbe": {
+      "type": "object",
+      "required": ["tag", "value", "measuredAt", "expiresAt", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "tag": { "type": "string", "const": "measured" },
+        "value": {
+          "type": "object",
+          "required": ["ok", "reason", "at"],
+          "additionalProperties": false,
+          "properties": {
+            "ok": { "type": "boolean" },
+            "reason": {
+              "enum": [
+                null,
+                "TIMEOUT",
+                "SPAWN_FAILED",
+                "EXIT_NONZERO",
+                "NO_ANSWER",
+                "AUTH_FAILED",
+                "QUOTA_EXCEEDED",
+                "PAYMENT_OVERDUE",
+                "NO_CREDITS",
+                "RATE_LIMITED",
+                "invalid-model-name",
+                "temp-unavailable",
+                "SERVED_MISMATCH",
+                "SERVED_FAMILY_MISMATCH"
+              ]
+            },
+            "served": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+            "servedSource": { "enum": ["client-banner", "launcher-model", "agent-result", "client-log", "none"] },
+            "at": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" }
+          }
+        },
+        "measuredAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "expiresAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
+    "measuredPerformance": {
+      "type": "object",
+      "required": ["tag", "value", "measuredAt", "expiresAt", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "tag": { "type": "string", "const": "measured" },
+        "value": {
+          "type": "object",
+          "required": ["verdictShare", "noVerdictShare", "wallP50", "wallP90", "tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "verdictShare": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "noVerdictShare": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "wallP50": { "type": ["number", "null"], "minimum": 0, "maximum": 86400 },
+            "wallP90": { "type": ["number", "null"], "minimum": 0, "maximum": 86400 },
+            "tokens": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000000000000 }
+          }
+        },
+        "measuredAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "expiresAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    }
+  }
+}

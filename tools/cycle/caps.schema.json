@@ -1,0 +1,27 @@
+{
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "clients", "total", "softFactor", "runawayFactor", "safePointWaitSeconds", "idleSeconds", "clientAliases"],
+  "properties": {
+    "schema": {"enum": ["cycle-caps/1"]},
+    "clients": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mimo", "kilo", "codex", "glm", "claude", "kimi", "cline", "default"],
+      "properties": {
+        "mimo": {"type":"integer","minimum":1,"maximum":1},
+        "kilo": {"type":"integer","minimum":1,"maximum":3},
+        "codex": {"type":"integer","minimum":1,"maximum":3},
+        "glm": {"type":"integer","minimum":1,"maximum":2},
+        "claude": {"type":"integer","minimum":1,"maximum":3},
+        "kimi": {"type":"integer","minimum":1,"maximum":2},
+        "cline": {"type":"integer","minimum":1,"maximum":2},
+        "default": {"type":"integer","minimum":1,"maximum":18}
+      }
+    },
+    "clientAliases": {"type":"object","additionalProperties":false,"required":["vibe"],"properties":{"vibe":{"enum":["glm"]}}},
+    "total": {"type":"integer","minimum":1,"maximum":18},
+    "softFactor": {"type":"number","minimum":1,"maximum":1},
+    "runawayFactor": {"type":"number","minimum":2.5,"maximum":2.5},
+    "safePointWaitSeconds": {"type":"integer","minimum":1,"maximum":3600},
+    "idleSeconds": {"type":"integer","minimum":600,"maximum":600}
+  }
+}
