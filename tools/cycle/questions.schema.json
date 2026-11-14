@@ -1,0 +1,19 @@
+{
+  "type":"object","additionalProperties":false,"required":["schema","questions"],
+  "properties":{
+    "schema":{"enum":["cycle-questions/1"]},
+    "questions":{"type":"array","items":{
+      "type":"object","additionalProperties":false,"required":["seat","client","worktree","cwd","operation","prompt","options","default"],
+      "properties":{
+        "seat":{"type":"string","pattern":"^[a-z0-9][a-z0-9-]{0,63}$"},
+        "client":{"type":"string","minLength":1},
+        "worktree":{"type":"string","minLength":1},
+        "cwd":{"type":"string","minLength":1},
+        "operation":{"type":"object"},
+        "prompt":{"type":"string"},
+        "options":{"type":"array","items":{"type":"string"}},
+        "default":{"type":["string","null"]}
+      }
+    }}
+  }
+}

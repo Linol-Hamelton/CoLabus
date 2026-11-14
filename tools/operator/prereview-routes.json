@@ -1,0 +1,71 @@
+{
+  "schema": "prereview-routes/1",
+  "comment": "Machine registry of the free pre-review routes (PROTO-DEC-0206 item 2 (5)). Fields are documented in tools/operator/prereview-routes.schema.md. No key value is ever stored here: keyEnv names the environment variable read inside the request; endpoint ${ENV_NAME} placeholders resolve at send time. A route is used only when status is ok; the probe command restores ok. Sources: the live inventory of 2026-10-16 (free routes) and the 2026-10-14 memory that reasoning parameters differ per route. CLI-only aggregators (OpenCode Zen, Kilo, Cline) have no API route and are out of scope.",
+  "routes": [
+    {
+      "id": "openrouter-nemotron-3-super-120b",
+      "provider": "openrouter",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "keyEnv": "OPENROUTER_API_KEY",
+      "paid": false,
+      "reasoningParams": { "reasoning_effort": "low" },
+      "maxTokens": 4000,
+      "probeMaxTokens": 400,
+      "probe": { "time": null, "result": "unprobed", "note": null },
+      "status": "unprobed"
+    },
+    {
+      "id": "openrouter-laguna-s-2.1",
+      "provider": "openrouter",
+      "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+      "model": "poolside/laguna-s-2.1:free",
+      "keyEnv": "OPENROUTER_API_KEY",
+      "paid": false,
+      "reasoningParams": { "reasoning_effort": "low" },
+      "maxTokens": 4000,
+      "probeMaxTokens": 400,
+      "probe": { "time": null, "result": "unprobed", "note": null },
+      "status": "unprobed"
+    },
+    {
+      "id": "dahl-glm-5.3-flash",
+      "provider": "dahl",
+      "endpoint": "https://inference.dahl.global/v1/chat/completions",
+      "model": "zai-org/GLM-5.3-Flash",
+      "keyEnv": "DAHL_API_KEY",
+      "paid": false,
+      "reasoningParams": {},
+      "maxTokens": 4000,
+      "probeMaxTokens": 400,
+      "probe": { "time": null, "result": "unprobed", "note": null },
+      "status": "unprobed"
+    },
+    {
+      "id": "ollama-nemotron-3-ultra",
+      "provider": "ollama-cloud",
+      "endpoint": "https://ollama.com/v1/chat/completions",
+      "model": "nemotron-3-ultra",
+      "keyEnv": "OLLAMA_API_KEY",
+      "paid": false,
+      "reasoningParams": {},
+      "maxTokens": 4000,
+      "probeMaxTokens": 400,
+      "probe": { "time": null, "result": "unprobed", "note": null },
+      "status": "unprobed"
+    },
+    {
+      "id": "vercel-kimi-k3",
+      "provider": "vercel",
+      "endpoint": "https://ai-gateway.vercel.sh/v1/chat/completions",
+      "model": "moonshotai/kimi-k3",
+      "keyEnv": "AI_GATEWAY_API_KEY",
+      "paid": true,
+      "reasoningParams": {},
+      "maxTokens": 12000,
+      "probeMaxTokens": 400,
+      "probe": { "time": null, "result": "unprobed", "note": null },
+      "status": "unprobed"
+    }
+  ]
+}

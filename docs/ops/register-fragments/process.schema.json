@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "register-process/1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "launchId", "packageId", "slot"],
+  "properties": {
+    "schema": {"const": "register-process/1"},
+    "launchId": {"type": "string", "pattern": "^L(?!000000)[0-9]{6}$"},
+    "packageId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+    "slot": {"type": "string", "pattern": "^S[1-9][0-9]{0,5}$"}
+  },
+  "x-markdown": {
+    "lines": ["<!-- register-process/1", "compact metadata JSON", "-->", "| id | process | since | trigger | command | documentedIn | owner | enforcedBy | status |"],
+    "statuses": ["implemented", "partial", "proposed", "retired"],
+    "byteContract": "UTF-8 no BOM, NFC, LF, exactly four lines with one final LF, <=65536 bytes. Exactly nine nonempty cells, no pipes or unpaired delimiters. Since is a calendar date. id equals launchId-slot and filename. implemented/partial paths must exist in the supplied tree."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "schema": "write-boundary-allow/1",
+  "drive": "D:",
+  "note": "The top-level entries of the work drive that a seat may create. The launch wrapper lists the drive root before and after a seat; only an entry created DURING the seat counts, so this file never needs a baseline of existing directories. An entry outside this list is a WARNING plus one audit counter (docs/ops/launch-wrapper.cjs status); the same entry, still present at the start of a later launch, is a REFUSAL until it is removed or listed here. The drive field names the drive this list describes: a boundary root on another drive is skipped with the reason boundary-drive-not-in-allow-file, so a host project states its own drive and entries. The weekly report (docs/ops/temp-retention.cjs report) lists the drive root against this file and against the retention patterns.",
+  "allow": []
+}

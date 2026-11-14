@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Access inventory v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "machine", "at", "network", "clients", "keys", "providers", "routes", "works", "missing", "selection"],
+  "properties": {
+    "schema": {"const": "access-inventory/1"},
+    "machine": {"type": "string", "pattern": "^[a-f0-9]{16}$"},
+    "at": {"type": "string", "format": "date-time"},
+    "network": {"type": "boolean"},
+    "clients": {"type": "array", "items": {"$ref": "#/$defs/client"}},
+    "keys": {"type": "array", "items": {"$ref": "#/$defs/key"}},
+    "providers": {"type": "array", "items": {"$ref": "#/$defs/provider"}},
+    "routes": {"type": "array", "items": {"$ref": "#/$defs/route"}},
+    "works": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["id", "basis"], "properties": {"id": {"type": "string"}, "basis": {"type": "string"}}}},
+    "missing": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["id", "action", "reason"], "properties": {"id": {"type": "string"}, "action": {"type": "string"}, "reason": {"type": "string"}}}},
+    "selection": {
+      "type": "object", "additionalProperties": false, "required": ["measured", "declaredExpired"],
+      "properties": {
+        "measured": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["route", "probe"], "properties": {"route": {"type": "string"}, "probe": {"$ref": "#/$defs/probe"}}}},
+        "declaredExpired": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["route", "fields"], "properties": {"route": {"type": "string"}, "fields": {"$ref": "#/$defs/names"}}}}
+      }
+    }
+  },
+  "$defs": {
+    "names": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "nullableName": {"type": ["string", "null"]},
+    "probe": {
+      "type": "object", "additionalProperties": false, "required": ["ok", "reason", "at", "servedModel", "source", "match"],
+      "properties": {"ok": {"type": ["boolean", "null"]}, "reason": {"$ref": "#/$defs/nullableName"}, "at": {"$ref": "#/$defs/nullableName"}, "servedModel": {"$ref": "#/$defs/nullableName"}, "source": {"enum": ["none", "client-banner", "client-export", "vibe-fallback-warning"]}, "match": {"enum": [true, false, "unknown"]}}
+    },
+    "client": {
+      "type": "object", "additionalProperties": false, "required": ["id", "installed", "path", "version", "login", "models"],
+      "properties": {
+        "id": {"type": "string"}, "installed": {"type": "boolean"}, "path": {"$ref": "#/$defs/nullableName"}, "version": {"$ref": "#/$defs/nullableName"}, "models": {"$ref": "#/$defs/names"},
+        "login": {"type": "object", "additionalProperties": false, "required": ["state", "source"], "properties": {"state": {"enum": ["unknown", "logged-in", "not-logged-in", "cached"]}, "source": {"type": "string"}, "subscription": {"$ref": "#/$defs/nullableName"}, "cachedAt": {"type": "string", "format": "date-time"}}}
+      }
+    },
+    "key": {
+      "type": "object", "additionalProperties": false, "required": ["name", "service", "alias", "channel"],
+      "properties": {"name": {"type": "string"}, "service": {"type": "string"}, "alias": {"type": "string"}, "channel": {"$ref": "#/$defs/nullableName"}}
+    },
+    "provider": {
+      "type": "object", "additionalProperties": false, "required": ["id", "state", "balance", "models", "modelCount", "alias", "keyNames", "kind"],
+      "properties": {
+        "id": {"type": "string"}, "state": {"enum": ["valid", "rejected", "no-answer", "missing", "unknown"]}, "models": {"$ref": "#/$defs/names"}, "modelCount": {"type": ["integer", "null"], "minimum": 0}, "alias": {"$ref": "#/$defs/nullableName"}, "keyNames": {"$ref": "#/$defs/names"}, "kind": {"enum": ["direct", "aggregator"]},
+        "balance": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["currency", "amount"], "properties": {"currency": {"enum": ["USD", "CNY"]}, "amount": {"type": "number"}}}}
+      }
+    },
+    "route": {
+      "type": "object", "additionalProperties": false, "required": ["id", "client", "model", "models", "declaredExpired", "probe", "refreshCommand"],
+      "properties": {"id": {"type": "string"}, "client": {"type": "string"}, "model": {"type": "string"}, "models": {"$ref": "#/$defs/names"}, "declaredExpired": {"$ref": "#/$defs/names"}, "probe": {"$ref": "#/$defs/probe"}, "refreshCommand": {"type": "string"}}
+    }
+  }
+}
