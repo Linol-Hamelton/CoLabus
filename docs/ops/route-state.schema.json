@@ -1,0 +1,193 @@
+{
+  "$id": "docs/ops/route-state.schema.json",
+  "$schema": "route-state/json-schema-subset-1",
+  "title": "ROUTE-STATE record, schema route-state/1 (PROTO-DEC-0235)",
+  "vocabulary": [
+    "type (string | number | integer | boolean | object | array | null, or an array of these)",
+    "const",
+    "enum",
+    "required",
+    "properties",
+    "additionalProperties (false only)",
+    "items",
+    "minItems",
+    "maxItems",
+    "minLength",
+    "maxLength",
+    "minimum",
+    "maximum",
+    "pattern",
+    "$ref (a local pointer under $defs)"
+  ],
+  "notes": [
+    "Every field of a route is an object with an explicit tag: declared or measured. A field without a tag, or with the tag of the other kind, is refused by the one reader (tools/operator-knowledge/route-state.cjs).",
+    "The field name decides the kind: balance, limit, plan and price are declared fields and only tools/operator-knowledge/declare.cjs writes them; probe and performance are measured fields and only tools/operator-knowledge/refresh.cjs writes them.",
+    "A declared field names the owner act that declared it (a decision id, or owner message|answer|directive|word with the date) and the moment the value stops being a fact: expiresAt. A measured field names measuredAt, expiresAt and the writer in source.",
+    "An expired declared value is not a value: stateAt returns null for it. Only the fields named in requiredDeclared decide availability; an expired or future-dated OPTIONAL declared field is informational and never changes the route state. Nothing carries an old value forward.",
+    "Every string of the record - a value, a key, a source, a reason - is one line of visible, well-formed text. The one reader refuses a line break, a control character, an invisible/format character and a lone surrogate with RECORD_STRING, and both writers use the same function.",
+    "performance is advisory history (verdict share, wall time, tokens). Its expiry prevents old numbers from being carried forward, but it never decides the availability of the route; only probe and the fields named in requiredDeclared do.",
+    "probe.value.reason is a closed failure vocabulary, never raw output. reason is null exactly when ok is true; value.at equals measuredAt. An answered integer nonzero completion uses warning EXIT_NONZERO_AFTER_ANSWER with ok true. Historical failed measurements retain their original named reason.",
+    "First-party model identity is the route model, basis launch-command, never answer text. Proxy availability for author/advice requires an answer; certification additionally requires matching client-banner or client-log proof. Cline launcher-model is an echo, not backend proof. served and servedSource remain paired; launch-command is restricted to the first-party route model. A client-banner or client-log proof of another model restricts certification on every route, first party or not, while preserving answering-route availability; the launch identity only fills the absence of such a proof.",
+    "Vibe selects the route alias using VIBE_ACTIVE_MODEL, as the seat launcher does. Its first-party identity basis is launch-command. Historical served names are retained as measurement data; alias spellings do not become model-written identity claims.",
+    "The derived evidence basis is probe; real launches take priority throughout their live window. Both stateAt purpose certification and role certifier require client-banner/client-log proof for proxies. Real launch evidence retains its launch-command or client-proof basis and its independent live window; probe warnings never replace it.",
+    "For vibe probes the reader compares the route alias and the proven served name through served-model.cjs vibeAlias; the original served id is retained. Mistral Large 4 uses alias mistral-large-4, configured name mistral-large-4-0 and served-name pattern mistral-large-4-0 followed by numeric version segments (observed mistral-large-4-0-3). Proof derivation still requires a listed client model; a pattern alone never admits a model.",
+    "The schema is a JSON Schema subset checked by the one reader; a sample violating each rule must fail in the tests of the reader.",
+    "coverage (optional, PROTO-DEC-0240 item 2) is the operator's record that every route in use has a row. While it is absent or complete is false, a launch whose client and model match no route is admitted with a recorded transition line; complete=true makes the same launch a refusal (ROUTE_UNKNOWN). recordedBy names who recorded it, recordedAt when.",
+    "Fresh completed launch-journal observations outrank synthetic probes for the probe TTL, retaining their original measuredAt and expiresAt. Probes fill routes with no recent completed real launch. No answer and provider errors remain failures."
+  ],
+  "type": "object",
+  "required": ["schema", "generatedAt", "routes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "type": "string", "const": "route-state/1" },
+    "generatedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/route" }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["complete", "recordedBy", "recordedAt"],
+      "additionalProperties": false,
+      "properties": {
+        "complete": { "type": "boolean" },
+        "recordedBy": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "recordedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" }
+      }
+    }
+  },
+  "$defs": {
+    "route": {
+      "type": "object",
+      "required": ["id", "client", "model", "billing", "concurrencyCap", "roles", "rules", "requiredDeclared", "fields"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+        "client": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+        "model": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "billing": { "type": "string", "enum": ["subscription", "api-key", "free", "aggregator"] },
+        "concurrencyCap": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" }
+        },
+        "rules": {
+          "type": "array",
+          "maxItems": 16,
+          "items": { "type": "string", "minLength": 1, "maxLength": 400 }
+        },
+        "requiredDeclared": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": { "type": "string", "enum": ["balance", "limit", "plan", "price"] }
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "balance": { "$ref": "#/$defs/declared" },
+            "limit": { "$ref": "#/$defs/declared" },
+            "plan": { "$ref": "#/$defs/declared" },
+            "price": { "$ref": "#/$defs/declared" },
+            "probe": { "$ref": "#/$defs/measuredProbe" },
+            "performance": { "$ref": "#/$defs/measuredPerformance" }
+          }
+        }
+      }
+    },
+    "declared": {
+      "type": "object",
+      "required": ["tag", "value", "declaredBy", "declaredAt", "expiresAt", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "tag": { "type": "string", "const": "declared" },
+        "value": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "declaredBy": {
+          "type": "string",
+          "maxLength": 160,
+          "pattern": "^((PROTO-)?DEC-[0-9]{4}|owner (message|answer|directive|word) [0-9]{4}-[0-9]{2}-[0-9]{2})$"
+        },
+        "declaredAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "expiresAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
+    "measuredProbe": {
+      "type": "object",
+      "required": ["tag", "value", "measuredAt", "expiresAt", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "tag": { "type": "string", "const": "measured" },
+        "value": {
+          "type": "object",
+          "required": ["ok", "reason", "at"],
+          "additionalProperties": false,
+          "properties": {
+            "ok": { "type": "boolean" },
+            "reason": {
+              "enum": [
+                null,
+                "TIMEOUT",
+                "SPAWN_FAILED",
+                "EXIT_NONZERO",
+                "EXIT_NONZERO_AFTER_ANSWER",
+                "NO_ANSWER",
+                "AUTH_FAILED",
+                "QUOTA_EXCEEDED",
+                "PAYMENT_OVERDUE",
+                "NO_CREDITS",
+                "RATE_LIMITED",
+                "PROVIDER_UNAVAILABLE",
+                "invalid-model-name",
+                "temp-unavailable",
+                "SERVED_MISMATCH",
+                "SERVED_FAMILY_MISMATCH",
+                "ROUTE_UNKNOWN",
+                "ROUTE_INVALID",
+                "NOT_A_FIXER_ROUTE",
+                "ROUTE_ROLE_REFUSED",
+                "ROUTE_NOT_ADMITTED",
+                "WINDOW_UNSOURCED",
+                "WINDOW_TOO_SMALL"
+              ]
+            },
+            "served": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+            "servedSource": { "enum": ["launch-command", "client-banner", "launcher-model", "agent-result", "client-log", "none"] },
+            "warning": { "enum": ["EXIT_NONZERO_AFTER_ANSWER"] },
+            "at": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" }
+          }
+        },
+        "measuredAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "expiresAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
+    "measuredPerformance": {
+      "type": "object",
+      "required": ["tag", "value", "measuredAt", "expiresAt", "source"],
+      "additionalProperties": false,
+      "properties": {
+        "tag": { "type": "string", "const": "measured" },
+        "value": {
+          "type": "object",
+          "required": ["verdictShare", "noVerdictShare", "wallP50", "wallP90", "tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "verdictShare": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "noVerdictShare": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+            "wallP50": { "type": ["number", "null"], "minimum": 0, "maximum": 86400 },
+            "wallP90": { "type": ["number", "null"], "minimum": 0, "maximum": 86400 },
+            "tokens": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000000000000 }
+          }
+        },
+        "measuredAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "expiresAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$" },
+        "source": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    }
+  }
+}

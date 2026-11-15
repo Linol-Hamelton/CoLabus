@@ -1,0 +1,17 @@
+{
+  "schema": "assign-execution-policy/1",
+  "comment": "Data of the assign control layer. Every threshold is the owner's to change; a launch records the hash of this file.",
+  "lock": { "ttlSeconds": 120, "sectionMaxSeconds": 90 },
+  "seat": { "slotWaitMin": 0, "idleMinutes": 30, "idleKillMinutes": 60 },
+  "killcheck": {
+    "windowDays": 14,
+    "failureRate": { "minCompleted": 5, "minFailures": 2, "minBaselinePairs": 5, "absoluteRate": 0.3, "consecutive": 3 },
+    "stuck": { "silentFactor": 2, "idleStopsPerWindow": 2, "idleStopWindowDays": 7 },
+    "burn": {
+      "classes": ["AUTH", "QUOTA", "RATE", "TURN_LIMIT", "TRANSPORT_EXHAUSTED"],
+      "perRoute": 2, "windowHours": 24, "quarantineHours": 6, "distinctRoutes": 3
+    }
+  },
+  "hold": { "routeHours": 24, "maxRouteHours": 720 },
+  "expiry": { "warnHours": 48 }
+}

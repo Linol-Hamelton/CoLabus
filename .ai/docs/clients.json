@@ -1,0 +1,1123 @@
+{
+  "schema": "clients/1",
+  "clients": {
+    "claude": {
+      "autoApprove": {
+        "interactive": {
+          "state": "measured",
+          "file": "~/.claude/settings.json",
+          "format": "json",
+          "keys": [
+            {
+              "path": [
+                "permissions",
+                "defaultMode"
+              ],
+              "value": "bypassPermissions"
+            },
+            {
+              "path": [
+                "skipDangerousModePermissionPrompt"
+              ],
+              "value": true
+            }
+          ],
+          "note": "autoContinueAtUsageLimit (also set by the operator) is not an approval key and is not checked"
+        },
+        "seat": {
+          "mode": "bypass",
+          "flags": [
+            "--dangerously-skip-permissions"
+          ],
+          "basis": "argv of docs/ops/cert-launch.cjs, docs/ops/fix-launch.cjs and tools/operator/seats.cjs"
+        },
+        "stall": [
+          {
+            "id": "claude-not-granted",
+            "regex": "requested permissions? to .{1,200}? but you haven'?t granted it",
+            "basis": "unmeasured: no real prompt text was captured; fixture outputs only"
+          }
+        ],
+        "verify": "node docs/ops/channels-approve.cjs check --client claude"
+      },
+      "binary": "claude",
+      "models": [
+        "claude-opus-5-5",
+        "claude-sonnet-5",
+        "claude-haiku-4-5",
+        "claude-fable-5-1"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": ".claude/settings.json",
+        "resume": true
+      },
+      "command": [
+        "claude",
+        "-p",
+        "{message}",
+        "--model",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "--effort",
+            "{effort}"
+          ]
+        },
+        "--permission-mode",
+        "acceptEdits",
+        "--allowedTools",
+        "Read",
+        "Grep",
+        "Glob",
+        "Write",
+        "Edit",
+        "Bash(node:*)",
+        "Bash(git:*)",
+        "Bash(powershell:*)"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "resume": {
+        "command": [
+          "claude",
+          "-r",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "codex": {
+      "autoApprove": {
+        "interactive": {
+          "state": "measured",
+          "file": "~/.codex/config.toml",
+          "format": "toml",
+          "keys": [
+            {
+              "table": [],
+              "key": "approval_policy",
+              "value": "never"
+            },
+            {
+              "table": [],
+              "key": "sandbox_mode",
+              "value": "danger-full-access"
+            }
+          ],
+          "note": "a CODEX_HOME override of the config directory is not followed (open item)"
+        },
+        "seat": {
+          "mode": "review",
+          "flags": [
+            "--approve-for-me"
+          ],
+          "basis": "argv of docs/ops/cert-launch.cjs and tools/operator/seats.cjs; codex exec --help 2026-10-28: route approval requests through automatic review using the workspace-write sandbox",
+          "alternative": {
+            "mode": "bypass",
+            "flags": [
+              "--dangerously-bypass-approvals-and-sandbox"
+            ],
+            "switch": "COLABUS_CODEX_SEAT_APPROVAL=bypass (cert-launch only, linked worktree only); default stays review until the owner decides",
+            "basis": "codex exec --help, measured 2026-10-28"
+          }
+        },
+        "stall": [
+          {
+            "id": "codex-approve-command",
+            "regex": "^\\s*(?:Approve|Allow) (?:this )?(?:command|edit|patch)\\b.*\\?",
+            "basis": "unmeasured: no real prompt text was captured; fixture outputs only"
+          }
+        ],
+        "verify": "node docs/ops/channels-approve.cjs check --client codex"
+      },
+      "binary": "codex",
+      "models": [
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-5.6-luna",
+        "gpt-6-astra"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "~/.codex/config.toml",
+        "hooks": ".codex/hooks.json",
+        "resume": true
+      },
+      "command": [
+        "codex",
+        "exec",
+        "-m",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "-c",
+            "model_reasoning_effort={effort}"
+          ]
+        },
+        "--approve-for-me",
+        "--skip-git-repo-check",
+        "-C",
+        "{workdir}",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "codex",
+          "debug",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "config",
+        "values": [
+          "none",
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ]
+      },
+      "resume": {
+        "command": [
+          "codex",
+          "exec",
+          "resume",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "codex-tokens",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "copilot": {
+      "autoApprove": {
+        "interactive": {
+          "state": "unknown",
+          "file": null,
+          "format": null,
+          "keys": [],
+          "note": "no interactive approval key measured"
+        },
+        "seat": {
+          "mode": "allow-list",
+          "flags": [
+            "--no-ask-user"
+          ],
+          "basis": "dispatch template (command) of this registry; no cert-launch seat"
+        },
+        "stall": [],
+        "verify": null
+      },
+      "binary": "copilot",
+      "models": [
+        "claude-sonnet-5",
+        "claude-opus-5",
+        "gpt-5.3-codex",
+        "gemini-3.5-flash",
+        "grok-4.5",
+        "kimi-k3",
+        "kimi-k2.7-code",
+        "mai-code-1.1-flash"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "copilot",
+        "-p",
+        "{message}",
+        "--model",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "--reasoning-effort",
+            "{effort}"
+          ]
+        },
+        "-C",
+        "{workdir}",
+        "--no-ask-user",
+        "--allow-tool=write",
+        "--allow-tool=shell(git:*)",
+        "--allow-tool=shell(node:*)",
+        "--allow-tool=shell(powershell:*)",
+        "--allow-tool=shell(Get-Content:*)",
+        "--allow-tool=shell(Get-ChildItem:*)",
+        "--allow-tool=shell(Select-String:*)",
+        "--allow-tool=shell(Test-Path:*)",
+        "--allow-tool=shell(Measure-Object:*)",
+        "--deny-tool=shell(git commit)",
+        "--deny-tool=shell(git push)",
+        "--deny-tool=shell(git tag)"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "none",
+          "minimal",
+          "low",
+          "medium",
+          "high",
+          "xhigh",
+          "max"
+        ]
+      },
+      "resume": {
+        "command": [
+          "copilot",
+          "--resume={sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "copilot-credits",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "vibe": {
+      "autoApprove": {
+        "interactive": {
+          "state": "measured",
+          "file": "~/.vibe/config.toml",
+          "format": "toml",
+          "keys": [
+            {
+              "table": [
+                "tools",
+                "read_file"
+              ],
+              "key": "permission",
+              "value": "always"
+            },
+            {
+              "table": [
+                "tools",
+                "grep"
+              ],
+              "key": "permission",
+              "value": "always"
+            },
+            {
+              "table": [
+                "tools",
+                "write_file"
+              ],
+              "key": "permission",
+              "value": "always"
+            },
+            {
+              "table": [
+                "tools",
+                "edit"
+              ],
+              "key": "permission",
+              "value": "always"
+            },
+            {
+              "table": [
+                "tools",
+                "bash"
+              ],
+              "key": "permission",
+              "value": "always"
+            }
+          ],
+          "note": "permission goes inside the existing [tools.NAME] table; a second [tools.NAME] header breaks the file"
+        },
+        "seat": {
+          "mode": "bypass",
+          "flags": [
+            "--auto-approve",
+            "--trust"
+          ],
+          "basis": "argv of docs/ops/cert-launch.cjs and tools/operator/seats.cjs"
+        },
+        "stall": [
+          {
+            "id": "vibe-approve-tool",
+            "regex": "^\\s*(?:Approve|Allow) (?:tool|running|execution)\\b.*\\?",
+            "basis": "unmeasured: no real prompt text was captured; fixture outputs only"
+          }
+        ],
+        "verify": "node docs/ops/channels-approve.cjs check --client vibe"
+      },
+      "binary": "vibe",
+      "models": [
+        "mistral-medium-3.5",
+        "mistral-large",
+        "zai-glm-5-3",
+        "mistral-large-4-0",
+        "mistral-large-4-0-3"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "~/.vibe/config.toml [[mcp_servers]]",
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "vibe",
+        "-p",
+        "{message}",
+        "--enabled-tools",
+        "read_file",
+        "--enabled-tools",
+        "grep",
+        "--enabled-tools",
+        "write_file",
+        "--enabled-tools",
+        "edit",
+        "--enabled-tools",
+        "bash",
+        "--auto-approve",
+        "--trust",
+        "--max-turns",
+        "400",
+        "--output",
+        "streaming",
+        "--workdir",
+        "{workdir}"
+      ],
+      "model": {
+        "how": "none",
+        "listing": null
+      },
+      "effort": {
+        "how": "config",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "vibe",
+          "--resume",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "none",
+      "launchAliases": {
+        "zai-glm-5-3": "glm-5-3",
+        "mistral-large-4-0": "mistral-large-4",
+        "mistral-large-4-0-3": "mistral-large-4"
+      },
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "kilo": {
+      "autoApprove": {
+        "interactive": {
+          "state": "measured",
+          "file": "~/.config/kilo/kilo.jsonc",
+          "format": "jsonc",
+          "keys": [
+            {
+              "path": [
+                "permission",
+                "edit"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "webfetch"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "doom_loop"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "bash"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "external_directory"
+              ],
+              "value": "allow",
+              "wildcard": true
+            }
+          ],
+          "note": "a rule map (bash, external_directory) counts as on when its \"*\" member is allow"
+        },
+        "seat": {
+          "mode": "bypass",
+          "flags": [
+            "--auto"
+          ],
+          "basis": "argv of docs/ops/cert-launch.cjs and tools/operator/seats.cjs; headless kilo without --auto waits for a permission prompt (declared, not measured)"
+        },
+        "stall": [
+          {
+            "id": "kilo-permission",
+            "regex": "^\\s*(?:Permission|Allow) (?:required|requested)\\b",
+            "basis": "unmeasured: no real prompt text was captured; fixture outputs only"
+          }
+        ],
+        "verify": "node docs/ops/channels-approve.cjs check --client kilo"
+      },
+      "binary": "kilo",
+      "models": [
+        "deepseek/deepseek-flash",
+        "kilo/qwen/qwen3.8-27b:free",
+        "kilo/stepfun/step-3.7-flash:free",
+        "kilo/nvidia/nemotron-3-super-120b-a12b:free",
+        "openai-compatible/deepseek/deepseek-v4-flash"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "kilo",
+        "run",
+        "-m",
+        "{model}",
+        {
+          "if": "effort",
+          "args": [
+            "--variant",
+            "{effort}"
+          ]
+        },
+        "--auto",
+        "--dir",
+        "{workdir}",
+        "--title",
+        "{title}",
+        "--format",
+        "json",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "kilo",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "high",
+          "max",
+          "minimal"
+        ]
+      },
+      "resume": {
+        "command": [
+          "kilo",
+          "--session",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "kilo-json",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "kimi": {
+      "models": [
+        "kimi-code-k3"
+      ],
+      "launchAliases": {
+        "kimi-code-k3": "kimi-code/k3"
+      },
+      "autoApprove": {
+        "interactive": {
+          "state": "measured",
+          "file": "~/Documents/PowerShell/profile.ps1",
+          "format": "ps-profile",
+          "keys": [
+            {
+              "function": "kimi",
+              "flag": "--auto",
+              "exe": "$env:USERPROFILE\\.kimi-code\\bin\\kimi.exe",
+              "passThrough": [
+                "-p",
+                "--prompt",
+                "--print",
+                "-y",
+                "--yolo",
+                "--auto",
+                "-h",
+                "--help",
+                "-V",
+                "--version",
+                "login",
+                "logout"
+              ]
+            }
+          ],
+          "note": "PowerShell 7 profile wrapper; an approval key of the kimi config itself is unknown"
+        },
+        "seat": {
+          "mode": "client-default",
+          "flags": [],
+          "basis": "measured 2026-10-17: -p sets permission mode auto itself and refuses --auto and --yolo"
+        },
+        "stall": [],
+        "verify": "node docs/ops/channels-approve.cjs check --client kimi"
+      },
+      "binary": "kimi",
+      "command": [
+        "kimi",
+        "-p",
+        "{message}",
+        {
+          "if": "model",
+          "args": [
+            "-m",
+            "{model}"
+          ]
+        },
+        "--output-format",
+        "stream-json"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "config",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "kimi",
+          "-S",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "mimo": {
+      "autoApprove": {
+        "interactive": {
+          "state": "measured",
+          "file": "~/.config/mimocode/mimocode.jsonc",
+          "format": "jsonc",
+          "keys": [
+            {
+              "path": [
+                "permission",
+                "edit"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "webfetch"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "doom_loop"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "bash"
+              ],
+              "value": "allow",
+              "wildcard": true
+            },
+            {
+              "path": [
+                "permission",
+                "external_directory"
+              ],
+              "value": "allow",
+              "wildcard": true
+            }
+          ],
+          "note": "same rule map as kilo"
+        },
+        "seat": {
+          "mode": "bypass",
+          "flags": [
+            "--yolo"
+          ],
+          "basis": "argv of docs/ops/cert-launch.cjs and tools/operator/seats.cjs"
+        },
+        "stall": [
+          {
+            "id": "mimo-permission",
+            "regex": "^\\s*(?:Permission|Allow) (?:required|requested)\\b",
+            "basis": "unmeasured: no real prompt text was captured; fixture outputs only"
+          }
+        ],
+        "verify": "node docs/ops/channels-approve.cjs check --client mimo"
+      },
+      "binary": "mimo",
+      "models": [
+        "xiaomi/mimo-v2.6-flash",
+        "xiaomi/mimo-v2.6-pro",
+        "xiaomi/mimo-v2.5"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "mimo",
+        "run",
+        "{message}",
+        {
+          "if": "model",
+          "args": [
+            "-m",
+            "{model}"
+          ]
+        },
+        {
+          "if": "effort",
+          "args": [
+            "--variant",
+            "{effort}"
+          ]
+        },
+        "--yolo",
+        "--format",
+        "json"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "mimo",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "high",
+          "max",
+          "minimal"
+        ]
+      },
+      "resume": {
+        "command": [
+          "mimo",
+          "run",
+          "--session",
+          "{sessionId}"
+        ],
+        "sessionId": "printed in launch output"
+      },
+      "usage": "kilo-json",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "cline": {
+      "autoApprove": {
+        "interactive": {
+          "state": "unknown",
+          "file": null,
+          "format": null,
+          "keys": [],
+          "note": "not measured"
+        },
+        "seat": {
+          "mode": "unknown",
+          "flags": [],
+          "basis": "no seat launcher"
+        },
+        "stall": [],
+        "verify": null
+      },
+      "binary": "cline",
+      "models": [
+        "cline-free/mimo-v2.6-flash"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "cline mcp",
+        "hooks": "~/.cline/hooks (hooks-dir flag)",
+        "resume": true
+      },
+      "command": [
+        "cline",
+        "-c",
+        "{workdir}",
+        {
+          "if": "model",
+          "args": [
+            "-m",
+            "{model}"
+          ]
+        },
+        {
+          "if": "effort",
+          "args": [
+            "--thinking",
+            "{effort}"
+          ]
+        },
+        {
+          "if": "provider",
+          "args": [
+            "-P",
+            "{provider}"
+          ]
+        },
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "flag",
+        "values": [
+          "none",
+          "low",
+          "medium",
+          "high",
+          "xhigh"
+        ]
+      },
+      "resume": {
+        "command": [
+          "cline",
+          "--id",
+          "{sessionId}"
+        ],
+        "sessionId": "listed by cline history (not captured in the 2026-10-05 probe)"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "goose": {
+      "autoApprove": {
+        "interactive": {
+          "state": "unknown",
+          "file": null,
+          "format": null,
+          "keys": [],
+          "note": "not measured"
+        },
+        "seat": {
+          "mode": "unknown",
+          "flags": [],
+          "basis": "no seat launcher"
+        },
+        "stall": [],
+        "verify": null
+      },
+      "binary": "goose",
+      "models": [
+        "anthropic/claude-sonnet-4"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "goose mcp",
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "goose",
+        "run",
+        "-t",
+        "{message}",
+        "--no-session",
+        "-q"
+      ],
+      "model": {
+        "how": "config",
+        "listing": null
+      },
+      "effort": {
+        "how": "unknown",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "goose",
+          "run",
+          "--resume",
+          "--session-id",
+          "{sessionId}"
+        ],
+        "sessionId": "session id from goose session / run output (not captured in the 2026-10-05 probe, which used --no-session)"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "opencode": {
+      "autoApprove": {
+        "interactive": {
+          "state": "unknown",
+          "file": null,
+          "format": null,
+          "keys": [],
+          "note": "not measured; kilo and mimocode are forks with the measured permission map"
+        },
+        "seat": {
+          "mode": "unknown",
+          "flags": [],
+          "basis": "no seat launcher"
+        },
+        "stall": [],
+        "verify": null
+      },
+      "binary": "opencode",
+      "models": [
+        "cerebras/qwen-3.8-27b",
+        "minimax/MiniMax-M3"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": "opencode mcp",
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "opencode",
+        "run",
+        "-m",
+        "{model}",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": [
+          "opencode",
+          "models"
+        ]
+      },
+      "effort": {
+        "how": "unknown",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "opencode",
+          "run",
+          "--session",
+          "{sessionId}"
+        ],
+        "sessionId": "session id via `opencode session` / export (not captured in the 2026-10-05 probe)"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "qwen": {
+      "autoApprove": {
+        "interactive": {
+          "state": "unknown",
+          "file": null,
+          "format": null,
+          "keys": [],
+          "note": "not measured"
+        },
+        "seat": {
+          "mode": "bypass",
+          "flags": [
+            "--approval-mode",
+            "yolo"
+          ],
+          "basis": "docs/ops/qwen-client.cjs buildInvocation; measured 2026-10-17: headless yolo writes files"
+        },
+        "stall": [],
+        "verify": null
+      },
+      "binary": "qwen",
+      "models": [
+        "qwen3.8-max",
+        "qwen3.8-flash",
+        "qwen3.8-2.4t-a95b"
+      ],
+      "capabilities": {
+        "fileWrite": true,
+        "mcp": true,
+        "hooks": null,
+        "resume": true
+      },
+      "command": [
+        "qwen",
+        "-m",
+        "{model}",
+        "--bare",
+        "--auth-type",
+        "openai",
+        "--approval-mode",
+        "yolo",
+        "--output-format",
+        "text",
+        "--max-session-turns",
+        "{turns}",
+        "-p",
+        "{message}"
+      ],
+      "model": {
+        "how": "flag",
+        "listing": null
+      },
+      "effort": {
+        "how": "none",
+        "values": null
+      },
+      "resume": {
+        "command": [
+          "qwen",
+          "--resume",
+          "{sessionId}"
+        ],
+        "sessionId": "the session id of the client's own session store; the launcher never reads it"
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    },
+    "webbee": {
+      "autoApprove": {
+        "interactive": {
+          "state": "unknown",
+          "file": null,
+          "format": null,
+          "keys": [],
+          "note": "not measured"
+        },
+        "seat": {
+          "mode": "unknown",
+          "flags": [],
+          "basis": "no seat launcher"
+        },
+        "stall": [],
+        "verify": null
+      },
+      "binary": "webbee",
+      "models": [],
+      "capabilities": {
+        "fileWrite": "unknown",
+        "mcp": null,
+        "hooks": null,
+        "resume": false
+      },
+      "command": [],
+      "model": {
+        "how": "unknown",
+        "listing": null
+      },
+      "effort": {
+        "how": "unknown",
+        "values": null
+      },
+      "resume": {
+        "command": [],
+        "sessionId": null
+      },
+      "usage": "none",
+      "present": false,
+      "version": null,
+      "verifiedOn": null,
+      "source": "product-contract",
+      "env": {},
+      "failureModes": []
+    }
+  }
+}

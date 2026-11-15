@@ -1,0 +1,102 @@
+---
+id: SCHEMA-client-profile
+version: 0.2
+title: Client profile - registry wire shape and measured execution boundary
+layer: L3
+type: schema
+status: draft
+evidence_class: [B, C]
+cost_basis: unknown
+evidence: [.ai/bin/protocol-packet.cjs:533-560, .ai/bin/protocol-dispatch/workdir.cjs:59-96]
+---
+
+# Профиль клиента
+
+Авторский draft по P-L0-001. Дом профиля инструмента — L3;
+измеренный опыт клиента остаётся в L4 APP-карточках. Это описание существующего
+`clients/1`, не approved supersession, не подтверждение доступности провайдера.
+Потребители: protocol-dispatch/clients, cert-launch, fix-launch, protocol-packet.
+Текущий дом данных `.ai/docs/clients.json`; переход в L3-tools требует отдельной
+посадки с обновлением всех потребителей. Здесь данные не перемещаются.
+
+## Rules
+
+- R-L3-client-profile.1. `schema` равен `clients/1`; `clients` — объект записей по id клиента. Отсутствующая запись и `present: false` не разрешают запуск.
+- R-L3-client-profile.2. Наблюдение имеет дату и источник; неизвестная способность остаётся unknown/null. Наличие бинарника не доказывает права, модель, авторство или актуальную квоту.
+- R-L3-client-profile.3. `command` — argv-шаблон, не shell-строка; адаптер shell имеет отдельную проверку. Значения модели, усилия и роли выбираются слоем назначения, не этой схемой.
+- R-L3-client-profile.4. `executionObservation` описывает только указанный boundary и источник. detect-only не является предотвращением; unknown никогда не становится разрешением.
+- R-L3-client-profile.5. Профиль рабочей машины не является профилем установленного проекта. Пути, auth и персональные данные текущего registry не копируются в публичный продукт; host получает схему и собственный registry.
+
+## Отображение старого контракта
+
+| Старый контракт | Текущий clients/1 | Ограничение |
+|---|---|---|
+| client | ключ clients, `id`, `binary` | maker/provider берутся из слоя назначения |
+| version, verified | `version`, `verifiedOn`, `source` | даты CLI наблюдений не обновляются от чтения кода |
+| executable, shim | `binary`, `path` | path — локальные данные; adapter проверяет способ вызова |
+| argv | `command` | строки и условные `{if, args}`; подстановка в clients.cjs |
+| env | `env` | значения не печатаются и не служат доказательством auth |
+| models, effort, tiers | `models`, `model`, `effort` | tiers здесь не добавляются; selection layer |
+| permission | `capabilities`, `executionObservation` | capability не равна разрешению текущей задачи |
+| timeBound | executor options | локальная deadline policy, не выдуманный CLI флаг |
+| sessionIdFrom, resume | `resume` | null — отсутствие доказательства поддержки |
+| artifacts | executor lease и session store | наблюдения относятся к своей сессии |
+| failureModes | `failureModes` | pattern/class/cause/countermeasure; L4 хранит опыт |
+| `enforcement` | `executionObservation.noCommit` | неиспользуемое legacy поле не добавляется как gate |
+| compiler budget | `packetSoftTokens` | положительное целое, проверяет compiler |
+| context level | `contextLevel` | `C3`, `C2` или `C1`: уровень архитектурного контекста, который запускатель просит у резолвера для этого клиента; без ключа — `C3` для клиента с доступом к файлам, `C1` без него; другое значение — отказ compiler |
+
+## Execution observation
+
+Закрытая форма: boundary=`dispatch-postflight`, noCommit=`detect-only`,
+authentication=`unknown`, observedOn=UTC дата проверки кода, source=path:line.
+На 2026-10-14 workdir.cjs сравнивает HEAD и write-set; это наблюдение локального
+кода для каждого registry entry, а не проба всех двенадцати реальных клиентов.
+CLI capabilities, версии и источники 2026-10-04/05 сохранены без повышения
+достоверности. `fileWrite: true` использован compiler как legacy fallback для
+чтения только при отсутствии fileRead; unknown не считается true.
+
+## Command timeout
+
+Необязательный `commandTimeout` описывает deadline shell-инструмента внутри
+клиента, а не внешний timeout процесса launcher. Отсутствующее поле старого
+host registry даёт unknown; явно некорректный объект отказывается до запуска.
+Общий читатель и renderer: `.ai/bin/lib/client-command-timeout.cjs`.
+
+Закрытая форма (все поля обязательны при наличии объекта):
+
+| Поле | Контракт |
+|---|---|
+| state | observed или unknown |
+| foregroundMs | положительное безопасное целое в миллисекундах; null при unknown |
+| strategy | tool-timeout, detached или unknown |
+| toolTimeoutMs | для tool-timeout: целое больше foregroundMs; иначе null |
+| pollMs | для detached: целое кратное 1000, меньше foregroundMs и не больше 20000; иначе null |
+| observedOn | действительная UTC дата YYYY-MM-DD; null при unknown |
+| source | repo-relative path:line, без traversal; null при unknown |
+
+При state=unknown strategy=unknown, остальные поля null. Наблюдение deadline
+не повышает CLI capabilities и не обновляет историческую версию клиента.
+Число toolTimeoutMs — параметр shell TOOL, не выдуманный CLI флаг клиента.
+Обычный record запускается detached с PROTOCOL_NO_FULL_SUITE=1 и `--quick`;
+helper не меняет подпись, receipt или семантику protocol-handoff.
+
+## Самоприменимость и приёмка
+
+P-L0-001: intake=client-profile, class B/C, draft, independent review и owner act
+ещё требуются. Новые правила не активируются. Canonical schema и provenance
+проверяются собственными тестами; потребители проверяются их suites.
+CATALOG/RULE-MAP regenerates интегратор после приёмки; автор их не редактирует.
+
+## Risks
+
+| Риск | Покрытие | Остаток |
+|---|---|---|
+| stale CLI snapshot | исходная дата/источник сохраняются | offline не подтверждает live capability |
+| широкие shell права | сила границы названа detect-only | злонамеренный shell не изолирован ОС |
+| обещание от metadata | draft и unknown | owner act и sealed pair ещё нужны |
+
+## Change log
+
+- 0.1 — 2026-10-14
+- 0.2 — 2026-11-12

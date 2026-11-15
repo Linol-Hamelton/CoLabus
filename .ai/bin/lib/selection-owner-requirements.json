@@ -1,0 +1,4 @@
+{
+  "modelIds": ["claude-fable-5-1"],
+  "reason": "These models require readable host policy before selection or dispatch can evaluate conditional fallback eligibility. This scope grants no permission and supplies no host facts. Non-free assign decisions also require host policy; billing classes come from the shared billing schema."
+}

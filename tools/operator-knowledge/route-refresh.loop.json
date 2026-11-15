@@ -1,0 +1,11 @@
+{
+  "loop": "route-refresh",
+  "admission": ".ai/bin/lib/loop-supervisor.cjs assessStart",
+  "stop": ".ai/bin/lib/loop-supervisor.cjs assessStopped",
+  "command": ["node", "tools/operator-knowledge/refresh-tick.cjs"],
+  "intervalMs": 60000,
+  "maxProbesPerTick": 1,
+  "scarceClients": "launch-only",
+  "recentLaunchWindowMs": 10800000,
+  "activation": "operator-owned; serialize admission with a fresh complete OS snapshot; record runner and children identities; no scheduler is installed"
+}
