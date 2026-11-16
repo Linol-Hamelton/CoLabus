@@ -1,0 +1,11 @@
+{
+  "schema": "assign-owner-classes/1",
+  "enabled": false,
+  "ownerAct": null,
+  "classes": [
+    "read-only",
+    "host-child",
+    "low-risk-reader"
+  ],
+  "note": "The owner's first classes of automatic assignment: read-only tasks (analysis, verification, document classification, pre-review), child tasks of a decomposition in a host project outside the kernel paths, readers and certifiers of low risk. Author rounds on kernel paths stay in advice. Recognition, the selection for a recognised launch and the return to advice: tools/assign/owner-classes.cjs. OFF: enabled stays false and ownerAct null until the owner act after the pilot names the decision block that turns it on; a missing or invalid file is off."
+}

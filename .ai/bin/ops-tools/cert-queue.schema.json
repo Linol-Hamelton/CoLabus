@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:colabus:cert-queue:1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "key", "client", "stream", "worktree"],
+  "properties": {
+    "schema": { "const": "cert-queue/1" },
+    "key": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$" },
+    "client": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$" },
+    "stream": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$" },
+    "worktree": { "type": "string", "minLength": 1, "pattern": "^(?:[A-Za-z]:[\\\\/]|/|\\\\\\\\)[^\\u0000-\\u001f\\u007f]*$" }
+  }
+}

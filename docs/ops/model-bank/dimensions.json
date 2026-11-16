@@ -1,0 +1,43 @@
+{
+  "schema": "dimension-registry/1",
+  "source": "PROTO-DEC-0175 item 5 (the IMPL/ALGO/EDIT split and the layer dimensions AGENT, MATH, REASON, KNOW); PROTO-DEC-0084 item 2 (the frozen nine of the class registry); one registry of 14 IDs with a scope field, LONG and INSTR as facets, D-DEBUG only through the crosswalk, D-RES removed and the researcher role on D-DOC",
+  "rules": "scope task: an ID a task profile, a launch domain and a selection slot may name; profile true: it may carry a weight in a task profile; scope layer: a strength cell of the selection layer only, never a task profile or a launch domain; f02: a member of the frozen nine of the class registry (PROTO-DEC-0084 item 2). A facet, a crosswalk label and the quarantine bucket are bank labels, never IDs: a facet qualifies a cell, a crosswalk label is resolved by the benchmark crosswalk per family, and the quarantine bucket is never a number. A removed ID is refused everywhere and names its replacement.",
+  "dimensions": [
+    { "id": "D-IMPL", "scope": "task", "profile": true, "f02": true, "name": "implementation of new code" },
+    { "id": "D-ARCH", "scope": "task", "profile": true, "f02": true, "name": "architecture and design" },
+    { "id": "D-REV", "scope": "task", "profile": true, "f02": true, "name": "review" },
+    { "id": "D-TERM", "scope": "task", "profile": true, "f02": true, "name": "terminal and tool work" },
+    { "id": "D-ALGO", "scope": "task", "profile": true, "f02": true, "name": "algorithms" },
+    { "id": "D-EDIT", "scope": "task", "profile": true, "f02": true, "name": "editing existing code" },
+    { "id": "D-DOC", "scope": "task", "profile": true, "f02": true, "name": "documentation and research writing" },
+    { "id": "D-CRIT", "scope": "task", "profile": false, "f02": true, "name": "critique" },
+    { "id": "D-SYN", "scope": "task", "profile": false, "f02": true, "name": "synthesis" },
+    { "id": "D-SEC", "scope": "task", "profile": true, "f02": false, "name": "security" },
+    { "id": "D-AGENT", "scope": "layer", "profile": false, "f02": false, "name": "agentic computer and tool use" },
+    { "id": "D-MATH", "scope": "layer", "profile": false, "f02": false, "name": "mathematics" },
+    { "id": "D-REASON", "scope": "layer", "profile": false, "f02": false, "name": "general reasoning" },
+    { "id": "D-KNOW", "scope": "layer", "profile": false, "f02": false, "name": "knowledge" }
+  ],
+  "facets": [
+    { "id": "LONG", "label": "D-LONG", "name": "long context" },
+    { "id": "INSTR", "label": "D-INSTR", "name": "instruction following" }
+  ],
+  "crosswalkLabels": ["D-DEBUG"],
+  "quarantine": ["POSSIBLE_FUTURE_DIMENSION"],
+  "removed": [
+    { "id": "D-RES", "replacement": "D-DOC" }
+  ],
+  "roles": {
+    "implementer": "D-IMPL",
+    "fixer": "D-IMPL",
+    "certifier": "D-REV",
+    "reviewer": "D-REV",
+    "critic": "D-CRIT",
+    "researcher": "D-DOC",
+    "drafter": "D-DOC",
+    "synthesiser": "D-SYN",
+    "architect": "D-ARCH"
+  },
+  "certification": ["D-REV", "D-CRIT"],
+  "certificationReason": "certification is review and critique work"
+}

@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source", "rules", "dimensions", "facets", "crosswalkLabels", "quarantine", "removed", "roles", "certification", "certificationReason"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["dimension-registry/1"] },
+    "source": { "type": "string", "minLength": 1 },
+    "rules": { "type": "string", "minLength": 1 },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "scope", "profile", "f02", "name"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^D-[A-Z]{2,12}$" },
+          "scope": { "type": "string", "enum": ["task", "layer"] },
+          "profile": { "type": "boolean" },
+          "f02": { "type": "boolean" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 80 }
+        }
+      }
+    },
+    "facets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "name"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Z]{2,12}$" },
+          "label": { "type": "string", "pattern": "^D-[A-Z]{2,12}$" },
+          "name": { "type": "string", "minLength": 1, "maxLength": 80 }
+        }
+      }
+    },
+    "crosswalkLabels": { "type": "array", "items": { "type": "string", "pattern": "^D-[A-Z]{2,12}$" } },
+    "quarantine": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z][A-Z_]{2,40}$" } },
+    "removed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "replacement"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^D-[A-Z]{2,12}$" },
+          "replacement": { "type": "string", "pattern": "^D-[A-Z]{2,12}$" }
+        }
+      }
+    },
+    "roles": { "type": "object", "additionalProperties": { "type": "string", "pattern": "^D-[A-Z]{2,12}$" } },
+    "certification": { "type": "array", "items": { "type": "string", "pattern": "^D-[A-Z]{2,12}$" } },
+    "certificationReason": { "type": "string", "minLength": 1 }
+  }
+}
