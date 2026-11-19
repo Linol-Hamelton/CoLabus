@@ -1,0 +1,14 @@
+{
+  "schema": "dimension-adjacency/1",
+  "source": "the selection rule (the model ladder measures only task complexity; models are chosen by the benchmark classifiers of the task): a model without data in a classifier of the task takes the nearest classifier, marked as a substitute and counted as coverage; without any, no automatic assignment and a question to the operator. The rows are the initial table of the design analysis of that rule.",
+  "rules": "A row names one registry ID (dimension) and its nearest classifiers in order (nearest). A selection that finds no comparable cell of the model in the dimension takes the first nearest ID in which the model has one, marks the score as a substitute of that ID and counts the dimension as covered. One step only: the nearest ID of a nearest ID is never taken. Every ID is a registry ID that is not a crosswalk label, the quarantine bucket or a removed ID; a dimension never names itself; a dimension without a row has no substitute. basis says why the IDs are near.",
+  "rows": [
+    { "dimension": "D-IMPL", "nearest": ["D-EDIT", "D-ALGO"], "basis": "the three coding IDs of one split coding dimension: swe-bench families (D-IMPL), aider-polyglot (D-EDIT) and the code generation families (D-ALGO) all score written code" },
+    { "dimension": "D-REV", "nearest": ["D-CRIT", "D-IMPL"], "basis": "review and critique are the certification pair of the registry; the implementation strength is the reviewer proxy the selection layer used before, now marked" },
+    { "dimension": "D-CRIT", "nearest": ["D-REV"], "basis": "critique and review are the certification pair of the registry" },
+    { "dimension": "D-ARCH", "nearest": ["D-SYN", "D-EDIT"], "basis": "design work is synthesis of a whole and a repository-level change (repobench, repoprobe score repository context)" },
+    { "dimension": "D-TERM", "nearest": ["D-AGENT", "D-IMPL"], "basis": "terminal work is agentic tool use (osworld, tau-bench) applied to code" },
+    { "dimension": "D-DOC", "nearest": ["D-KNOW"], "basis": "documentation and research writing draw on knowledge (gpqa, mmlu-pro, hle)" },
+    { "dimension": "D-AGENT", "nearest": ["D-TERM", "D-IMPL"], "basis": "agentic computer use and terminal work share the tool-use loop" }
+  ]
+}

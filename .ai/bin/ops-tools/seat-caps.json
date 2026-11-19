@@ -1,0 +1,14 @@
+{
+  "schema": "seat-caps/1",
+  "comment": "The client NAME patterns only. First matching name pattern wins: kimi and cline before claude. The caps are not here: they live in the seat policy (docs/ops/seat-policy.json of the main checkout), so a stale shipped number enforces nothing.",
+  "clients": [
+    { "name": "mimo", "patterns": ["mimo"] },
+    { "name": "vibe", "patterns": ["vibe", "-glm$", "five-.*-glm"] },
+    { "name": "kilo", "patterns": ["kilofree", "-kilo-", "-kilo$", "-ds$", "-nemo$", "-nsuper$", "-evid$", "kilo"] },
+    { "name": "codex", "patterns": ["codex", "sol"] },
+    { "name": "cline", "patterns": ["cline"] },
+    { "name": "kimi", "patterns": ["kimi"] },
+    { "name": "opencode", "patterns": ["opencode", "(^|-)mmx(-|$)", "minimax"] },
+    { "name": "claude", "patterns": ["sonnet", "opus", "claude"] }
+  ]
+}

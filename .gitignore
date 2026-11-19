@@ -1,0 +1,40 @@
+# Claude Code local overrides (personal, never shared)
+.claude/settings.local.json
+
+# Editor and OS noise
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+*.swp
+*~
+
+# Scratch space for agents. Nothing here is project state.
+.ai/scratch/
+.ai/runtime/
+.ai/backups/
+
+# Durable local system outcomes; exported only with explicit consent.
+.ai/outcomes/
+
+# Durable machine-local assignment feedback (one journal per machine); written in the main checkout, never staged.
+.ai/assign-feedback/
+
+# Durable machine-local route facts; never replaced by a landing or a fast-forward.
+docs/ops/route-state.local.json
+docs/ops/route-state.local.json.lock
+
+# The nested work root of the read-handle sampled check (an earlier revision removed that code path; an older
+# checkout still runs it, and it can land in a checkout whose temp root is inside the checkout).
+rh-w-*/
+
+# Never track secrets.
+.env
+.env.*
+*.key
+*.pem
+docs/product/launch-records/launches/pending/
+
+# local indexes and tool state rebuilt by IDE servers (a 25 MB graph database must never be staged)
+.codebase-memory/
+.mimocode/

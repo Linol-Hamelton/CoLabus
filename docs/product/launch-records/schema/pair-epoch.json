@@ -1,0 +1,37 @@
+{
+  "$comment": "pair-epoch/1: one epoch ledger record when an epoch is first seen. Advisory data, never Evidence. Fields are versions, hashes, names or times. A reader requires this schema, real dates, an epochId derived from the record fields, and privacy and advice checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "epochId", "ladderVersion", "classRegistryVersion", "selectorTuple", "selectorPromptSha256", "firstStartedAt", "machine", "recordedAt", "evidence"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["pair-epoch/1"] },
+    "epochId": { "type": "string", "pattern": "^E-[0-9a-f]{10}$" },
+    "ladderVersion": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9-]*/\\d+@\\d{4}-\\d{2}-\\d{2}#sha256:[0-9a-f]{16}$" },
+    "classRegistryVersion": { "type": ["string", "null"], "pattern": "^[a-z0-9-]+/\\d+@\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z#sha256:[0-9a-f]{16}$" },
+    "selectorTuple": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["client", "model", "effort"],
+      "properties": {
+        "client": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "model": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "effort": { "type": ["string", "null"], "maxLength": 40, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" }
+      }
+    },
+    "selectorPromptSha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+    "firstStartedAt": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$" },
+    "machine": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,31}$" },
+    "recordedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$" },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ladderVersionSource", "ladderMatchesCurrentFile", "registryVersionSource", "registryGeneratedAt"],
+      "properties": {
+        "ladderVersionSource": { "type": "string", "enum": ["shadow-record", "none"] },
+        "ladderMatchesCurrentFile": { "type": ["boolean", "null"] },
+        "registryVersionSource": { "type": "string", "enum": ["current-file", "none"] },
+        "registryGeneratedAt": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$" }
+      }
+    }
+  }
+}

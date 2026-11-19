@@ -1,0 +1,6 @@
+{
+  "schema": "l3-quotas/1",
+  "updated": null,
+  "note": "Host quota observations only; populate before selecting a route.",
+  "windows": []
+}

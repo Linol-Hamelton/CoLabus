@@ -1,0 +1,2187 @@
+{
+  "schema": "channels-catalog/1",
+  "comment": "Channels (cli, api, mcp) of a project and how the user connects them. Nothing here installs, starts or logs in anything; the tools only read it. A key VALUE never appears in this file or in the repository: values live in the OS credential store under the stored name KEYSTORE_<SERVICE>_<ALIAS>; this catalog lists NAMES only. Fields: verified=false means a fact below is not confirmed and the channel is NOT offered by the tools; a nonempty excluded field means the channel is excluded; key.env is the canonical environment variable name the consumer reads (the ONE key name of the service); key.aliases are other names of the same service (duplicates are found by them); key.scope per-device means the key is never copied between machines; key.billingSwitch means the key changes who pays for a client, so it is injected only when named explicitly; key.usedBy lists files that read the key (an empty list means: retire the key if nothing else uses it); install.verified=false means the package name or version is not confirmed here and the command is not offered. Install pins were observed offline with npm ls -g and uv tool list; check the current version before installing. login.check.semantic exit0-logged-in means the command exits 0 only when logged in (shown by the vendor help, behaviour on a logged-out machine NOT verified here). The mcp entries come from docs/ops/mcp-catalog.json: only the MCP entries are mirrored, skills are not channels.",
+  "keyNaming": {
+    "prefix": "KEYSTORE_",
+    "pattern": "KEYSTORE_<SERVICE>_<ALIAS>",
+    "service": "[A-Z0-9]+ (no underscore)",
+    "alias": "[A-Za-z][A-Za-z0-9]{0,23}, stored upper case",
+    "rule": "one key per (service, account); a second alias for the same service needs --second-account"
+  },
+  "channels": [
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": true,
+      "key": null,
+      "needsKeys": [],
+      "id": "git",
+      "title": "git",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": "No login. git identity (user.name, user.email) is the user's own setting."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": false,
+        "evidence": "OS-specific; no install command is recorded in this repository"
+      },
+      "check": {
+        "command": [
+          "git",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Install git from the vendor page for the OS if it is missing.",
+      "evidence": "AGENTS.md section 3 runs git; git --version"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": true,
+      "key": null,
+      "needsKeys": [],
+      "id": "node",
+      "title": "Node.js",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": "No login."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": false,
+        "evidence": "OS-specific; the kernel tools run on Node 22 (v22.21.0)"
+      },
+      "check": {
+        "command": [
+          "node",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Install Node.js 22 or newer if it is missing.",
+      "evidence": "node --version; the MCP setup notes section 1.2 records Node v22.21.0"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "uv",
+      "title": "uv (Python tool runner)",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": "No login."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": false,
+        "evidence": "OS-specific; uvx 0.12.21 is recorded in the MCP setup notes section 1.2"
+      },
+      "check": {
+        "command": [
+          "uv",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Install uv if vibe is wanted and uv is missing.",
+      "evidence": "Vibe was observed installed through uv"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "claude",
+      "title": "Claude Code",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "claude",
+          "auth",
+          "login"
+        ],
+        "check": {
+          "command": [
+            "claude",
+            "auth",
+            "status"
+          ],
+          "network": false,
+          "semantic": "exit0-logged-in"
+        },
+        "note": "Subscription login in the browser. If ANTHROPIC_API_KEY is set the client bills that key instead of the subscription: do not set it unless that is intended."
+      },
+      "install": {
+        "command": "npm install -g @anthropic-ai/claude-code@2.1.285",
+        "pin": "@anthropic-ai/claude-code@2.1.285",
+        "verified": true,
+        "evidence": "npm ls -g --depth=0 (matches clients.json 2.1.285)"
+      },
+      "check": {
+        "command": [
+          "claude",
+          "--version"
+        ],
+        "network": false
+      },
+      "mcpList": {
+        "command": [
+          "claude",
+          "mcp",
+          "list"
+        ],
+        "network": true,
+        "note": "health-checks every approved server (starts local ones, calls remote ones)"
+      },
+      "userAction": "Run `claude auth login` and sign in in the browser.",
+      "evidence": ".ai/docs/clients.json clients.claude; claude auth --help; claude mcp list --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "codex",
+      "title": "Codex CLI",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "codex",
+          "login"
+        ],
+        "check": {
+          "command": [
+            "codex",
+            "login",
+            "status"
+          ],
+          "network": false,
+          "semantic": "exit0-logged-in"
+        },
+        "note": "ChatGPT-account login in the browser. `codex login --with-api-key` reads a key from stdin; do not use that path from an agent session."
+      },
+      "install": {
+        "command": "npm install -g @openai/codex@0.161.0",
+        "pin": "@openai/codex@0.161.0",
+        "verified": true,
+        "evidence": "npm ls -g showed 0.161.0; the earlier registry recorded 0.159.2: the pin follows the observed installed version."
+      },
+      "check": {
+        "command": [
+          "codex",
+          "--version"
+        ],
+        "network": false
+      },
+      "mcpList": {
+        "command": [
+          "codex",
+          "mcp",
+          "list",
+          "--json"
+        ],
+        "network": false,
+        "note": "lists configured servers; the JSON can hold the config env, so the doctor keeps names and auth fields only"
+      },
+      "userAction": "Run `codex login` and sign in in the browser.",
+      "evidence": ".ai/docs/clients.json clients.codex; codex login --help; codex mcp list --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "copilot",
+      "title": "GitHub Copilot CLI",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "copilot",
+          "login"
+        ],
+        "check": null,
+        "note": "Device or browser login. No read-only login check is verified for copilot itself; `gh auth status` (channel gh) reports the GitHub account."
+      },
+      "install": {
+        "command": "npm install -g @github/copilot@1.0.87",
+        "pin": "@github/copilot@1.0.87",
+        "verified": true,
+        "evidence": "npm ls -g showed 1.0.87; the earlier registry recorded 1.0.91: the pin follows the observed installed version."
+      },
+      "check": {
+        "command": [
+          "copilot",
+          "--version"
+        ],
+        "network": false
+      },
+      "mcpList": null,
+      "userAction": "Run `copilot login` and follow the prompt.",
+      "evidence": ".ai/docs/clients.json clients.copilot; copilot --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "gh",
+      "title": "GitHub CLI (gh)",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "gh",
+          "auth",
+          "login"
+        ],
+        "check": {
+          "command": [
+            "gh",
+            "auth",
+            "status"
+          ],
+          "network": true,
+          "semantic": "exit0-logged-in"
+        },
+        "note": "Browser or device-code login. `gh auth status` validates the token with the GitHub API, so the doctor runs it only with --network."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": false,
+        "evidence": "OS-specific; not an npm global"
+      },
+      "check": {
+        "command": [
+          "gh",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Run `gh auth login`.",
+      "evidence": "gh auth --help (2026-10-08); .ai/docs/clients.json clients.copilot.auth (\"gh auth status green\")"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "vibe",
+      "title": "Mistral Vibe",
+      "login": {
+        "method": "api-key",
+        "command": [
+          "vibe",
+          "--setup"
+        ],
+        "check": null,
+        "note": "First-run setup (`vibe --setup`) asks for the Mistral account key itself and keeps it in its own config. No read-only login check is verified. The subscription is Mistral Pro (clients.json)."
+      },
+      "install": {
+        "command": "uv tool install mistral-vibe==2.26.1",
+        "pin": "mistral-vibe==2.26.1",
+        "verified": true,
+        "evidence": "uv tool list showed Vibe v2.26.1"
+      },
+      "check": {
+        "command": [
+          "vibe",
+          "--version"
+        ],
+        "network": false
+      },
+      "mcpList": {
+        "command": [
+          "vibe",
+          "config"
+        ],
+        "network": false,
+        "note": "The catalog names `vibe config`; its output format is NOT verified, the doctor treats it as free text and keeps only server names found in it",
+        "unverifiedFormat": true
+      },
+      "userAction": "Run `vibe --setup` once and enter the Mistral key in that prompt (it is kept by vibe, not by this kit).",
+      "evidence": ".ai/docs/clients.json clients.vibe; vibe --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [
+        "gateway"
+      ],
+      "id": "kilo",
+      "title": "Kilo CLI",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "kilo",
+          "auth",
+          "login"
+        ],
+        "check": null,
+        "note": "`kilo auth list` lists providers; its output format is not verified, so no automatic logged-in verdict is made."
+      },
+      "install": {
+        "command": "npm install -g @kilocode/cli@7.8.3",
+        "pin": "@kilocode/cli@7.8.3",
+        "verified": true,
+        "evidence": "npm ls -g"
+      },
+      "check": {
+        "command": [
+          "kilo",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Run `kilo auth login`; the openai-compatible route also needs the gateway key (channel gateway).",
+      "evidence": "Kilo supports AI_GATEWAY_API_KEY for openai-compatible/*; kilo auth --help. Offered only on request."
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "kimi",
+      "title": "Kimi Code",
+      "login": {
+        "method": "browser-oauth",
+        "command": null,
+        "check": null,
+        "note": "clients.json records no auth for kimi and `kimi --help` shows no login command in its first screen: the login is UNVERIFIED and is not offered."
+      },
+      "install": {
+        "command": "npm install -g @moonshot-ai/kimi-code@2.1.1",
+        "pin": "@moonshot-ai/kimi-code@2.1.1",
+        "verified": true,
+        "evidence": "npm ls -g"
+      },
+      "check": {
+        "command": [
+          "kimi",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Login command not verified: start `kimi` and follow its first-run prompt.",
+      "evidence": ".ai/docs/clients.json clients.kimi; kimi --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "mimo",
+      "title": "MiMo Code CLI",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "mimo",
+          "auth",
+          "login"
+        ],
+        "check": {
+          "command": [
+            "mimo",
+            "auth",
+            "whoami"
+          ],
+          "network": true,
+          "semantic": "exit0-logged-in"
+        },
+        "note": "Xiaomi/MiMo account. `mimo auth whoami` is shown by `mimo auth --help`; whether it calls the network is not verified, so it is treated as network and runs only with --network."
+      },
+      "install": {
+        "command": "npm install -g @mimo-ai/cli@0.1.15",
+        "pin": "@mimo-ai/cli@0.1.15",
+        "verified": true,
+        "evidence": "npm ls -g"
+      },
+      "check": {
+        "command": [
+          "mimo",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Run `mimo auth login` and sign in with the Xiaomi account.",
+      "evidence": ".ai/docs/clients.json clients.mimo; mimo auth --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "cline",
+      "title": "Cline CLI",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "cline",
+          "auth"
+        ],
+        "check": null,
+        "note": "clients.json records an OAuth login. `cline auth` accepts `-k/--apikey <key>`: that puts the key in argv, never use it."
+      },
+      "install": {
+        "command": "npm install -g cline@3.0.68",
+        "pin": "cline@3.0.68",
+        "verified": true,
+        "evidence": "npm ls -g"
+      },
+      "check": {
+        "command": [
+          "cline",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Run `cline auth` (interactive) and sign in in the browser. Never pass -k.",
+      "evidence": ".ai/docs/clients.json clients.cline; cline auth --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [
+        "openrouter"
+      ],
+      "id": "goose",
+      "title": "Goose",
+      "login": {
+        "method": "api-key",
+        "command": [
+          "goose",
+          "configure"
+        ],
+        "check": null,
+        "note": "Goose reads OPENROUTER_API_KEY from the environment in this setup (clients.json); `goose configure` is interactive. `goose doctor` exists but its output is not verified."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": false,
+        "evidence": "goose 1.53.0 is a native binary (goose.exe), not an npm global; no install command is recorded"
+      },
+      "check": {
+        "command": [
+          "goose",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Add the openrouter key (channel openrouter) and start goose through channels-env so it sees OPENROUTER_API_KEY.",
+      "evidence": ".ai/docs/clients.json clients.goose; goose --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [
+        "cerebras",
+        "groq"
+      ],
+      "id": "opencode",
+      "title": "OpenCode",
+      "login": {
+        "method": "api-key",
+        "command": [
+          "opencode",
+          "auth",
+          "login"
+        ],
+        "check": null,
+        "note": "clients.json: 0 stored credentials, models come from provider env keys (CEREBRAS_API_KEY, GROQ_API_KEY). `opencode auth list` output format is not verified."
+      },
+      "install": {
+        "command": "npm install -g opencode-ai@1.18.34",
+        "pin": "opencode-ai@1.18.34",
+        "verified": true,
+        "evidence": "npm ls -g"
+      },
+      "check": {
+        "command": [
+          "opencode",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Add the cerebras and groq keys and start opencode through channels-env, or run `opencode auth login`.",
+      "evidence": ".ai/docs/clients.json clients.opencode; opencode auth --help (2026-10-08)"
+    },
+    {
+      "kind": "cli",
+      "verified": false,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "id": "webbee",
+      "title": "webbee",
+      "login": {
+        "method": "browser-oauth",
+        "command": [
+          "webbee",
+          "login"
+        ],
+        "check": null,
+        "note": "clients.json: browser login (Imperal), TUI-only, no headless route; fileWrite unproven. Marked unverified and not offered."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": false,
+        "evidence": "not an npm global"
+      },
+      "check": {
+        "command": [
+          "webbee",
+          "--version"
+        ],
+        "network": false
+      },
+      "userAction": "Not offered (unverified).",
+      "evidence": ".ai/docs/clients.json clients.webbee"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "openrouter",
+      "title": "OpenRouter",
+      "key": {
+        "service": "OPENROUTER",
+        "env": "OPENROUTER_API_KEY",
+        "aliases": [
+          {
+            "name": "OPENAI_COMPAT_KEY",
+            "note": "Generic key name of an external OpenAI-compatible route; treated as the same service as OPENROUTER_API_KEY here. CONFIRM per project."
+          }
+        ],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [
+          "external route configuration",
+          "external OpenAI-compatible adapter"
+        ],
+        "console": "openrouter.ai (the base URL of external route configuration)",
+        "keyUrl": "https://openrouter.ai/settings/keys",
+        "keyHint": "создайте ключ, задайте лимит кредита на ключ (поле Credit limit; правило ядра: 10 USD), скопируйте значение сразу",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 307 then HTTP 307 to a login page (openrouter.ai/sign-in)",
+          "status": "login-redirect"
+        },
+        "verify": {
+          "url": "https://openrouter.ai/api/v1/auth/key",
+          "hosts": [
+            "openrouter.ai"
+          ],
+          "auth": "bearer",
+          "parse": "openrouter"
+        }
+      },
+      "userAction": "Create a key in the OpenRouter account and add it: `node docs/ops/channels-keys.cjs add openrouter --alias main`.",
+      "evidence": "external route configuration (keyEnv OPENROUTER_API_KEY); .ai/docs/clients.json clients.goose"
+    },
+    {
+      "kind": "api",
+      "verified": false,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "xiaomi",
+      "title": "Xiaomi MiMo API (direct)",
+      "key": null,
+      "userAction": "Not offered: no environment variable name for a direct MiMo key is recorded in this repository (the mimo CLI keeps its own login: channel mimo).",
+      "evidence": "The Xiaomi provider is configured inside mimo auth.json; the key name was not found when viewing stored names. Console: platform.xiaomimimo.com."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "mistral",
+      "title": "Mistral API",
+      "key": {
+        "service": "MISTRAL",
+        "env": "MISTRAL_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": "console.mistral.ai (the route configuration notes)",
+        "keyUrl": "https://console.mistral.ai/api-keys",
+        "keyHint": "создайте ключ в разделе API Keys консоли, скопируйте значение сразу",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 302 to a login page (auth.mistral.ai/self-service/login/browser)",
+          "status": "login-redirect"
+        },
+        "verify": null
+      },
+      "userAction": "Optional: only when the API (not the Vibe subscription) is used. Add: `node docs/ops/channels-keys.cjs add mistral --alias main`.",
+      "evidence": "Vibe can use MISTRAL_API_KEY for the API; the observed environment variable was unset."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "openai",
+      "title": "OpenAI API",
+      "key": {
+        "service": "OPENAI",
+        "env": "OPENAI_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": true,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://platform.openai.com/api-keys",
+        "keyHint": "создайте ключ, скопируйте значение сразу (позже его не показать), задайте лимит расходов на ключе, если провайдер это позволяет (правило ядра: 10 USD на ключ)",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 403 (a login or a bot check stands in front; confirm in a browser)",
+          "status": "blocked"
+        },
+        "verify": null
+      },
+      "userAction": "Optional. Setting OPENAI_API_KEY in the environment of a client that also has a subscription login can change what it bills: inject it only into the commands that need it.",
+      "evidence": ".ai/docs/clients.json clients.codex.auth (OPENAI_API_KEY field of the codex auth file)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "anthropic",
+      "title": "Anthropic API",
+      "key": {
+        "service": "ANTHROPIC",
+        "env": "ANTHROPIC_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": true,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://platform.claude.com/settings/keys",
+        "keyHint": "создайте ключ, скопируйте значение сразу; ключ API включает оплату по токенам вместо подписки клиента, поэтому он подставляется только по явной просьбе (--keys anthropic)",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 200",
+          "status": "ok"
+        },
+        "verify": null
+      },
+      "userAction": "Optional. Claude Code bills ANTHROPIC_API_KEY instead of the subscription when it is set: inject it only into the commands that need it, never export it globally.",
+      "evidence": "Claude can use ANTHROPIC_API_KEY; the observed environment variable was unset."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "google",
+      "title": "Google Gemini API",
+      "excluded": "catalog-policy",
+      "key": {
+        "service": "GOOGLE",
+        "env": "GEMINI_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://aistudio.google.com/apikey",
+        "keyHint": "ключ Gemini исключён политикой каталога и мастером не предлагается; страница указана для справки",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 302 to a login page (accounts.google.com/ServiceLogin)",
+          "status": "login-redirect"
+        },
+        "verify": null
+      },
+      "userAction": "Not offered: GEMINI_API_KEY is excluded by this catalog policy.",
+      "evidence": "GEMINI_API_KEY is excluded by this catalog policy."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "telegram",
+      "title": "Telegram bot (CoLabus)",
+      "key": {
+        "service": "TELEGRAM",
+        "env": "COLABUS_BOT_TOKEN",
+        "aliases": [
+          {
+            "name": "TELEGRAM_BOT_TOKEN",
+            "note": "Legacy fallback name used by external notification tools; it can belong to ANOTHER project bot and is not a key of this project: the wizard never takes it, channels-verify shows which bot it is",
+            "notColabus": true
+          }
+        ],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "In Telegram open the bot owner chat (BotFather) and revoke the token (the old one stops working at once); then add the new one with `node docs/ops/channels-keys.cjs rotate telegram --alias <alias>`.",
+        "expiry": "no expiry is set by the platform for a bot token; it is valid until revoked (BotFather)",
+        "usedBy": [
+          "external notification consumer",
+          "external message sender",
+          "external message client",
+          "external alert consumer"
+        ],
+        "console": null,
+        "keyUrl": "https://t.me/BotFather",
+        "keyHint": "BotFather в Telegram: /newbot (новый бот) или /token (токен существующего), скопируйте токен сразу; токен бота другого проекта здесь не нужен",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 200",
+          "status": "ok"
+        },
+        "verify": {
+          "url": "https://api.telegram.org/bot<token>/getMe",
+          "hosts": [
+            "api.telegram.org"
+          ],
+          "auth": "url-token",
+          "parse": "telegram"
+        }
+      },
+      "userAction": "Get the bot token from the bot owner chat (BotFather) and add it: `node docs/ops/channels-keys.cjs add telegram --alias main`.",
+      "evidence": "external notification consumer (TOKEN_VAR COLABUS_BOT_TOKEN, legacy TELEGRAM_BOT_TOKEN fallback)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "groq",
+      "title": "Groq API",
+      "key": {
+        "service": "GROQ",
+        "env": "GROQ_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [
+          "external route configuration"
+        ],
+        "console": null,
+        "keyUrl": "https://console.groq.com/keys",
+        "keyHint": "создайте ключ, скопируйте значение сразу (позже его не показать), задайте лимит расходов на ключе, если провайдер это позволяет (правило ядра: 10 USD на ключ)",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 200",
+          "status": "ok"
+        },
+        "verify": {
+          "url": "https://api.groq.com/openai/v1/models",
+          "hosts": [
+            "api.groq.com"
+          ],
+          "auth": "bearer",
+          "parse": "models"
+        }
+      },
+      "userAction": "Optional (free tier routes of the calibration farm). Add: `node docs/ops/channels-keys.cjs add groq --alias main`.",
+      "evidence": "external route configuration (keyEnv GROQ_API_KEY)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "cerebras",
+      "title": "Cerebras API",
+      "key": {
+        "service": "CEREBRAS",
+        "env": "CEREBRAS_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [
+          "external route configuration"
+        ],
+        "console": null,
+        "keyUrl": "https://cloud.cerebras.ai",
+        "keyHint": "откройте Cerebras Cloud, раздел API Keys, создайте ключ, скопируйте значение сразу; задайте лимит расходов, если он есть (правило ядра: 10 USD на ключ)",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 200",
+          "status": "ok"
+        },
+        "verify": {
+          "url": "https://api.cerebras.ai/v1/models",
+          "hosts": [
+            "api.cerebras.ai"
+          ],
+          "auth": "bearer",
+          "parse": "models"
+        }
+      },
+      "userAction": "Optional. Add: `node docs/ops/channels-keys.cjs add cerebras --alias main`.",
+      "evidence": "external route configuration (keyEnv CEREBRAS_API_KEY); .ai/docs/clients.json clients.opencode"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "sambanova",
+      "title": "SambaNova Cloud API",
+      "key": {
+        "service": "SAMBANOVA",
+        "env": "SAMBANOVA_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page (a key cannot be viewed again after creation)",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://cloud.sambanova.ai/apis",
+        "keyHint": "откройте SambaCloud (cloud.sambanova.ai), раздел API Keys, создайте ключ и скопируйте значение сразу (позже его не показать); free tier работает без карты, лимиты моделей — в документации rate limits",
+        "keyChecked": {
+          "date": "2026-10-13",
+          "how": "plain GET without key or cookie: HTTP 200",
+          "status": "ok"
+        },
+        "verify": {
+          "url": "https://api.sambanova.ai/v1/models",
+          "hosts": [
+            "api.sambanova.ai"
+          ],
+          "auth": "bearer",
+          "parse": "models"
+        }
+      },
+      "userAction": "Optional. Add: `node docs/ops/channels-keys.cjs add sambanova --alias main`; external tools read SAMBANOVA_API_KEY (opencode provider sambanova, openai-compat adapter).",
+      "evidence": "docs.sambanova.ai/docs/en/get-started/api-keys-urls (base URL https://api.sambanova.ai/v1, key section of the SambaCloud portal); docs.sambanova.ai/docs/en/models/rate-limits (free tier)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "together",
+      "title": "Together AI API",
+      "key": {
+        "service": "TOGETHER",
+        "env": "TOGETHER_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "an optional expiration date is set when the key is created (Together offers presets or a custom date); read it on the key's settings page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://api.together.xyz/settings/api-keys",
+        "keyHint": "откройте Together AI (api.together.xyz), Settings → API Keys, создайте project-scoped ключ и скопируйте значение сразу; free tier без карты, ставьте лимит расходов, если он есть (правило ядра: 10 USD на ключ)",
+        "keyChecked": {
+          "date": "2026-10-13",
+          "how": "plain GET without key or cookie: HTTP 307 then HTTP 307 to a login page (api.together.xyz/signin)",
+          "status": "login-redirect"
+        },
+        "verify": {
+          "url": "https://api.together.xyz/v1/models",
+          "hosts": [
+            "api.together.xyz"
+          ],
+          "auth": "bearer",
+          "parse": "models"
+        }
+      },
+      "userAction": "Optional. Add: `node docs/ops/channels-keys.cjs add together --alias main`; external tools read TOGETHER_API_KEY (opencode provider together, openai-compat adapter).",
+      "evidence": "docs.together.ai/docs/api-keys-authentication (project-scoped keys, Authorization header); api.together.xyz/settings/api-keys (key page); docs.together.ai/docs/serverless/models (free endpoints, free tier 60 RPM/60k TPM)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "ollama",
+      "title": "Ollama Cloud API",
+      "key": {
+        "service": "OLLAMA",
+        "env": "OLLAMA_API_KEY",
+        "aliases": [
+          {
+            "name": "OLLAMA_CLOUD_API_KEY",
+            "note": "name some tools use for the same Ollama Cloud key (for example the Hermes Agent environment list); channels-env sets it from the one stored key",
+            "inject": true
+          }
+        ],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "no expiry: Ollama API keys do not expire (docs.ollama.com/api/authentication); revoke a key in the API keys settings",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://ollama.com/settings/keys",
+        "keyHint": "откройте ollama.com/settings/keys, создайте ключ Cloud API и скопируйте значение сразу; free-план даёт стартовые кредиты и стартовые модели при 1 параллельном запросе, платные кредиты опциональны",
+        "keyChecked": {
+          "date": "2026-10-13",
+          "how": "plain GET without key or cookie: HTTP 303 to a login page (ollama.com/signin)",
+          "status": "login-redirect"
+        },
+        "verify": {
+          "url": "https://ollama.com/v1/models",
+          "hosts": [
+            "ollama.com"
+          ],
+          "auth": "bearer",
+          "parse": "models"
+        }
+      },
+      "userAction": "Optional. Add: `node docs/ops/channels-keys.cjs add ollama --alias main`; external tools read OLLAMA_API_KEY (Ollama clients, openai-compat adapter with base https://ollama.com/v1).",
+      "evidence": "docs.ollama.com/api/authentication (OLLAMA_API_KEY, Authorization bearer, key page ollama.com/settings/keys); docs.ollama.com/cloud (cloud models on the free plan)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "odirouter",
+      "title": "OdiRouter API (агрегатор)",
+      "key": {
+        "service": "ODIROUTER",
+        "env": "ODIROUTER_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "per-key: the key carries expires_at (0 means no expiry); read it on the keys page or in the GET /v1/balance answer",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://odirouter.ai/ru/settings/api-keys",
+        "keyHint": "зарегистрируйтесь на odirouter.ai (Google/GitHub/почта), возьмите бесплатные кредиты для старта и создайте API-ключ на странице settings/api-keys, скопируйте значение сразу; без пополнения бесплатные модели — до 50 вызовов/день при RPM 5, с пополнением — до 100/день при RPM 100",
+        "keyChecked": {
+          "date": "2026-10-13",
+          "how": "plain GET without key or cookie: HTTP 307 then HTTP 307 to a login page (odirouter.ai/login)",
+          "status": "login-redirect"
+        },
+        "verify": {
+          "url": "https://api.odirouter.ai/v1/models",
+          "hosts": [
+            "api.odirouter.ai"
+          ],
+          "auth": "bearer",
+          "parse": "models"
+        }
+      },
+      "userAction": "Optional. Add: `node docs/ops/channels-keys.cjs add odirouter --alias main`; external tools read ODIROUTER_API_KEY (opencode provider odirouter with base https://api.odirouter.ai/v1, openai-compat adapter).",
+      "evidence": "odirouter.ai/docs/get-started/quick-start (base URL https://api.odirouter.ai/v1, key page https://odirouter.ai/ru/settings/api-keys, limits: free models 50 calls/day at RPM 5 without top-up, 100/day at RPM 100 with top-up); odirouter.ai/docs/api-reference/models/model-list (GET /v1/models); odirouter.ai/docs/integrations/coding-agents/opencode (opencode provider odirouter)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "gateway",
+      "title": "AI gateway (openai-compatible, Vercel)",
+      "key": {
+        "service": "GATEWAY",
+        "env": "AI_GATEWAY_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [
+          "external route configuration",
+          "external route chooser"
+        ],
+        "console": null,
+        "keyUrl": "https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai-gateway%2Fapi-keys&title=AI+Gateway+API+Keys",
+        "keyHint": "создайте ключ AI Gateway (Create key), задайте бюджет ключа (лимит расходов), скопируйте значение сразу; страница зависит от команды Vercel, ссылка открывает выбор команды; то же из консоли: vercel ai-gateway api-keys create --name ИМЯ",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 200",
+          "status": "ok"
+        },
+        "verify": {
+          "url": "https://ai-gateway.vercel.sh/v1/credits",
+          "hosts": [
+            "ai-gateway.vercel.sh"
+          ],
+          "auth": "bearer",
+          "parse": "gateway"
+        }
+      },
+      "userAction": "Optional (kilo openai-compatible route). Add: `node docs/ops/channels-keys.cjs add gateway --alias main`.",
+      "evidence": ".ai/docs/clients.json clients.kilo.auth (AI_GATEWAY_API_KEY from a local env file)"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "deepseek",
+      "title": "DeepSeek API (direct, one key)",
+      "key": {
+        "service": "DEEPSEEK",
+        "env": "DEEPSEEK_API_KEY",
+        "aliases": [
+          {
+            "name": "DEEPSEEK_MAIN_KEY",
+            "note": "one of the three names that were three keys of one account (two with the same USD balance, the third a CNY wallet); the project uses one key, so this name is only an alias of the single DeepSeek key and channels-env still sets it for code that reads it",
+            "inject": true
+          },
+          {
+            "name": "DEEPSEEK_MENTOR_KEY",
+            "note": "one of the three names that were three keys of one account (two with the same USD balance, the third a CNY wallet); the project uses one key, so this name is only an alias of the single DeepSeek key and channels-env still sets it for code that reads it",
+            "inject": true
+          },
+          {
+            "name": "DEEPSEEK_MULTI_KEY",
+            "note": "one of the three names that were three keys of one account (two with the same USD balance, the third a CNY wallet); the project uses one key, so this name is only an alias of the single DeepSeek key and channels-env still sets it for code that reads it",
+            "inject": true
+          }
+        ],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://platform.deepseek.com/api_keys",
+        "keyHint": "создайте ключ в аккаунте, который отдаёт баланс в USD (один ключ на проект), скопируйте значение сразу",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 202",
+          "status": "ok"
+        },
+        "verify": {
+          "url": "https://api.deepseek.com/user/balance",
+          "hosts": [
+            "api.deepseek.com"
+          ],
+          "auth": "bearer",
+          "parse": "deepseek"
+        }
+      },
+      "userAction": "Add the one DeepSeek key (the one that returns the USD balance): `node docs/ops/channels-keys.cjs add deepseek --alias main`. The three legacy names stay as aliases of it: channels-env sets them from the one stored key.",
+      "evidence": "One DeepSeek key is used; DEEPSEEK_MAIN_KEY, DEEPSEEK_MENTOR_KEY and DEEPSEEK_MULTI_KEY remain aliases of canonical DEEPSEEK_API_KEY. The USD balance request returned HTTP 200. No tracked code reads the legacy names: the readers are external scripts."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "dahl",
+      "title": "DAHL Inference API",
+      "key": {
+        "service": "DAHL",
+        "env": "DAHL_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [
+          "docs/ops/cert-launch.cjs",
+          "external OpenAI-compatible adapter"
+        ],
+        "console": null,
+        "keyUrl": null,
+        "keyHint": "ключ выдан владельцу по гранту DAHL; страница выпуска в репозитории не записана; сервис не подтверждён",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "no vendor page is recorded for this key",
+          "status": "no-page"
+        },
+        "verify": null
+      },
+      "userAction": "Optional and UNVERIFIED. Add: `node docs/ops/channels-keys.cjs add dahl --alias main`.",
+      "evidence": "docs/ops/cert-launch.cjs (--key-env DAHL_API_KEY); the provider compatibility notes (DAHL Inference API, key DAHL_API_KEY); external OpenAI-compatible adapter",
+      "unverifiedNote": "DAHL is recorded as an OpenAI-compatible route (the DAHL Inference API) but the service is not verified for this catalog: no read-only endpoint is verified for the verify command and no key page is recorded"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "typesafe",
+      "title": "TYPESAFE route (jev-shadow)",
+      "key": {
+        "service": "TYPESAFE",
+        "env": "TYPESAFE_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [
+          "external environment consumer"
+        ],
+        "console": null,
+        "keyUrl": null,
+        "keyHint": "провайдер не записан в репозитории, имя читает только инструмент jev-shadow; страница выпуска не известна; сервис не подтверждён",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "no vendor page is recorded for this key",
+          "status": "no-page"
+        },
+        "verify": null
+      },
+      "userAction": "Optional and UNVERIFIED. Add: `node docs/ops/channels-keys.cjs add typesafe --alias main`.",
+      "evidence": "external environment consumer (Key: TYPESAFE_API_KEY from the environment only); external environment consumer",
+      "unverifiedNote": "only the tool the external environment consumer reads TYPESAFE_API_KEY; the provider behind the name is not recorded in this repository"
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "huggingface",
+      "title": "Hugging Face (Inference Providers, personal token)",
+      "key": {
+        "service": "HUGGINGFACE",
+        "env": "HF_TOKEN",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://huggingface.co/settings/tokens",
+        "keyHint": "создайте токен доступа с минимальными правами (для Inference Providers), скопируйте значение сразу",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 302 to a login page (huggingface.co/login)",
+          "status": "login-redirect"
+        },
+        "verify": {
+          "url": "https://huggingface.co/api/whoami-v2",
+          "hosts": [
+            "huggingface.co"
+          ],
+          "auth": "bearer",
+          "parse": "huggingface"
+        }
+      },
+      "userAction": "Optional (paid aggregator route). Add: `node docs/ops/channels-keys.cjs add huggingface --alias main`.",
+      "evidence": "HF_TOKEN: whoami returned HTTP 200; opencode providers list reports the name. No tracked code reads the name; Hugging Face is an optional keyed service."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "cloudflare",
+      "title": "Cloudflare (Workers AI gateway token)",
+      "key": {
+        "service": "CLOUDFLARE",
+        "env": "CLOUDFLARE_API_TOKEN",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://dash.cloudflare.com/profile/api-tokens",
+        "keyHint": "создайте API-токен (Create Token) с минимальными правами и скопируйте значение сразу; идентификатор аккаунта CLOUDFLARE_ACCOUNT_ID не секрет, задайте его отдельно в окружении, мастер его не хранит",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 403 (a login or a bot check stands in front; confirm in a browser)",
+          "status": "blocked"
+        },
+        "verify": {
+          "url": "https://api.cloudflare.com/client/v4/user/tokens/verify",
+          "hosts": [
+            "api.cloudflare.com"
+          ],
+          "auth": "bearer",
+          "parse": "cloudflare"
+        },
+        "companions": [
+          {
+            "name": "CLOUDFLARE_ACCOUNT_ID",
+            "secret": false,
+            "evidence": "the provider compatibility notes (CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID); the provider registration notes"
+          }
+        ]
+      },
+      "userAction": "Optional. Add: `node docs/ops/channels-keys.cjs add cloudflare --alias main`. The account id (CLOUDFLARE_ACCOUNT_ID) is not a secret and is not stored here.",
+      "evidence": "the client route notes (CLOUDFLARE_API_TOKEN); the provider registration notes (opencode providers list reports the name). No tracked code reads the name."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "spacebunny",
+      "title": "SpaceBunny (OpenAI-compatible endpoint)",
+      "key": {
+        "service": "SPACEBUNNY",
+        "env": "SPACEBUNNY_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": null,
+        "keyHint": "ключ SpaceBunny (spacebunnymodel.com): страница выпуска ключа в репозитории не записана, возьмите ключ в кабинете сервиса",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "no vendor page is recorded for this key",
+          "status": "no-page"
+        },
+        "verify": null
+      },
+      "userAction": "Optional. Add: `node docs/ops/channels-keys.cjs add spacebunny --alias main`.",
+      "evidence": "the provider compatibility notes (key env SPACEBUNNY_API_KEY, 401 without it); the provider compatibility notes (passed with --key-env to external OpenAI-compatible adapter)."
+    },
+    {
+      "kind": "api",
+      "verified": true,
+      "required": false,
+      "needsKeys": [],
+      "install": null,
+      "check": null,
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "id": "kilo-server",
+      "title": "Kilo local server password",
+      "key": {
+        "service": "KILOSERVER",
+        "env": "KILO_SERVER_PASSWORD",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [
+          "external local server consumer"
+        ],
+        "console": null,
+        "keyUrl": null,
+        "keyHint": "пароль локального сервера kilo: придумайте его сами и задайте для сервера, провайдер его не выдаёт",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "no vendor page is recorded for this key",
+          "status": "no-page"
+        },
+        "verify": null
+      },
+      "userAction": "Optional local server access, offered only on request. The password you chose for `kilo serve`. Add: `node docs/ops/channels-keys.cjs add kilo-server --alias main`.",
+      "evidence": "external local server consumer (reads KILO_SERVER_PASSWORD and passes it to the kilo child); the value is a local server password, not a provider key."
+    },
+    {
+      "id": "codebase-memory",
+      "kind": "mcp",
+      "verified": true,
+      "required": true,
+      "key": null,
+      "needsKeys": [],
+      "mandatory": true,
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": "Local stdio server, no key and no login."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": true,
+        "evidence": "see the MCP setup notes section 1.2 (pins codebase-memory-mcp@0.11.0, @tobilu/qmd@2.8.3)"
+      },
+      "check": null,
+      "mcpNames": [
+        "codebase-memory",
+        "codebase_memory"
+      ],
+      "connect": {
+        "section": "the MCP setup notes section 1.3",
+        "pin": "codebase-memory-mcp@0.11.0",
+        "prerequisite": "npm install -g codebase-memory-mcp@0.11.0 @tobilu/qmd@2.8.3",
+        "placeholders": [
+          "<NPM_GLOBAL> = the output of: npm root -g"
+        ],
+        "target": {
+          "claude": ".mcp.json in the project root (inside \"mcpServers\"), or: claude mcp add",
+          "codex": "~/.codex/config.toml",
+          "vibe": "~/.vibe/config.toml"
+        },
+        "fragments": {
+          "claude": [
+            "\"codebase-memory\": {",
+            "  \"type\": \"stdio\",",
+            "  \"command\": \"node\",",
+            "  \"args\": [",
+            "    \"<NPM_GLOBAL>/codebase-memory-mcp/bin.js\"",
+            "  ]",
+            "}"
+          ],
+          "codex": [
+            "[mcp_servers.codebase_memory]",
+            "command = \"node\"",
+            "args = [\"<NPM_GLOBAL>/codebase-memory-mcp/bin.js\"]"
+          ],
+          "vibe": [
+            "[[mcp_servers]]",
+            "name = \"codebase-memory\"",
+            "transport = \"stdio\"",
+            "command = \"node\"",
+            "args = [\"<NPM_GLOBAL>/codebase-memory-mcp/bin.js\"]"
+          ]
+        }
+      },
+      "userAction": "Mandatory minimum: connect through the client config as in the MCP setup notes section 1.3.",
+      "evidence": "docs/ops/mcp-catalog.json (mandatory list)"
+    },
+    {
+      "id": "qmd",
+      "kind": "mcp",
+      "verified": true,
+      "required": true,
+      "key": null,
+      "needsKeys": [],
+      "mandatory": true,
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": "Local stdio server, no key and no login."
+      },
+      "install": {
+        "command": null,
+        "pin": null,
+        "verified": true,
+        "evidence": "see the MCP setup notes section 1.2 (pins codebase-memory-mcp@0.11.0, @tobilu/qmd@2.8.3)"
+      },
+      "check": null,
+      "mcpNames": [
+        "qmd"
+      ],
+      "connect": {
+        "section": "the MCP setup notes section 1.3",
+        "pin": "@tobilu/qmd@2.8.3",
+        "prerequisite": "npm install -g codebase-memory-mcp@0.11.0 @tobilu/qmd@2.8.3",
+        "placeholders": [
+          "<NPM_GLOBAL> = the output of: npm root -g"
+        ],
+        "target": {
+          "claude": ".mcp.json in the project root (inside \"mcpServers\"), or: claude mcp add",
+          "codex": "~/.codex/config.toml",
+          "vibe": "~/.vibe/config.toml"
+        },
+        "fragments": {
+          "claude": [
+            "\"qmd\": {",
+            "  \"type\": \"stdio\",",
+            "  \"command\": \"node\",",
+            "  \"args\": [",
+            "    \"<NPM_GLOBAL>/@tobilu/qmd/bin/qmd\",",
+            "    \"mcp\"",
+            "  ]",
+            "}"
+          ],
+          "codex": [
+            "[mcp_servers.qmd]",
+            "command = \"node\"",
+            "args = [\"<NPM_GLOBAL>/@tobilu/qmd/bin/qmd\", \"mcp\"]"
+          ],
+          "vibe": [
+            "[[mcp_servers]]",
+            "name = \"qmd\"",
+            "transport = \"stdio\"",
+            "command = \"node\"",
+            "args = [\"<NPM_GLOBAL>/@tobilu/qmd/bin/qmd\", \"mcp\"]"
+          ]
+        }
+      },
+      "userAction": "Mandatory minimum: connect through the client config as in the MCP setup notes section 1.3.",
+      "evidence": "docs/ops/mcp-catalog.json (mandatory list)"
+    },
+    {
+      "id": "context7",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": "npx -y @upstash/context7-mcp@4.1.1 (stdio). An optional API key only raises rate limits; do not store it in the repository.",
+        "pin": "@upstash/context7-mcp@4.1.1",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "context7"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry context7"
+    },
+    {
+      "id": "shadcn",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": "npx -y shadcn@4.21.0 mcp (stdio); the project needs a components.json",
+        "pin": "shadcn@4.21.0",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "shadcn"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry shadcn"
+    },
+    {
+      "id": "design-md",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": "npx -y @webdesignhot/design-md-mcp@0.2.0 (stdio)",
+        "pin": "@webdesignhot/design-md-mcp@0.2.0",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "design-md"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry design-md"
+    },
+    {
+      "id": "brandsystem",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": "npx -y @brandsystem/mcp@0.16.1 (stdio)",
+        "pin": "@brandsystem/mcp@0.16.1",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "brandsystem"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry brandsystem"
+    },
+    {
+      "id": "better-design",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": {
+        "service": "BETTERDESIGN",
+        "env": "BETTER_DESIGN_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": null,
+        "keyHint": "ключ сервиса Better Design: страница выпуска в репозитории не записана, возьмите ключ в кабинете сервиса",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "no vendor page is recorded for this key",
+          "status": "no-page"
+        },
+        "verify": null
+      },
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": "npx -y better-design-mcp@0.6.1 (stdio); the key is set by the user in the client environment, never written to the repository or to docs/MCP-PROJECT.md",
+        "pin": "better-design-mcp@0.6.1",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "better-design"
+      ],
+      "userAction": "Add the key: `node docs/ops/channels-keys.cjs add better-design --alias main`, then start the client through channels-env.",
+      "evidence": "docs/ops/mcp-catalog.json entry better-design"
+    },
+    {
+      "id": "playwright",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "none",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "playwright"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry playwright"
+    },
+    {
+      "id": "chrome-devtools",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "none",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": "npx -y chrome-devtools-mcp@1.10.1 (stdio); needs Chrome installed",
+        "pin": "chrome-devtools-mcp@1.10.1",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "chrome-devtools"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry chrome-devtools"
+    },
+    {
+      "id": "figma",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "remote",
+      "network": "runtime",
+      "login": {
+        "method": "browser-oauth",
+        "command": null,
+        "check": null,
+        "note": "Hosted server: the client opens the browser for the OAuth sign-in; the doctor flags it as needs-auth until you authorize it in the client."
+      },
+      "install": {
+        "command": "remote server added in the client; the user signs in with OAuth in the client, no key is stored in the repository",
+        "pin": "hosted service, not pinnable",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "figma"
+      ],
+      "userAction": "Authorize the server in the client (browser).",
+      "evidence": "docs/ops/mcp-catalog.json entry figma"
+    },
+    {
+      "id": "github",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": {
+        "service": "GITHUB",
+        "env": "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "aliases": [
+          {
+            "name": "GH_TOKEN",
+            "note": "name read by the gh CLI"
+          },
+          {
+            "name": "GITHUB_TOKEN",
+            "note": "name read by gh and many tools"
+          }
+        ],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://github.com/settings/personal-access-tokens",
+        "keyHint": "создайте токен (Fine-grained): выберите репозитории и минимальные права, задайте срок жизни, скопируйте значение сразу",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 302 to a login page (github.com/login)",
+          "status": "login-redirect"
+        },
+        "verify": {
+          "url": "https://api.github.com/user",
+          "hosts": [
+            "api.github.com"
+          ],
+          "auth": "bearer",
+          "parse": "github"
+        }
+      },
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "github"
+      ],
+      "userAction": "Add the key: `node docs/ops/channels-keys.cjs add github --alias main`, then start the client through channels-env.",
+      "evidence": "docs/ops/mcp-catalog.json entry github"
+    },
+    {
+      "id": "git-mcp",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "none",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "git"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry git"
+    },
+    {
+      "id": "dbhub",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": {
+        "service": "DBHUB",
+        "env": "DATABASE_URL",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": null,
+        "keyHint": "строка подключения вашей базы",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "no vendor page is recorded for this key",
+          "status": "no-page"
+        },
+        "verify": null
+      },
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "dbhub"
+      ],
+      "userAction": "Add the key: `node docs/ops/channels-keys.cjs add dbhub --alias main`, then start the client through channels-env.",
+      "evidence": "docs/ops/mcp-catalog.json entry dbhub"
+    },
+    {
+      "id": "sentry",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "remote",
+      "network": "runtime",
+      "login": {
+        "method": "browser-oauth",
+        "command": null,
+        "check": null,
+        "note": "Hosted server: the client opens the browser for the OAuth sign-in; the doctor flags it as needs-auth until you authorize it in the client."
+      },
+      "install": {
+        "command": "remote server added in the client; OAuth sign-in by the user, no key in the repository",
+        "pin": "hosted service, not pinnable",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "sentry"
+      ],
+      "userAction": "Authorize the server in the client (browser).",
+      "evidence": "docs/ops/mcp-catalog.json entry sentry"
+    },
+    {
+      "id": "postman",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": {
+        "service": "POSTMAN",
+        "env": "POSTMAN_API_KEY",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://go.postman.co/settings/me/api-keys",
+        "keyHint": "создайте ключ API (Generate API Key), скопируйте значение сразу",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 302 to a login page (identity.getpostman.com/login)",
+          "status": "login-redirect"
+        },
+        "verify": null
+      },
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "postman"
+      ],
+      "userAction": "Add the key: `node docs/ops/channels-keys.cjs add postman --alias main`, then start the client through channels-env.",
+      "evidence": "docs/ops/mcp-catalog.json entry postman"
+    },
+    {
+      "id": "sonarqube",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": {
+        "service": "SONAR",
+        "env": "SONAR_TOKEN",
+        "aliases": [],
+        "scope": "per-device",
+        "billingSwitch": false,
+        "rotation": "Create the new key in the provider account, run `node docs/ops/channels-keys.cjs rotate <channel> --alias <alias>` (value from the hidden prompt), then revoke the old key in the provider account.",
+        "expiry": "unknown: an expiry is set (or not) when the key is created; read it on the provider account page",
+        "usedBy": [],
+        "console": null,
+        "keyUrl": "https://sonarcloud.io/account/security",
+        "keyHint": "создайте токен в разделе Security своего аккаунта SonarCloud, скопируйте значение сразу",
+        "keyChecked": {
+          "date": "2026-10-09",
+          "how": "plain GET without key or cookie: HTTP 200",
+          "status": "ok"
+        },
+        "verify": null
+      },
+      "needsKeys": [],
+      "transport": "local",
+      "network": "runtime",
+      "login": {
+        "method": "api-key",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": true,
+        "evidence": "docs/ops/mcp-catalog.json, provenance host-config"
+      },
+      "check": null,
+      "mcpNames": [
+        "sonarqube"
+      ],
+      "userAction": "Add the key: `node docs/ops/channels-keys.cjs add sonarqube --alias main`, then start the client through channels-env.",
+      "evidence": "docs/ops/mcp-catalog.json entry sonarqube"
+    },
+    {
+      "id": "dart-flutter",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "none",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "dart-flutter"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry dart-flutter"
+    },
+    {
+      "id": "markitdown",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "none",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "markitdown"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry markitdown"
+    },
+    {
+      "id": "sequential-thinking",
+      "kind": "mcp",
+      "verified": true,
+      "required": false,
+      "key": null,
+      "needsKeys": [],
+      "transport": "local",
+      "network": "none",
+      "login": {
+        "method": "none",
+        "command": null,
+        "check": null,
+        "note": null
+      },
+      "install": {
+        "command": null,
+        "pin": "unverified: operator must record a verified version before this entry may be offered",
+        "verified": false,
+        "evidence": "docs/ops/mcp-catalog.json, provenance author-knowledge (name and version MUST be verified before install)"
+      },
+      "check": null,
+      "mcpNames": [
+        "sequential-thinking"
+      ],
+      "userAction": "Choose it in the MCP recommender (docs/ops/mcp-recommender.cjs); no key.",
+      "evidence": "docs/ops/mcp-catalog.json entry sequential-thinking"
+    }
+  ]
+}

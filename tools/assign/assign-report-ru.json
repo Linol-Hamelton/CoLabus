@@ -1,0 +1,21 @@
+{
+  "schema": "assign-report-ru/1",
+  "comment": "Owner-facing text of assign-control.cjs report (design rev2 section 8). Placeholders are {name}. UTF-8, no code.",
+  "title": "ОТЧЁТ ASSIGN на {now}",
+  "mode": "Режим: {mode}; включено классов: {classes}; срок режима: {expires}",
+  "state": "Состояние управления: {state}; hold: {hold}; классов в demoted: {demoted}; маршрутов в карантине: {quarantined}",
+  "classHeader": "Пары advise по классам (рекомендация и фактический выбор оператора):",
+  "classRow": "  {class}: пар {pairs}; совпало {matched}; отклонено {deviated}; из них без причины {noReason}",
+  "noPairs": "  пар advise в записях нет",
+  "assignedHeader": "Назначенные запуски (assignLaunch):",
+  "assignedRow": "  {class}: назначено {assigned}; завершено {done}; отказов {failed}; не стартовали {notStarted}; идут {running}",
+  "noAssigned": "  назначенных запусков нет (в этом выпуске ни один запуск не пишет assignLaunch)",
+  "baseline": "Эталон оператора: завершённых запусков класса {pairs}; отказов {failed}",
+  "criteriaHeader": "Срабатывания критериев отключения:",
+  "criteriaRow": "  {kind} {target}: правило {rule}; доказательства: {evidence}",
+  "noCriteria": "  срабатываний нет",
+  "integrity": "Целостность: эффективный режим advise, причины: {reasons}",
+  "expiryWarn": "ВНИМАНИЕ: срок режима истекает через {hours} ч; продлевает оператор по отчёту пар",
+  "expired": "ВНИМАНИЕ: срок режима истёк, запуски читают режим как off",
+  "lockMissing": "ВНИМАНИЕ: файл состояния отсутствует, пока он не создан, все классы остаются в advise (команда init)"
+}

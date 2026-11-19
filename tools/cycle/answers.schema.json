@@ -1,0 +1,17 @@
+{
+  "type":"object","additionalProperties":false,"required":["schema","source","unknown","answers"],
+  "properties": {
+    "schema":{"enum":["cycle-answers/1"]},
+    "source":{"enum":["PROTO-DEC-0233 item 3"]},
+    "unknown":{"enum":["operator"]},
+    "answers":{"type":"array","items":{
+      "type":"object","additionalProperties":false,"required":["client","promptClass","scope","answer"],
+      "properties":{
+        "client":{"enum":["mimo","kilo","codex","glm","claude","vibe"]},
+        "promptClass":{"enum":["continue","read","edit","test","git-status","git-diff","git-log","git-add","git-commit"]},
+        "scope":{"enum":["own-worktree"]},
+        "answer":{"enum":["continue","confirm"]}
+      }
+    }}
+  }
+}
