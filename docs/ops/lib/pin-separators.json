@@ -1,0 +1,376 @@
+{
+  "source": "Unicode UTS #39 confusables.txt",
+  "version": "18.0.0",
+  "snapshotDate": "2026-08-06",
+  "upstreamSha256": "6ed3ee967c9dfdf6677d563c9985182fbc50a2efb7d6059cd57b2e2ce18f5b92",
+  "policy": "Recursive UTS prototypes composed only of -./_, including sequences; middle dot -> dot and long-dash representative U+30FC -> hyphen; numeric code-point arrays, applied before NFKD",
+  "prototypeAliases": {
+    "\u00b7": ".",
+    "\u30fc": "-"
+  },
+  "derivation": "node docs/ops/pin-separators-build.cjs <pinned confusables.txt>; characters sorted by source code point",
+  "charactersEncoding": "U+HEX keys; prototypes are numeric Unicode code-point arrays",
+  "charactersSha256": "d910657e46f89af5f704ec176a0b5f21087128e861e4b65c658911ff4872079a",
+  "characters": {
+    "U+00B7": [
+      46
+    ],
+    "U+02D1": [
+      46
+    ],
+    "U+02D7": [
+      45
+    ],
+    "U+0640": [
+      95
+    ],
+    "U+0660": [
+      46
+    ],
+    "U+06D4": [
+      45
+    ],
+    "U+06F0": [
+      46
+    ],
+    "U+0701": [
+      46
+    ],
+    "U+0702": [
+      46
+    ],
+    "U+07FA": [
+      95
+    ],
+    "U+0830": [
+      46
+    ],
+    "U+0A76": [
+      46
+    ],
+    "U+1173": [
+      45
+    ],
+    "U+1196": [
+      45,
+      45
+    ],
+    "U+1427": [
+      46
+    ],
+    "U+16EB": [
+      46
+    ],
+    "U+1735": [
+      47
+    ],
+    "U+174D": [
+      45
+    ],
+    "U+1BC7": [
+      45
+    ],
+    "U+1BF3": [
+      45
+    ],
+    "U+2010": [
+      45
+    ],
+    "U+2011": [
+      45
+    ],
+    "U+2012": [
+      45
+    ],
+    "U+2013": [
+      45
+    ],
+    "U+2014": [
+      45
+    ],
+    "U+2015": [
+      45
+    ],
+    "U+2022": [
+      46
+    ],
+    "U+2024": [
+      46
+    ],
+    "U+2025": [
+      46,
+      46
+    ],
+    "U+2026": [
+      46,
+      46,
+      46
+    ],
+    "U+2027": [
+      46
+    ],
+    "U+2041": [
+      47
+    ],
+    "U+2043": [
+      45
+    ],
+    "U+2044": [
+      47
+    ],
+    "U+2212": [
+      45
+    ],
+    "U+2215": [
+      47
+    ],
+    "U+2219": [
+      46
+    ],
+    "U+22C5": [
+      46
+    ],
+    "U+22EF": [
+      46,
+      46,
+      46
+    ],
+    "U+2500": [
+      45
+    ],
+    "U+2501": [
+      45
+    ],
+    "U+2571": [
+      47
+    ],
+    "U+2796": [
+      45
+    ],
+    "U+27CB": [
+      47
+    ],
+    "U+29F8": [
+      47
+    ],
+    "U+2AFB": [
+      47,
+      47,
+      47
+    ],
+    "U+2AFD": [
+      47,
+      47
+    ],
+    "U+2CBA": [
+      45
+    ],
+    "U+2CBB": [
+      45
+    ],
+    "U+2CC6": [
+      47
+    ],
+    "U+2CC7": [
+      47
+    ],
+    "U+2D48": [
+      46,
+      46,
+      46
+    ],
+    "U+2E31": [
+      46
+    ],
+    "U+2F00": [
+      45
+    ],
+    "U+2F03": [
+      47
+    ],
+    "U+3033": [
+      47
+    ],
+    "U+30CE": [
+      47
+    ],
+    "U+30FB": [
+      46
+    ],
+    "U+30FC": [
+      45
+    ],
+    "U+3161": [
+      45
+    ],
+    "U+3192": [
+      45
+    ],
+    "U+31D0": [
+      45
+    ],
+    "U+31D2": [
+      47
+    ],
+    "U+31D3": [
+      47
+    ],
+    "U+4E00": [
+      45
+    ],
+    "U+4E3F": [
+      47
+    ],
+    "U+A4F8": [
+      46
+    ],
+    "U+A4FA": [
+      46,
+      46
+    ],
+    "U+A4FE": [
+      45,
+      46
+    ],
+    "U+A60E": [
+      46
+    ],
+    "U+A78F": [
+      46
+    ],
+    "U+A7F7": [
+      45
+    ],
+    "U+AA7D": [
+      45
+    ],
+    "U+ABEC": [
+      46
+    ],
+    "U+FE4D": [
+      95
+    ],
+    "U+FE4E": [
+      95
+    ],
+    "U+FE4F": [
+      95
+    ],
+    "U+FE52": [
+      46
+    ],
+    "U+FE58": [
+      45
+    ],
+    "U+FE63": [
+      45
+    ],
+    "U+FF0D": [
+      45
+    ],
+    "U+FF0E": [
+      46
+    ],
+    "U+FF0F": [
+      47
+    ],
+    "U+FF3F": [
+      95
+    ],
+    "U+FF65": [
+      46
+    ],
+    "U+FF70": [
+      45
+    ],
+    "U+FF89": [
+      47
+    ],
+    "U+FFDA": [
+      45
+    ],
+    "U+10101": [
+      46
+    ],
+    "U+10191": [
+      45
+    ],
+    "U+1091F": [
+      46
+    ],
+    "U+10A50": [
+      46
+    ],
+    "U+1104B": [
+      45
+    ],
+    "U+11174": [
+      46
+    ],
+    "U+111C7": [
+      46
+    ],
+    "U+115C4": [
+      46
+    ],
+    "U+116B9": [
+      46
+    ],
+    "U+12562": [
+      46
+    ],
+    "U+145C1": [
+      95
+    ],
+    "U+1D16D": [
+      46
+    ],
+    "U+1D23A": [
+      47
+    ],
+    "U+1ECAE": [
+      46
+    ]
+  },
+  "licenseText": [
+    "UNICODE LICENSE V3",
+    "",
+    "COPYRIGHT AND PERMISSION NOTICE",
+    "",
+    "Copyright \u00a9 1991-2026 Unicode, Inc.",
+    "",
+    "NOTICE TO USER: Carefully read the following legal agreement. BY",
+    "DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING DATA FILES, AND/OR",
+    "SOFTWARE, YOU UNEQUIVOCALLY ACCEPT, AND AGREE TO BE BOUND BY, ALL OF THE",
+    "TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE, DO NOT",
+    "DOWNLOAD, INSTALL, COPY, DISTRIBUTE OR USE THE DATA FILES OR SOFTWARE.",
+    "",
+    "Permission is hereby granted, free of charge, to any person obtaining a",
+    "copy of data files and any associated documentation (the \"Data Files\") or",
+    "software and any associated documentation (the \"Software\") to deal in the",
+    "Data Files or Software without restriction, including without limitation",
+    "the rights to use, copy, modify, merge, publish, distribute, and/or sell",
+    "copies of the Data Files or Software, and to permit persons to whom the",
+    "Data Files or Software are furnished to do so, provided that either (a)",
+    "this copyright and permission notice appear with all copies of the Data",
+    "Files or Software, or (b) this copyright and permission notice appear in",
+    "associated Documentation.",
+    "",
+    "THE DATA FILES AND SOFTWARE ARE PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY",
+    "KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF",
+    "MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF",
+    "THIRD PARTY RIGHTS.",
+    "",
+    "IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE",
+    "BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES,",
+    "OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,",
+    "WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,",
+    "ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE DATA",
+    "FILES OR SOFTWARE.",
+    "",
+    "Except as contained in this notice, the name of a copyright holder shall",
+    "not be used in advertising or otherwise to promote the sale, use or other",
+    "dealings in these Data Files or Software without prior written",
+    "authorization of the copyright holder."
+  ]
+}

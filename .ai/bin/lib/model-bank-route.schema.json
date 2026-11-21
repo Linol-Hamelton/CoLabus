@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "model-bank-route/1 billing vocabulary",
+  "type": "object",
+  "required": ["billing"],
+  "properties": {
+    "billing": {
+      "enum": ["free", "free-nim", "local", "subscription", "subscription-pool", "token-plan", "api", "api-key", "paid", "disabled", "unknown"],
+      "x-cost-order": [
+        ["free", "free-nim", "local"],
+        ["subscription", "subscription-pool", "token-plan"],
+        ["api", "api-key"],
+        ["paid"]
+      ]
+    }
+  }
+}

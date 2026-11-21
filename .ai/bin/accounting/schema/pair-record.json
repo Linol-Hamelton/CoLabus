@@ -1,0 +1,166 @@
+{
+  "$comment": "pair-record/1: one record per launch decision (recommendation, assignment, selector, outcome). Advisory data: never Evidence, never read by dispatch (PROTO-DEC-0143 item 3). Unknown is null, never zero. No path, secret or free text of the launch is copied. Text fields are names, tokens, hashes or times. Schema validation is supplemented by real-date, epoch identity, privacy and advice checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "pairId", "launchId", "machine", "epoch", "taskClass", "recordClass", "role", "startedAt", "endedAt", "recommendation", "selector", "assignment", "outcome", "match", "effortMatch", "isolation", "recordedAt"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["pair-record/1"] },
+    "pairId": { "type": "string", "pattern": "^PR-\\d{8}T\\d{6}Z-[a-z0-9-]+$" },
+    "launchId": { "type": "string", "pattern": "^L-\\d{8}T\\d{6}Z-[a-z0-9-]+$" },
+    "machine": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,31}$" },
+    "epoch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ladderVersion", "classRegistryVersion", "selectorTuple", "selectorPromptSha256"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^E-[0-9a-f]{10}$" },
+        "ladderVersion": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9-]*/\\d+@\\d{4}-\\d{2}-\\d{2}#sha256:[0-9a-f]{16}$" },
+        "classRegistryVersion": { "type": ["string", "null"], "pattern": "^[a-z0-9-]+/\\d+@\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z#sha256:[0-9a-f]{16}$" },
+        "selectorTuple": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["client", "model", "effort"],
+          "properties": {
+            "client": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+            "model": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+            "effort": { "type": ["string", "null"], "maxLength": 40, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" }
+          }
+        },
+        "selectorPromptSha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "taskClass": { "type": ["string", "null"], "pattern": "^T[1-9]$" },
+    "recordClass": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9_.-]{1,40}$" },
+    "role": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9_.-]{1,40}$" },
+    "startedAt": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$" },
+    "endedAt": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$" },
+    "recommendation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["source", "linkBasis", "at", "launcher", "choice", "candidates", "reason", "error", "terminal", "ladderVersion", "snapshotHash", "makerOrder"],
+      "properties": {
+        "source": { "type": "string", "enum": ["resolver-shadow", "route-choose"] },
+        "linkBasis": { "type": "string", "enum": ["launchId", "name+time"] },
+        "at": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$" },
+        "launcher": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9_.-]{1,40}$" },
+        "choice": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["maker", "client", "model", "effort", "tier", "id"],
+          "properties": {
+            "maker": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9 _.&+-]{0,59}$" },
+            "client": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+            "model": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+            "effort": { "type": ["string", "null"], "maxLength": 40, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+            "tier": { "type": ["integer", "null"], "minimum": 0, "maximum": 99 },
+            "id": { "type": ["string", "null"], "maxLength": 80, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" }
+          }
+        },
+        "candidates": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["maker", "client", "model", "effort", "tier", "id"],
+            "properties": {
+              "maker": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9 _.&+-]{0,59}$" },
+              "client": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+              "model": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+              "effort": { "type": ["string", "null"], "maxLength": 40, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+              "tier": { "type": ["integer", "null"], "minimum": 0, "maximum": 99 },
+              "id": { "type": ["string", "null"], "maxLength": 80, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" }
+            }
+          }
+        },
+        "reason": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9_.:+-]{1,80}$" },
+        "error": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9_.:+-]{1,80}$" },
+        "terminal": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9_.:+-]{1,80}$" },
+        "ladderVersion": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9_.:@#+/-]+$" },
+        "snapshotHash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{16}$" },
+        "makerOrder": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["key", "date"],
+          "properties": {
+            "key": { "type": ["string", "null"], "pattern": "^[A-Za-z0-9_.:+-]{1,80}$" },
+            "date": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+          }
+        }
+      }
+    },
+    "selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["client", "model", "effort", "promptSha256", "source"],
+      "properties": {
+        "client": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "model": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "effort": { "type": ["string", "null"], "maxLength": 40, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "promptSha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "source": { "type": ["string", "null"], "enum": ["shadow-record", null] }
+      }
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["client", "model", "effort", "route", "promptSha256", "servedModel", "servedModelSource", "servedModelConfidence", "servedMatchesRequested"],
+      "properties": {
+        "client": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "model": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "effort": { "type": ["string", "null"], "maxLength": 40, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "route": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "promptSha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "servedModel": { "type": ["string", "null"], "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:+/@#~-]{0,119}$" },
+        "servedModelSource": { "type": ["string", "null"], "enum": ["agent-result", "client-banner", "client-log", null] },
+        "servedModelConfidence": { "type": ["string", "null"], "enum": ["exact", "derived", null] },
+        "servedMatchesRequested": { "type": "string", "enum": ["yes", "no", "unknown"] }
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "verdictExpected", "exitCode", "failureClass", "durationSeconds", "tokens", "cost"],
+      "properties": {
+        "verdict": { "type": ["string", "null"], "enum": ["PASS", "RECOMMENDATION", "FAIL", "BLOCKED", "NO_VERDICT", null] },
+        "verdictExpected": { "type": ["boolean", "null"] },
+        "exitCode": { "type": ["integer", "null"] },
+        "failureClass": { "type": ["string", "null"], "pattern": "^[A-Z_]{2,24}$" },
+        "durationSeconds": { "type": ["number", "null"], "minimum": 0 },
+        "tokens": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["total", "input", "output", "cacheRead", "cacheWrite", "source"],
+          "properties": {
+            "total": { "type": ["integer", "null"], "minimum": 1 },
+            "input": { "type": ["integer", "null"], "minimum": 0 },
+            "output": { "type": ["integer", "null"], "minimum": 0 },
+            "cacheRead": { "type": ["integer", "null"], "minimum": 0 },
+            "cacheWrite": { "type": ["integer", "null"], "minimum": 0 },
+            "source": { "type": ["string", "null"], "maxLength": 60, "pattern": "^[A-Za-z0-9_.:+-]{1,80}$" }
+          }
+        },
+        "cost": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["usd", "basis"],
+          "properties": { "usd": { "type": ["number", "null"], "minimum": 0 }, "basis": { "type": ["string", "null"], "enum": ["priced", "subscription", "unknown", null] } }
+        }
+      }
+    },
+    "match": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "effortMatch": { "type": "string", "enum": ["yes", "no", "unknown"] },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate", "codes", "origin", "order"],
+      "properties": {
+        "gate": { "type": "string", "enum": ["clean", "quarantined"] },
+        "codes": { "type": "array", "maxItems": 12, "items": { "type": "string", "enum": ["TEST_RECORD", "CONFLICT", "NO_RECOMMENDATION", "NO_SNAPSHOT", "BAD_VERSION", "NO_SELECTOR", "NO_PROMPT_HASH", "NO_TIMES", "TIME_ORDER", "RECOMMENDATION_STALE"] } },
+        "origin": { "type": "string", "enum": ["live", "test"] },
+        "order": { "type": "string", "enum": ["recommendation<assignment<outcome", "violated", "stale", "unknown"] }
+      }
+    },
+    "recordedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$" }
+  }
+}

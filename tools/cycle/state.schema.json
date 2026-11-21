@@ -1,0 +1,12 @@
+{
+  "type":"object","additionalProperties":false,
+  "required":["schema","revision","firstObservedAt","lastObservedAt","lastSeatAt"],
+  "properties":{
+    "schema":{"enum":["cycle-controller/1"]},
+    "revision":{"type":"integer","minimum":0,"maximum":9007199254740991},
+    "firstObservedAt":{"type":"string"},
+    "lastObservedAt":{"type":"string"},
+    "lastSeatAt":{"type":["string","null"]},
+    "controllerPid":{"type":["integer","null"],"minimum":1}
+  }
+}

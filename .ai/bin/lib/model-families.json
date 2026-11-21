@@ -1,0 +1,276 @@
+{
+  "sv": "model-families/2",
+  "note": "Kernel table of model families: the maker of every model spelling the route catalog (docs/ops/routes/route-catalog.json, field model) and the model bank (.ai/bin/access/model-bank.json, field id) name, each spelling whole and case-sensitive. The family of a row is the dash form of its maker (lower case, every run of other characters one dash), the rule the makerRules of the alias data use, so the maker and the family of a row never disagree. model-identity.cjs consults it only where the alias data of the project gives no family: the project data always wins, nothing here is folded or matched by prefix, and a spelling that is not listed stays UNKNOWN. labels are further names that declare a family exactly (a record may write zhipu for the GLM maker). The maker of a spelling is read from its own provider path or model name (nvidia/meta/... is Meta, nvidia/nvidia/... is NVIDIA); a spelling whose maker the name does not show (opencode/big-pickle, the beam, flint, xing, dots and solar routes) is left out on purpose.",
+  "families": [
+    {
+      "maker": "Anthropic",
+      "labels": [],
+      "models": [
+        "claude-haiku-5-5",
+        "claude-opus-5-5",
+        "claude-opus-5-5-high",
+        "claude-opus-5-5-low",
+        "claude-opus-5-5-medium",
+        "claude-sonnet-5-5",
+        "claude-sonnet-5-5-high",
+        "claude-sonnet-5-5-low",
+        "claude-sonnet-5-5-medium"
+      ]
+    },
+    {
+      "maker": "NVIDIA",
+      "labels": [],
+      "models": [
+        "cline-free/nemotron-3.5-super-vl",
+        "cline/cline-free/nemotron-3.5-super-vl",
+        "cline/nvidia/nemotron-3.5-lightning-free",
+        "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+        "kilo/nvidia/nemotron-3.5-lightning:free",
+        "kilo/nvidia/nemotron-3.5-super-vl:free",
+        "nvidia/nemotron-3-ultra-550b-a55b",
+        "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "nvidia/nemotron-3.5-content-safety",
+        "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "nvidia/nemotron-3.5-lightning-free",
+        "nvidia/nemotron-3.5-lightning:free",
+        "nvidia/nemotron-3.5-super-vl-120b-a12b",
+        "nvidia/nemotron-3.5-super-vl:free",
+        "nvidia/nvidia/active-speaker-detection",
+        "nvidia/nvidia/bevformer",
+        "nvidia/nvidia/cosmos-transfer2_5-2b",
+        "nvidia/nvidia/llama-nemotron-embed-vl-1b-v2",
+        "nvidia/nvidia/magpie-tts-zeroshot",
+        "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+        "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
+        "nvidia/nvidia/nemotron-voicechat",
+        "nvidia/nvidia/sparsedrive",
+        "nvidia/nvidia/streampetr",
+        "nvidia/nvidia/studiovoice",
+        "opencode/nemotron-3.5-lightning-free",
+        "opencode/nemotron-3.5-super-vl-free"
+      ]
+    },
+    {
+      "maker": "DeepSeek",
+      "labels": [],
+      "models": [
+        "dahl/deepseek-ai/DeepSeek-V4-Flash-0731",
+        "deepseek-ai/deepseek-v4.1-flash",
+        "deepseek-flash",
+        "deepseek-v4-pro",
+        "deepseek/deepseek-flash",
+        "deepseek/deepseek-v4-pro",
+        "nvidia/deepseek-ai/deepseek-v4.1-flash",
+        "opencode/deepseek-v4.1-flash-free"
+      ]
+    },
+    {
+      "maker": "Mistral",
+      "labels": [],
+      "models": [
+        "mistral-large-4",
+        "mistral-medium-3.5"
+      ]
+    },
+    {
+      "maker": "Xiaomi",
+      "labels": [],
+      "models": [
+        "opencode/mimo-v2.6-flash-free",
+        "xiaomi/mimo-v2.6-flash",
+        "xiaomi/mimo-v2.6-pro",
+        "xiaomi/mimo-v2.6-pro-ultraspeed"
+      ]
+    },
+    {
+      "maker": "MiniMax",
+      "labels": [
+        "MiniMax"
+      ],
+      "models": [
+        "dahl/MiniMaxAI/MiniMax-M2.7",
+        "minimax/MiniMax-M3",
+        "minimax/MiniMax-M3.1-Flash",
+        "minimax/MiniMax-M3.1-Flash-Preview",
+        "minimaxai/minimax-m3.1-flash",
+        "nvidia/minimaxai/minimax-m3.1-flash"
+      ]
+    },
+    {
+      "maker": "Zhipu AI (Z.ai)",
+      "labels": [
+        "zhipu",
+        "z-ai",
+        "Zhipu"
+      ],
+      "models": [
+        "glm-5-3",
+        "nvidia/z-ai/glm-5.3-flash",
+        "opencode/glm-5.3-flash-free",
+        "z-ai/glm-5.3-flash"
+      ]
+    },
+    {
+      "maker": "Alibaba (Qwen)",
+      "labels": [
+        "qwen",
+        "alibaba",
+        "Alibaba Qwen"
+      ],
+      "models": [
+        "nvidia/qwen/qwen-image",
+        "nvidia/qwen/qwen-image-edit"
+      ]
+    },
+    {
+      "maker": "StepFun",
+      "labels": [],
+      "models": [
+        "nvidia/stepfun-ai/step-5-preview",
+        "stepfun-ai/step-5-preview"
+      ]
+    },
+    {
+      "maker": "Meta",
+      "labels": [
+        "Meta"
+      ],
+      "models": [
+        "meta/muse-glimmer-30b",
+        "nvidia/meta/llama-3.2-11b-vision-instruct",
+        "nvidia/meta/llama-3.2-90b-vision-instruct",
+        "nvidia/meta/muse-glimmer-30b"
+      ]
+    },
+    {
+      "maker": "Google",
+      "labels": [],
+      "models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-flash-thinking",
+        "gemini-3-flash",
+        "gemini-3.1-flash-lite",
+        "gemini-3.5-flash-lite",
+        "gemini-3.8-flash-high",
+        "gemini-3.8-flash-low",
+        "gemini-3.8-flash-medium",
+        "gemini-3.8-flash-tiered",
+        "gemini-4-argon-high",
+        "gemini-4-argon-low",
+        "gemini-4-argon-medium",
+        "google/diffusiongemma-26b-a4b-it",
+        "nvidia/google/diffusiongemma-26b-a4b-it",
+        "nvidia/google/gemma-4-31b-it",
+        "nvidia/google/google-paligemma",
+        "openai-compatible/gemini-3.8-flash-high",
+        "openai-compatible/gemini-3.8-flash-low",
+        "openai-compatible/gemini-3.8-flash-medium",
+        "openai-compatible/gemini-3.8-flash-tiered",
+        "openai-compatible/gemini-4-argon-high",
+        "openai-compatible/gemini-4-argon-low",
+        "openai-compatible/gemini-4-argon-medium"
+      ]
+    },
+    {
+      "maker": "OpenAI",
+      "labels": [],
+      "models": [
+        "codex-auto-review",
+        "gpt-5.2",
+        "gpt-5.2-2025-12-11",
+        "gpt-5.2-chat-latest",
+        "gpt-5.2-pro",
+        "gpt-5.2-pro-2025-12-11",
+        "gpt-5.3-codex-spark",
+        "gpt-5.4",
+        "gpt-5.4-2026-03-05",
+        "gpt-5.4-mini",
+        "gpt-5.6",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol",
+        "gpt-5.6-terra",
+        "gpt-6",
+        "gpt-6-astra",
+        "gpt-6-luna",
+        "gpt-6-sol",
+        "gpt-6.1-sol",
+        "gpt-6.1-terra",
+        "gpt-oss-120b-medium",
+        "nvidia/openai/gpt-oss-20b",
+        "nvidia/openai/whisper-large-v3",
+        "openai-compatible/codex-auto-review",
+        "openai-compatible/gpt-5.6",
+        "openai-compatible/gpt-5.6-luna",
+        "openai-compatible/gpt-5.6-sol",
+        "openai-compatible/gpt-5.6-terra",
+        "openai-compatible/gpt-6",
+        "openai-compatible/gpt-6-astra",
+        "openai-compatible/gpt-6-luna",
+        "openai-compatible/gpt-6-sol",
+        "openai-compatible/gpt-6.1-sol",
+        "openai-compatible/gpt-6.1-terra",
+        "openai-compatible/gpt-image-2.5-flare",
+        "openai-compatible/gpt-image-2.5-sunburst"
+      ]
+    },
+    {
+      "maker": "Moonshot",
+      "labels": [],
+      "models": [
+        "kimi-code/k3",
+        "kimi-code/k3-256k",
+        "kimi-code/k3.1-pro",
+        "kimi-code/k3.1-pro-highspeed",
+        "kimi-code/kimi-for-coding",
+        "kimi-code/kimi-for-coding-highspeed"
+      ]
+    },
+    {
+      "maker": "Black Forest Labs",
+      "labels": [
+        "Black Forest Labs"
+      ],
+      "models": [
+        "nvidia/black-forest-labs/flux.1-dev",
+        "nvidia/black-forest-labs/flux_1-kontext-dev",
+        "nvidia/black-forest-labs/flux_1-schnell",
+        "nvidia/black-forest-labs/flux_2-klein-4b"
+      ]
+    },
+    {
+      "maker": "Poolside",
+      "labels": [
+        "Poolside"
+      ],
+      "models": [
+        "cline/poolside/laguna-s-2.1-free",
+        "kilo/poolside/laguna-s-2.1:free",
+        "kilo/poolside/laguna-xs-2.1:free",
+        "nvidia/poolside/laguna-xs-2.1",
+        "poolside/laguna-s-2.1-free"
+      ]
+    },
+    {
+      "maker": "Cohere",
+      "labels": [
+        "Cohere"
+      ],
+      "models": [
+        "cohere/north-mini-code:free",
+        "kilo/cohere/north-mini-code:free"
+      ]
+    },
+    {
+      "maker": "inclusionAI",
+      "labels": [
+        "inclusionAI"
+      ],
+      "models": [
+        "kilo/inclusionai/ling-3.1-flash-1019-free"
+      ]
+    }
+  ]
+}

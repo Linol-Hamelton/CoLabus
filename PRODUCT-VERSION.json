@@ -1,0 +1,9 @@
+{
+  "schema": "product-version/1",
+  "product": "CoLabus",
+  "version": "2.0.3-pre.4",
+  "sourceSha": "a66d12b92fb9708a83c48ef2e7d293f340fdd710",
+  "manifestHash": "sha256:d960f275c9dffb91a605d45cbf27e3e906053cd2051c1489073f0f39069d5778",
+  "builtAt": "2026-11-21T00:17:55.000Z",
+  "fileCount": 700
+}
