@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source", "rules", "rows"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["benchmark-crosswalk/1"] },
+    "source": { "type": "string", "minLength": 1 },
+    "rules": { "type": "string", "minLength": 1 },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["benchmark", "version", "metric", "target", "type", "confidence", "status", "decision", "checks"],
+        "properties": {
+          "benchmark": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$" },
+          "version": { "type": ["string", "null"], "minLength": 1, "maxLength": 40 },
+          "metric": { "type": ["string", "null"], "minLength": 1, "maxLength": 80 },
+          "target": { "type": ["string", "null"], "minLength": 1, "maxLength": 64 },
+          "type": { "type": "string", "enum": ["direct", "proxy", "facet", "unmapped"] },
+          "confidence": { "type": "string", "enum": ["H", "M", "L"] },
+          "status": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "decision": { "type": "string", "enum": ["PROTO-DEC-0175 item 5", "PROTO-DEC-0321 item 7", "double-check"] },
+          "counted": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$" },
+          "basis": { "type": "string", "minLength": 1, "maxLength": 1000 },
+          "subsetOf": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$" },
+          "substituteIn": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 64 } },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["reviewer", "family"],
+              "properties": {
+                "reviewer": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,80}$" },
+                "family": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,40}$" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

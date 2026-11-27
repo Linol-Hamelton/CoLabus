@@ -1,0 +1,48 @@
+{
+  "schema": "client-home/1",
+  "comment": "Which client data a seat keeps inside its own launch directory. Class K: the client keeps its growing data (a database, snapshots, logs) in XDG_DATA_HOME/<dataDir>; the seat gets a fresh data home and, for each name in seed, a byte copy of that file from the user's data home (the content is never read or printed; the copy is removed at seat end in every completion class). A client is active only when enabled is true; otherwise it is unseated with the reason given and keeps writing where it wrote before (the pulse watches that). Class O: the home is shared with interactive work and holds rotating tokens; nothing is copied, and the growing sub-folders are moved by one prepared operator step of the source repository.",
+  "clients": {
+    "kilo": {
+      "class": "K",
+      "enabled": true,
+      "dataDir": "kilo",
+      "seed": ["auth.json"],
+      "reason": "auth.json is the one credential file the client reads from its data home (.ai/bin/access/kilo-config.cjs names it); the readers of the seat data are the farm session export of the owner's own kilo database (not a seat) and the usage accounting, which reads the client's stream output"
+    },
+    "opencode": {
+      "class": "K",
+      "enabled": true,
+      "dataDir": "opencode",
+      "seed": [],
+      "reason": "the data home holds no credential file (names listed 2026-11-19) and the seat already runs with an empty config home, so access is by environment; the seat data is read by no repository reader"
+    },
+    "mimo": {
+      "class": "K",
+      "enabled": false,
+      "dataDir": "mimocode",
+      "seed": ["auth.json", "installation_id", "trusted-workspaces.json", "mimo-key-name"],
+      "reason": "unseated: the usage backfill (.ai/bin/accounting/lib/client-usage.cjs) reads mimocode.db of the home after the seat ended, and no collector copies its numbers before the seat folder is removed; the client keeps its data home until that reader is fed"
+    },
+    "codex": {
+      "class": "O",
+      "enabled": false,
+      "move": ["sessions"],
+      "reason": "OAuth tokens with rotation share the home with interactive work; the growing part moves by junction (the prepared operator step)"
+    },
+    "vibe": {
+      "class": "O",
+      "enabled": false,
+      "move": ["logs"],
+      "reason": "six readers use the fixed home path (accounting session logs, the access probe, the history archive); the growing part moves by junction (the prepared operator step)"
+    },
+    "claude": {
+      "class": "O",
+      "enabled": false,
+      "move": ["projects", "file-history", "uploads"],
+      "reason": "the owner's and the operator's own sessions live here; the growing part moves by junction (the prepared operator step)"
+    },
+    "kimi": { "class": "O", "enabled": false, "move": [], "reason": "small home (0.35 GB); watched by the pulse, nothing moves" },
+    "gemini": { "class": "O", "enabled": false, "move": [], "reason": "small home (0.37 GB); watched by the pulse, nothing moves" },
+    "cline": { "class": "O", "enabled": false, "move": [], "reason": "small home (0.58 GB); watched by the pulse, nothing moves" }
+  }
+}

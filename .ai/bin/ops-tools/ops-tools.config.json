@@ -1,0 +1,105 @@
+{
+  "schema": "ops-tools/1",
+  "heavyChecks": "local",
+  "comment": "Defaults of the operator tools. Work-root paths are names under protocol-manifest.json workRoot, else the directory above the main checkout. launch.wrapper and launch.engine resolve relative to the repository root; absent files are refused, never bypassed. Project selection sets live in the project layer. The operator may override sections in local config (shallow merge by section).",
+  "launch": {
+    "wrapper": "docs/ops/launch-wrapper.cjs",
+    "engine": "docs/ops/cert-launch.cjs"
+  },
+  "author": {
+    "baseRef": "origin/v2.0.0",
+    "defaultDepth": 1,
+    "manifestTestOnly": [
+      "tests",
+      "testTiers"
+    ],
+    "ignore": [
+      "^\\.ai/worklog/",
+      "^\\.ai/ARCHIVE\\.md$",
+      "^docs/reviews/"
+    ],
+    "common": [],
+    "heavy": {}
+  },
+  "paths": {
+    "receipts": "author-checks",
+    "prompts": "author-prompts",
+    "tmp": "author-check-tmp",
+    "localConfig": "ops-tools.local.json"
+  },
+  "proxy": {
+    "host": "127.0.0.1", "port": 8317, "path": "/v1/models", "timeoutMs": 3000,
+    "staleMs": 90000, "tickMs": 60000, "stableUpTicks": 2, "maxContinuations": 3
+  },
+  "seat": {
+    "maxAgeHours": 6,
+    "endMarker": "_(DONE|NO_VERDICT|BLOCKED)( |$)|terminal record not written(: |$)|REFUSED( |$)|TEMP kept ",
+    "defaultCap": 18,
+    "pollMs": 20000,
+    "waitTimeoutMs": 2700000,
+    "verifyTimeoutMs": 180000,
+    "verifyPollMs": 5000
+  },
+  "heavy": {
+    "comment": "Heavy-run gate (PROTO-DEC-0249 items 2 and 3). A heavy run is a protocol-test internal runner or a direct node --test of the product-real or the product-build test file. nodeVersion is the documented runtime prefix; the queue, the train flag and the run registry (pointer files that attribute a live heavy run to its tree) live under the work root.",
+    "cap": 4,
+    "minFreeGb": 8,
+    "nodeVersion": "22.21",
+    "waitMinutes": 720,
+    "pollMs": 60000,
+    "trainFlagHours": 6,
+    "queueDir": "heavy-queue",
+    "trainFlag": "heavy-train-waiting.flag",
+    "runsDir": "heavy-runs"
+  },
+  "cleanup": {
+    "comment": "Landing cleanup (PROTO-DEC-0249 item 4). archiveRoot is an absolute directory outside the working tree or null (then the archive goes under the work root); the inventory file older than inventoryMaxHours is refused; a temp root of an ended seat is removed only after tempRetentionDays. A tree whose path matches ownerSessionPattern belongs to a session the owner runs by hand and is never removed; protectedBranches are never deleted (the base branch of the line is protected as well).",
+    "archiveRoot": null,
+    "archiveName": "archive",
+    "inventoryMaxHours": 6,
+    "tempRetentionDays": 3,
+    "ownerSessionPattern": "owner",
+    "protectedBranches": [
+      "main",
+      "master"
+    ]
+  },
+  "pulse": {
+    "outDir": "auto/pulse",
+    "queueDir": "farm/queue",
+    "beatDir": "farm/beat",
+    "resultsDir": "farm/results",
+    "capBytes": 12288
+  },
+  "loops": {
+    "comment": "LOOP-RUNNER (P-213): supervision of the operator loops through .ai/bin/ops-tools/loops.cjs and the policy .ai/bin/lib/loop-supervisor.cjs. stateDir is one safe name under the work root holding the loop-runner/1 records, locks, launch tokens and logs. commands declares one argv per loop id; tokens carry no shell metacharacters and the last token is a relative script path resolved strictly inside the work root. The shipped defaults declare no commands: the loop commands of a host are scripts of that host outside the product, so they belong in the host or local layer (the local config under the work root), never in the shipped defaults; an undeclared loop is refused with LOOP-UNDECLARED.",
+    "stateDir": "loops",
+    "commands": {}
+  },
+  "watch": {
+    "comment": "The seat watcher .ai/bin/ops-tools/seat-watch.cjs. stateDir and farmDir are names under the work root: the state folder holds its lock and the append-only list of handled events and is the only place it writes; farmDir is the farm share it reads. A pass runs every intervalSec seconds; a beat older than staleBeatMinutes is STALE-BEAT; seats and farm results older than windowHours are not read.",
+    "stateDir": "seat-watch",
+    "farmDir": "farm",
+    "intervalSec": 60,
+    "staleBeatMinutes": 15,
+    "windowHours": 48
+  },
+  "legacy": {
+    "comment": "The old file names of the untracked operator tools. A forwarding stub is written only by an explicit --write run; the tool never overwrites a real implementation without --force.",
+    "names": [
+      "author-check.cjs",
+      "author-select.cjs",
+      "precert-check.cjs",
+      "seat-count.cjs",
+      "wait-slot.cjs",
+      "seat-verify.cjs",
+      "cand-add.cjs",
+      "author-launch.cjs",
+      "cert-queue.cjs",
+      "heavy-gate.cjs",
+      "wt-inventory.cjs",
+      "landing-cleanup.cjs",
+      "train-land.cjs"
+    ]
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": "access-metadata/1"
+    },
+    "client": {
+      "enum": [
+        "kilo",
+        "cline"
+      ]
+    },
+    "provenance": {
+      "enum": [
+        "observed",
+        "declared"
+      ]
+    },
+    "at": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 30,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "maxLength": 30,
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "providerRef": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"
+          },
+          "inputModalities": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "text",
+                "image",
+                "video",
+                "audio",
+                "embedding",
+                "unknown"
+              ]
+            },
+            "maxItems": 6,
+            "uniqueItems": true
+          },
+          "outputModalities": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "text",
+                "image",
+                "video",
+                "audio",
+                "embedding",
+                "unknown"
+              ]
+            },
+            "maxItems": 6,
+            "uniqueItems": true
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "generate",
+                "edit",
+                "unknown"
+              ]
+            },
+            "maxItems": 3,
+            "uniqueItems": true
+          },
+          "paid": {
+            "enum": [
+              true,
+              false,
+              "unknown"
+            ]
+          }
+        },
+        "required": [
+          "providerRef",
+          "id",
+          "inputModalities",
+          "outputModalities",
+          "operations",
+          "paid"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 256,
+      "uniqueItems": true
+    },
+    "userProviders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "keyPresent": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "keyPresent"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 64,
+      "uniqueItems": true
+    },
+    "connectorMcp": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "connectorId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "serverCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 64
+          },
+          "toolCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 65536
+          }
+        },
+        "required": [
+          "connectorId",
+          "serverCount",
+          "toolCount"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 64,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema",
+    "client",
+    "provenance",
+    "at",
+    "expiresAt",
+    "models",
+    "userProviders",
+    "connectorMcp"
+  ],
+  "additionalProperties": false
+}

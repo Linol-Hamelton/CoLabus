@@ -1,0 +1,23 @@
+{
+  "$schema": "cycle-plans/1",
+  "type": "object",
+  "required": ["schema", "plans"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "type": "string", "enum": ["cycle-plans/1"] },
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["provider", "period", "tokenLimit"],
+        "additionalProperties": false,
+        "properties": {
+          "provider": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,39}$" },
+          "period": { "type": "string", "enum": ["day", "month"] },
+          "tokenLimit": { "type": ["integer", "null"], "minimum": 1 },
+          "note": { "type": "string", "maxLength": 200 }
+        }
+      }
+    }
+  }
+}

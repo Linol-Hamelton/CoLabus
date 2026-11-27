@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "register-open/1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "launchId", "packageId", "slot", "item"],
+  "properties": {
+    "schema": {"const": "register-open/1"},
+    "launchId": {"type": "string", "pattern": "^L(?!000000)[0-9]{6}$"},
+    "packageId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+    "slot": {"type": "string", "pattern": "^I[1-9][0-9]{0,5}$"},
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sourceKey", "sourceIds", "title", "status", "statusAsOf", "class", "layer", "ownerAct", "target", "package"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^L(?!000000)[0-9]{6}-I[1-9][0-9]{0,5}$"},
+        "sourceKey": {"enum": ["KDR14", "RR201", "PROC", "BACKLOG", "OPMEM", "DOCS", "REV"]},
+        "sourceIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z0-9]+:[A-Za-z0-9._-]+$"}},
+        "title": {"type": "string", "minLength": 1},
+        "status": {"enum": ["open", "partial", "unknown", "closed", "withdrawn"]},
+        "statusAsOf": {"type": "string", "format": "date"},
+        "class": {"enum": ["A", "B"]},
+        "layer": {"enum": ["release", "product", "package-finding", "carried", "temp-hygiene", "process", "operator", "docs", "review", "backlog", "test", "VOICE", "L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "X-CLEANUP", "X-DOCS", "X-GOVERNANCE", "X-MACHINES", "X-MCP", "X-OPERATOR", "X-PILOTS", "X-PRODUCT", "X-SECURITY", "X-SELECTION", "X-TOPOLOGY"]},
+        "ownerAct": {"type": "boolean"},
+        "target": {"type": "string"},
+        "package": {"type": "string"},
+        "statusProof": {"type": "string", "minLength": 1},
+        "dependsOn": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "nextStep": {"type": "string"},
+        "note": {"type": "string"},
+        "evidence": {"oneOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}]},
+        "hardening": {"$ref": "hardening.schema.json"}
+      }
+    }
+  },
+  "x-byte-contract": "UTF-8 no BOM, NFC, LF, exactly one final LF, <=65536 bytes, unique decoded keys. Strings contain no controls, invisible characters, angle brackets or ampersand. Source keys are pinned in the base tree. package equals issue packageLabel. Targets, proof, graph and PROC coverage are checked by the reader."
+}

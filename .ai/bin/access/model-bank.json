@@ -1,0 +1,1674 @@
+[
+  {
+    "client": "claude",
+    "provider": "claude",
+    "id": "claude-fable-5-2",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "claude",
+    "provider": "claude",
+    "id": "claude-haiku-5-5",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "claude",
+    "provider": "claude",
+    "id": "claude-opus-5-5",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "claude",
+    "provider": "claude",
+    "id": "claude-sonnet-5-5",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "claude-opus-5-5-high",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "claude-opus-5-5-low",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "claude-opus-5-5-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "claude-sonnet-5-5-high",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "claude-sonnet-5-5-low",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "claude-sonnet-5-5-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "cline",
+    "id": "cline-free/nemotron-3.5-super-vl",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "cline",
+    "id": "cline-free/solar-mini4",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "codex-auto-review",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-2.5-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-2.5-flash-lite",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-2.5-flash-thinking",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-3-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-3.1-flash-lite",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-3.5-flash-lite",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-3.8-flash-high",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-3.8-flash-low",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-3.8-flash-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-3.8-flash-tiered",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-4-argon-high",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-4-argon-low",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gemini-4-argon-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.2",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.2-2025-12-11",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.2-chat-latest",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.2-pro",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.2-pro-2025-12-11",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.3-codex-spark",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.4",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.4-2026-03-05",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.4-mini",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.6",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.6-luna",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.6-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-5.6-terra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-6",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-6-astra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-6-luna",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-6-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-6.1-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-6.1-terra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "openai-compatible",
+    "id": "gpt-oss-120b-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "cline",
+    "id": "nvidia/nemotron-3.5-lightning-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "cline",
+    "id": "poolside/laguna-s-2.1-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "cline",
+    "provider": "cline",
+    "id": "reflection/beam-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-5.6-luna",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-5.6-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-5.6-terra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-6-astra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-6-luna",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-6-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-6.1-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-6.1-terra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-6.2-astra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-6.2-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "codex",
+    "provider": "codex",
+    "id": "gpt-reserve",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "kilo",
+    "id": "kilo/mistralai/mistral-large-4-0",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "kilo",
+    "id": "kilo/moonshotai/kimi-k3",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "kilo",
+    "id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "kilo",
+    "id": "kilo/nvidia/nemotron-3.5-lightning:free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "kilo",
+    "id": "kilo/nvidia/nemotron-3.5-super-vl:free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "kilo",
+    "id": "kilo/recursive/flint-v1.0:free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "kilo",
+    "id": "kilo/reflection/beam-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/deepseek-ai/deepseek-v4.1-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/google/diffusiongemma-26b-a4b-it",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/meta/muse-glimmer-30b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/minimaxai/minimax-m3.1-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/poolside/laguna-xs-2.1",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/stepfun-ai/step-5-preview",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "nvidia",
+    "id": "nvidia/z-ai/glm-5.3-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/codex-auto-review",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-2.5-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-2.5-flash-lite",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-2.5-flash-thinking",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-3-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-3.1-flash-lite",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-3.5-flash-lite",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-3.8-flash-high",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-3.8-flash-low",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-3.8-flash-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-3.8-flash-tiered",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-4-argon-high",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-4-argon-low",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gemini-4-argon-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.2",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.2-2025-12-11",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.2-chat-latest",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.2-pro",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.2-pro-2025-12-11",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.3-codex-spark",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.4",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.4-2026-03-05",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.4-mini",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.6",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.6-luna",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.6-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-5.6-terra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-6",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-6-astra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-6-luna",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-6-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-6.1-sol",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-6.1-terra",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "openai-compatible",
+    "id": "openai-compatible/gpt-oss-120b-medium",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "deepseek",
+    "id": "deepseek/deepseek-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kilo",
+    "provider": "deepseek",
+    "id": "deepseek/deepseek-v4-pro",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-code/k3",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-code/k3-256k",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-code/k3.1-pro",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-code/k3.1-pro-highspeed",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-code/kimi-for-coding",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-code/kimi-for-coding-highspeed",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-for-coding",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "kimi",
+    "provider": "kimi",
+    "id": "kimi-for-coding-highspeed",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux_1-kontext-dev",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux_1-schnell",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux_2-klein-4b",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux.1-dev",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/deepseek-ai/deepseek-v4.1-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/google/diffusiongemma-26b-a4b-it",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/google/gemma-4-31b-it",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/google/google-paligemma",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/meta/llama-3.2-11b-vision-instruct",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/meta/llama-3.2-90b-vision-instruct",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/meta/muse-glimmer-30b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/minimaxai/minimax-m3.1-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/active-speaker-detection",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/bevformer",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/cosmos-transfer2_5-2b",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/llama-nemotron-embed-vl-1b-v2",
+    "kind": "embedding",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/magpie-tts-zeroshot",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-voicechat",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/sparsedrive",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/streampetr",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/studiovoice",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/synthetic-video-detector",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/openai/gpt-oss-20b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/openai/whisper-large-v3",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/poolside/laguna-xs-2.1",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/qwen/qwen-image",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/qwen/qwen-image-edit",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/stepfun-ai/step-5-preview",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "nvidia",
+    "id": "nvidia/z-ai/glm-5.3-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "xiaomi",
+    "id": "xiaomi/mimo-v2.6-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "xiaomi",
+    "id": "xiaomi/mimo-v2.6-pro",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "mimo",
+    "provider": "xiaomi",
+    "id": "xiaomi/mimo-v2.6-pro-ultraspeed",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "minimax",
+    "id": "minimax/MiniMax-M3",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "minimax",
+    "id": "minimax/MiniMax-M3.1-Flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "minimax",
+    "id": "minimax/MiniMax-M3.1-Flash-Preview",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux_1-kontext-dev",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux_1-schnell",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux_2-klein-4b",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/black-forest-labs/flux.1-dev",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/deepseek-ai/deepseek-v4.1-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/google/diffusiongemma-26b-a4b-it",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/google/gemma-4-31b-it",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/google/google-paligemma",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/meta/llama-3.2-11b-vision-instruct",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/meta/llama-3.2-90b-vision-instruct",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/meta/muse-glimmer-30b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/minimaxai/minimax-m3.1-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/active-speaker-detection",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/bevformer",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/cosmos-transfer2_5-2b",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/llama-nemotron-embed-vl-1b-v2",
+    "kind": "embedding",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/magpie-tts-zeroshot",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/nemotron-voicechat",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/sparsedrive",
+    "kind": "vision",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/streampetr",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/studiovoice",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/nvidia/synthetic-video-detector",
+    "kind": "video",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/openai/gpt-oss-20b",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/openai/whisper-large-v3",
+    "kind": "speech",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/poolside/laguna-xs-2.1",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/qwen/qwen-image",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/qwen/qwen-image-edit",
+    "kind": "image",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/stepfun-ai/step-5-preview",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "nvidia",
+    "id": "nvidia/z-ai/glm-5.3-flash",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/beam-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/big-pickle",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/deepseek-v4.1-flash-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/flint-40b-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/hy4-flash-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/iceman-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/longcat-2.5-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/mimo-v2.6-flash-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/nemotron-3.5-lightning-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/nemotron-3.5-super-vl-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "opencode",
+    "provider": "opencode",
+    "id": "opencode/tidepool-alpha-free",
+    "kind": "text",
+    "paid": false,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "vibe",
+    "provider": "vibe",
+    "id": "glm-5-3",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "vibe",
+    "provider": "vibe",
+    "id": "mistral-large-4",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "vibe",
+    "provider": "vibe",
+    "id": "mistral-large-4-0",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "vibe",
+    "provider": "vibe",
+    "id": "mistral-medium-3.5",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  },
+  {
+    "client": "vibe",
+    "provider": "vibe",
+    "id": "zai-glm-5-3",
+    "kind": "text",
+    "paid": true,
+    "at": "2026-11-22T17:36:22.498Z"
+  }
+]

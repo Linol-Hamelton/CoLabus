@@ -1,0 +1,646 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Access inventory v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "machine",
+    "at",
+    "network",
+    "clients",
+    "keys",
+    "providers",
+    "routes",
+    "works",
+    "missing",
+    "selection",
+    "models",
+    "userProviders",
+    "connectorMcp"
+  ],
+  "properties": {
+    "schema": {
+      "const": "access-inventory/2"
+    },
+    "machine": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{16}$"
+    },
+    "at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "network": {
+      "type": "boolean"
+    },
+    "clients": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/client"
+      }
+    },
+    "keys": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/key"
+      }
+    },
+    "providers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/provider"
+      }
+    },
+    "routes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/route"
+      }
+    },
+    "works": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "basis"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "missing": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "action",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measured",
+        "declaredExpired"
+      ],
+      "properties": {
+        "measured": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "route",
+              "probe"
+            ],
+            "properties": {
+              "route": {
+                "type": "string"
+              },
+              "probe": {
+                "$ref": "#/$defs/probe"
+              }
+            }
+          }
+        },
+        "declaredExpired": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "route",
+              "fields"
+            ],
+            "properties": {
+              "route": {
+                "type": "string"
+              },
+              "fields": {
+                "$ref": "#/$defs/names"
+              }
+            }
+          }
+        }
+      }
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "providerRef": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "client": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"
+          },
+          "modelKinds": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "text",
+                "image-generation",
+                "image-edit",
+                "video-generation",
+                "video-edit",
+                "audio",
+                "embedding",
+                "unknown"
+              ]
+            },
+            "maxItems": 8,
+            "uniqueItems": true,
+            "minItems": 1
+          },
+          "provenance": {
+            "enum": [
+              "observed",
+              "declared"
+            ]
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "maxLength": 30,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "maxLength": 30,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+          },
+          "kind": {
+            "enum": [
+              "text",
+              "image",
+              "video",
+              "speech",
+              "vision",
+              "embedding",
+              "unknown"
+            ]
+          },
+          "paid": {
+            "enum": [
+              true,
+              false,
+              "unknown"
+            ]
+          },
+          "probeState": {
+            "const": "unknown"
+          },
+          "status": {
+            "enum": [
+              "MODEL_KIND_UNKNOWN",
+              "NETWORK_DISABLED",
+              "METADATA_EXPIRED",
+              "KEY_MISSING",
+              "AVAILABLE",
+              "BILLING_UNKNOWN",
+              "AUTH_UNKNOWN"
+            ]
+          }
+        },
+        "required": [
+          "providerRef",
+          "client",
+          "id",
+          "modelKinds",
+          "provenance",
+          "at",
+          "expiresAt",
+          "kind",
+          "paid",
+          "probeState",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 16384,
+      "uniqueItems": true
+    },
+    "userProviders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "client": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "keyPresent": {
+            "type": "boolean"
+          },
+          "provenance": {
+            "enum": [
+              "observed",
+              "declared"
+            ]
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "maxLength": 30,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "maxLength": 30,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+          }
+        },
+        "required": [
+          "client",
+          "name",
+          "keyPresent",
+          "provenance",
+          "at",
+          "expiresAt"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 128,
+      "uniqueItems": true
+    },
+    "connectorMcp": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "client": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "connectorId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+          },
+          "serverCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 64
+          },
+          "toolCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 65536
+          },
+          "health": {
+            "const": "unknown"
+          },
+          "provenance": {
+            "enum": [
+              "observed",
+              "declared"
+            ]
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "maxLength": 30,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "maxLength": 30,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$"
+          }
+        },
+        "required": [
+          "client",
+          "connectorId",
+          "serverCount",
+          "toolCount",
+          "health",
+          "provenance",
+          "at",
+          "expiresAt"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 128,
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "nullableName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ok",
+        "reason",
+        "at",
+        "servedModel",
+        "source",
+        "match"
+      ],
+      "properties": {
+        "ok": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/nullableName"
+        },
+        "at": {
+          "$ref": "#/$defs/nullableName"
+        },
+        "servedModel": {
+          "$ref": "#/$defs/nullableName"
+        },
+        "source": {
+          "enum": [
+            "none",
+            "client-banner",
+            "client-export",
+            "vibe-fallback-warning"
+          ]
+        },
+        "match": {
+          "enum": [
+            true,
+            false,
+            "unknown"
+          ]
+        }
+      }
+    },
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "installed",
+        "path",
+        "version",
+        "login",
+        "models"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "installed": {
+          "type": "boolean"
+        },
+        "path": {
+          "$ref": "#/$defs/nullableName"
+        },
+        "version": {
+          "$ref": "#/$defs/nullableName"
+        },
+        "models": {
+          "$ref": "#/$defs/names"
+        },
+        "login": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "source"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "unknown",
+                "logged-in",
+                "not-logged-in",
+                "cached"
+              ]
+            },
+            "source": {
+              "type": "string"
+            },
+            "subscription": {
+              "$ref": "#/$defs/nullableName"
+            },
+            "cachedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    },
+    "key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "service",
+        "alias",
+        "channel"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "string"
+        },
+        "channel": {
+          "$ref": "#/$defs/nullableName"
+        }
+      }
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "state",
+        "balance",
+        "models",
+        "modelCount",
+        "alias",
+        "keyNames",
+        "kind"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "valid",
+            "rejected",
+            "no-answer",
+            "missing",
+            "unknown"
+          ]
+        },
+        "models": {
+          "$ref": "#/$defs/names"
+        },
+        "modelCount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "alias": {
+          "$ref": "#/$defs/nullableName"
+        },
+        "keyNames": {
+          "$ref": "#/$defs/names"
+        },
+        "kind": {
+          "enum": [
+            "direct",
+            "aggregator"
+          ]
+        },
+        "balance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "currency",
+              "amount"
+            ],
+            "properties": {
+              "currency": {
+                "enum": [
+                  "USD",
+                  "CNY"
+                ]
+              },
+              "amount": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "client",
+        "model",
+        "models",
+        "declaredExpired",
+        "probe",
+        "refreshCommand"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "client": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "models": {
+          "$ref": "#/$defs/names"
+        },
+        "declaredExpired": {
+          "$ref": "#/$defs/names"
+        },
+        "probe": {
+          "$ref": "#/$defs/probe"
+        },
+        "refreshCommand": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "text",
+            "image",
+            "video",
+            "speech",
+            "vision",
+            "embedding",
+            "unknown"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,333 @@
+'use strict';
+const childProcess = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
+const repoPaths = require('../../.ai/bin/repo-paths.cjs');
+const { loadRegistry } = require('../../.ai/bin/protocol-dispatch/registry.cjs');
+const { effortArgs } = require('../../.ai/bin/protocol-dispatch/clients.cjs');
+const seatMcp = require('../../.ai/bin/lib/seat-mcp.cjs');
+const { identity: seatIdentity, spawnClient, FIX_FIRST } = require('./seat-failover.cjs'); // the one reader of the fallback client and model; the one spawn point of a client; the first route
+
+// <main checkout>/.ai/runtime of the repository these files live in (env OPS_RUNTIME_DIR overrides; repo-paths.cjs)
+const DEFAULT_RUNTIME = repoPaths.runtimeDir();
+const unknownUsageFields = e => ({ tokens: null, cost: { usd: null, basis: 'unknown', priceSnapshot: null, formula: null, reason: `usage derivation failed: ${String((e && e.message) || e).slice(0, 200)}` } });
+const recordFailedLine = e => `RECORD-WRITE-FAILED code=${String((e && e.code) || 'UNKNOWN').replace(/[^A-Za-z0-9_]/g, '').slice(0, 40) || 'UNKNOWN'}`;
+function value(argv, name, dflt) { const i = argv.indexOf(`--${name}`); return i >= 0 ? argv[i + 1] : dflt; }
+function options(argv) { return { worktree: value(argv, 'worktree'), name: value(argv, 'name'), promptFile: value(argv, 'prompt-file'), expect: value(argv, 'expect-sha'), branch: value(argv, 'branch', ''), dryRun: argv.includes('--dry-run'),
+  packetRole: value(argv, 'packet-role'), packetStage: value(argv, 'packet-stage'), packetFrame: value(argv, 'packet-frame'), packetProfile: value(argv, 'packet-profile'), packetRetrieval: value(argv, 'packet-retrieval'), allowExecutorPacket: argv.includes('--allow-executor-packet'),
+  packetContext: value(argv, 'packet-context'), packetStream: value(argv, 'packet-stream'),
+  // the one way past the launch gate of the packet: a row of the kernel bypass register (BP-nnn), never an environment value
+  packetBypass: value(argv, 'packet-bypass'),
+  taskFile: value(argv, 'task-file'), selectionBase: value(argv, 'selection-base'), expectTaskSha256: value(argv, 'expect-task-digest', ''),
+  effort: value(argv, 'effort'), tier: value(argv, 'tier', 'T7') }; }
+const MODEL = FIX_FIRST.model; // the first route is read from seat-failover FIX_FIRST, the pair the early route check decides
+// P-L3-005: the project supplies its own registry, as for cert-launch.
+// A missing or broken registry refuses; an absent or unavailable client entry also refuses.
+// No fallback or error-message discrimination: only registered clients can begin a task.
+// EFFORT-EXPLICIT: effort must be explicitly provided; no default is applied.
+function effortFor(o, registry) {
+  const reg = registry || loadRegistry();
+  const cfg = reg.clients && Object.hasOwn(reg.clients, 'claude') && reg.clients.claude;
+  if (!cfg || cfg.present !== true) {
+    return { ok: false, args: [], effortUsed: null, error: 'client claude is absent or not present in the registry (P-L3-005)' };
+  }
+  // EFFORT-EXPLICIT: pass effort as-is without default; effortArgs will refuse if missing for effort-capable routes
+  return effortArgs('claude', o.effort, reg);
+
+}
+
+function buildInvocation(o, env = process.env, packet) {
+  const effort = (o.effortArgs ? { args: o.effortArgs } : effortFor(o, o.registry)).args || [];
+  // the prompt the client reads: the copy whose first line points to the packet of this launch, when the prompt pointed to another one
+  const legacyArgText = `Read ${(o.pointedPromptFile || o.promptFile).replace(/\\/g, '/')} and execute it exactly (end with the DONE or BLOCKED marker named in the prompt).`;
+  // One line only: cmd.exe /c ends the command line at the first newline (see cert-launch.cjs buildInvocation).
+  // The client is spawned WITHOUT a text encoding (encoding 'buffer'): its streams stay BYTES to the strict decode of
+  // the ONE derivation path (deriveForLaunch); nothing here decodes a client stream.
+  const timeout = require('../../.ai/bin/lib/client-command-timeout.cjs');
+  let argText = timeout.append(o.instructionText ?? legacyArgText, timeout.lookup(o.client || 'claude', o.registry), packet?.pointerLine);
+  // PROTO-DEC-0251 requests structured usage on every run. The JSON result carries
+  // tokens and modelUsage; token pricing remains separate from the subscription.
+  const mcp = o.seatMcp || seatMcp.plan({ role: 'fixer', root: o.worktree, env });
+  if (mcp.list.some(s => s.name === 'semgrep')) argText += ` ${require('../../.ai/bin/lib/semgrep-mcp.cjs').RESTRICTION}`;
+  // the codebase-memory tools outside the read-only list are denied by name after the config file (seat-mcp.cjs claudeArgs)
+  const mcpArgs = mcp.mode === 'user' ? [] : ['--strict-mcp-config', ...(mcp.mode === 'kernel' && o.seatMcpConfigFile ? ['--mcp-config', o.seatMcpConfigFile.replace(/\\/g, '/'), ...seatMcp.claudeArgs(mcp.list)] : [])];
+  return { command: 'cmd.exe', args: ['/c', 'claude', '--model', MODEL, ...effort, '--dangerously-skip-permissions', ...mcpArgs, '-p', argText, '--output-format', 'json'], spawnOptions: { cwd: o.worktree, encoding: 'buffer', env: { ...env, PYTHONUTF8: '1', PYTHONIOENCODING: 'utf-8' }, maxBuffer: 536870912 }, argText };
+}
+
+function main(argv, deps = {}) {
+  const auto = argv.some((s, i) => s === '--assign=auto' || s === '--assign' && argv[i + 1] === 'auto');
+  if (auto && !(deps.env || process.env).LAUNCH_WRAPPER_NAME) { (deps.say || console.log)('ASSIGN-DEFERRED reason=wrapper-required; nothing was started'); return 4; }
+  return require('./seat-failover.cjs').run(argv, deps, launchOnce, 'fix');
+}
+
+function launchOnce(argv, deps = {}) {
+  const o = options(argv);
+  const assigned = value(argv, 'assign') === 'auto';
+  if (assigned && !(deps.env || process.env).LAUNCH_WRAPPER_NAME) { (deps.say || console.log)('ASSIGN-DEFERRED reason=wrapper-required; nothing was started'); return 4; }
+  // Recovery changes only the transport/model. The fixer retains its SHA/branch,
+  // packet, shadow and report contract on every attempt.
+  const stated = deps.seatFallback || assigned ? seatIdentity(argv) : null;
+  if (stated && stated.problem) throw new Error(stated.problem);
+  o.client = stated ? stated.client : FIX_FIRST.client;
+  o.model = stated ? stated.model : MODEL;
+  o.vibeModels = deps.vibeModels;
+  const io = deps.fs || fs;
+  const spawnSync = deps.spawnSync || childProcess.spawnSync;
+  const runtime = deps.runtimeDir || DEFAULT_RUNTIME;
+  const say = deps.say || (line => console.log(line));
+  if (!o.worktree || !o.name || !o.promptFile || !o.expect) { (deps.error || console.error)('usage: --worktree --name --prompt-file --expect-sha [--branch]'); return 2; }
+  // The report path pin and the receipt pin belong to the certifier launcher: a fix launch that is given one refuses instead of silently ignoring a pin it cannot honour.
+  if (argv.some(a => /^--expect-(?:report-path|receipt-digest)(?:=|$)/.test(a))) { (deps.error || console.error)('--expect-report-path and --expect-receipt-digest are certifier options; the fix launcher cannot honour them; nothing was started'); return 2; }
+  // P3 (INJECTION-DEFENSE R2): a pinned task digest must be one sha256 value; the digest itself is checked just before anything is created (cert-launch.cjs taskPinGate)
+  if (o.expectTaskSha256) {
+    o.taskPinHex = require('./cert-launch.cjs').shaHex(o.expectTaskSha256);
+    if (!o.taskPinHex) { (deps.error || console.error)('--expect-task-digest must be one sha256 value (64 hex characters); nothing was started'); return 2; }
+  }
+  // Launch isolation: the name becomes a directory name under the work root; a traversal is refused here (exit 2) exactly as
+  // cert-launch refuses it, before anything is created, and prepareLaunchDir refuses it again defensively.
+  if (!require('./launch-packet.cjs').SAFE_SEGMENT.test(o.name)) {
+    (deps.error || console.error)('name must be one safe path segment');
+    return 2;
+  }
+  const callFile = path.join(runtime, `${o.name}-call.txt`);
+  const done = `${o.name.toUpperCase()}_DONE`;
+  if (o.client === 'vibe' && !require('./served-model.cjs').vibeAlias(o.model, o.vibeModels).known) {
+    (deps.error || console.error)('unknown vibe model; nothing was started'); return 2;
+  }
+  // a kilo fallback route is built by cert-launch buildInvocation: its wakeup tool is off, and a caller config that cannot be merged refuses here
+  if (o.client === 'kilo') {
+    const kiloConfig = require('./cert-launch.cjs').kiloSeatConfig(deps.env || process.env);
+    if (!kiloConfig.ok) { (deps.error || console.error)(`KILO REFUSED reason=${kiloConfig.reason}; the wakeup tool cannot be turned off; nothing was started`); return 2; }
+  }
+  if (o.dryRun) { say(`DRY-RUN fix-launch name=${o.name}`); return 0; }
+  const git = args => require('./cert-launch.cjs').noHooksSpawn(spawnSync)('git', args, { cwd: o.worktree, encoding: 'utf8' }); // P12(a): hooks off for the launcher's git
+  const head = (git(['rev-parse', '--short', 'HEAD']).stdout || '').trim();
+  const branch = (git(['rev-parse', '--abbrev-ref', 'HEAD']).stdout || '').trim();
+  const shaOk = head === o.expect || (head.length >= 7 && o.expect.length >= 7 && (head.startsWith(o.expect) || o.expect.startsWith(head)));
+  if (!shaOk || (o.branch && branch !== o.branch)) {
+    io.writeFileSync(callFile, `exit=PREFLIGHT_FAIL head=${head} branch=${branch}\n`, 'utf8');
+    return 2;
+  }
+  if (Boolean(o.packetRole) !== Boolean(o.packetStage)) { (deps.error || console.error)('--packet-role and --packet-stage must be given together'); return 2; }
+  // P3: the task file is hashed and a pinned digest that no longer holds refuses the start, before anything is created (the same gate as cert-launch.cjs).
+  const certLaunch = require('./cert-launch.cjs');
+  const taskPin = certLaunch.taskPinGate(o, io);
+  if (!taskPin.ok) return certLaunch.pinRefusal('TASK_PIN_REFUSED', taskPin.reason, o, io, say, callFile);
+  o.taskSha256 = taskPin.hex;
+  // Advisory L1 lines for the package data files before the client starts (cert-launch.cjs observeInjection); the launch never changes.
+  require('./cert-launch.cjs').observeInjection(o, deps, io, say, runtime);
+  // Launch isolation (docs/ops/lib/work-root.cjs): the work root of this launcher's repository is enforced for every launched child; TEMP, TMP, TMPDIR
+  // and the toolchain caches point inside a per-launch directory created FRESH for this launch (an inherited TEMP that carries the marker of an
+  // earlier run is not accepted again) with every cache directory created fresh and exclusively inside it, marker-kept for retention. A refusal
+  // starts nothing and names the reason and the recovery line.
+  const workTool = deps.workRoot || require('./lib/work-root.cjs');
+  const work = workTool.kernelWorkEnv({ repo: path.resolve(__dirname, '..', '..'), name: o.name, env: deps.env || process.env, io, client: o.client });
+  if (work.refusal) {
+    if (work.tempDir) io.appendFileSync(callFile, `TEMP-DIR ${JSON.stringify(work.tempDir)}\n`, 'utf8');
+    io.appendFileSync(callFile, `exit=WORKROOT_REFUSED reason=${work.refusal.reason} root=${work.refusal.root}\nrecovery: ${work.refusal.recovery}\n`, 'utf8');
+    say(`WORKROOT REFUSED reason=${work.refusal.reason} root=${work.refusal.root}; ${work.refusal.recovery}; nothing was started`);
+    return 3;
+  }
+  for (const note of work.notes || []) say(`SEAT-CACHE ${note}`);
+  // The creator settles its own kernel directory on every return and exception.
+  let tempDir = null;
+  const settleLaunch = code => {
+    if (tempDir) return tempDir;
+    tempDir = require('./lib/work-root.cjs').finishLaunchTmp({ dir: work.dir, root: work.root.dir, name: o.name, lease: work.lease }, code !== 0, 'KERNEL_EXIT');
+    // This precedes the terminal marker; its path is the exact directory created above.
+    io.appendFileSync(callFile, `TEMP-DIR ${JSON.stringify(tempDir)}\n`, 'utf8');
+    return tempDir;
+  };
+  try {
+  const env = deps.env || process.env;
+  // The architecture context (launch-packet.cjs contextPacket): while it is switched on at the candidate commit the fixer packet carries the context
+  // of the task, resolved for the stated stream or the branch of the worktree; while it is off and the gate on, the fixer packet comes without a
+  // context; while both are off nothing is resolved or written.
+  let contextual = null; let contextStop = null;
+  const PG = deps.packetGate || require('../../.ai/bin/lib/packet-gate.cjs');
+  try { contextual = (deps.contextPacket || require('./launch-packet.cjs').contextPacket)({ worktree: o.worktree, head, launchRole: 'fixer', packetRole: o.packetRole, packetStage: o.packetStage, allowExecutor: o.allowExecutorPacket, contextFile: o.packetContext, stream: o.packetStream, branch, base: o.selectionBase, taskFile: o.taskFile || o.promptFile, client: o.client, run: certLaunch.noHooksSpawn(spawnSync) }, { fs: io }); }
+  catch (error) { if (!error || error.code !== 'CONTEXT_REFUSED') throw error; if (error.gate && error.gateOn) contextStop = { code: error.gate, reason: error.message }; else { say(`PACKET REFUSED reason=${error.message}; nothing was started`); return 3; } }
+  // The launch gate of the packet (cert-launch.cjs gateStop): a fix round is an author launch; the gate exists only while its key is on.
+  const g = (contextual && contextual.gate === 'on') || contextStop ? { kind: PG.gateOf('fixer'), o, io, say, callFile, deps, env, run: certLaunch.noHooksSpawn(spawnSync), base: o.selectionBase, head: contextual ? contextual.commit : head,
+    launchRole: 'author', role: contextual ? contextual.role : 'fixer', stage: contextual ? contextual.stage : 'execute' } : null;
+  if (contextStop) { const stop = certLaunch.gateStop(contextStop, g); if (stop !== null) return stop; }
+  if (contextual && g) { const ahead = PG.decisionsAhead({ worktree: o.worktree, commit: contextual.commit, run: g.run, io }); if (!ahead.ok) { const stop = certLaunch.gateStop(PG.decisionsRefusal(ahead), g); if (stop !== null) return stop; } }
+  if (contextual) { o.packetRole = contextual.role; o.packetStage = contextual.stage; }
+  const dispatchPacket = env.PROTOCOL_PACKET_ENGINE === 'dispatch';
+  if (dispatchPacket && !o.packetRole) { o.packetRole = 'fixer'; o.packetStage = 'execute'; }
+  let packet = null; let compileStop = null;
+  if (o.packetRole) {
+    const packetTool = deps.launchPacket || require('./launch-packet.cjs');
+    const gate = contextual ? { active: true } : dispatchPacket ? require('./launch-packet.cjs').deliveryPolicy(env, o.packetRole, o.allowExecutorPacket)
+      : packetTool.policy(env.OPERATOR_PACKET, o.packetRole, o.allowExecutorPacket);
+    if (gate.refused) { say(`PACKET REFUSED reason=${gate.refused}; nothing was started`); return 3; }
+    if (gate.active) {
+      // P8: the packet is written through the guarded io (a credential-shaped body is refused before the write; cert-launch.cjs packetGuard)
+      // behind the launch gate a compile that gives no packet is a finding of the gate (compileStop), decided after this block
+      try { try { packet = packetTool.preparePacket({ worktree: o.worktree, role: o.packetRole, stage: o.packetStage, frame: o.packetFrame, profile: o.packetProfile, client: o.client, ...(o.packetRetrieval === undefined ? {} : { retrieval: o.packetRetrieval }), ...(contextual && contextual.context ? { context: contextual.context } : {}) }, { fs: certLaunch.packetGuard(io, o, deps, say, runtime) }); } catch (error) { if (!g || certLaunch.isPacketSecretRefusal(error)) throw error; compileStop = PG.compileRefusal(error); }
+        // the pointer of the prompt follows the packet this launch compiled (launch-packet.cjs followPointer)
+        if (packet) { const pointed = (packetTool.followPointer || require('./launch-packet.cjs').followPointer)({ worktree: o.worktree, promptFile: o.promptFile, name: o.name, packet }, certLaunch.packetGuard(io, o, deps, say, runtime)); if (pointed) o.pointedPromptFile = pointed; } }
+      catch (error) { if (certLaunch.isPacketSecretRefusal(error)) return certLaunch.packetSecretRefusal(error, o, io, say, callFile); say(dispatchPacket ? 'PACKET REFUSED reason=packet-compile-failed; nothing was started' : `PACKET REFUSED reason=${error.message}; nothing was started`); return 3; }
+    }
+  }
+  if (compileStop) { const stop = certLaunch.gateStop(compileStop, g); if (stop !== null) return stop; }
+  if (g && packet && contextual && contextual.context) { const missing = PG.contextProblem(packet); if (missing) { const stop = certLaunch.gateStop(missing, g); if (stop !== null) return stop; } }
+  if (g && !packet && !g.found) { const stop = certLaunch.gateStop({ code: PG.CODES.required, reason: 'no-packet' }, g); if (stop !== null) return stop; }
+  let eff;
+  try { o.registry = deps.registry; eff = o.client === 'claude' ? effortFor(o, o.registry) : require('./cert-launch.cjs').effortFor(o, o.registry); } catch (error) { say(`EFFORT REFUSED reason=registry unavailable (${error.message}); nothing was started`); return 2; }
+  if (!eff.ok) { say(`EFFORT REFUSED reason=${eff.error} (P-L3-005 R-L3-005.7); nothing was started`); return 2; }
+  o.effortArgs = eff.args;
+  // PROTO-DEC-0215 item 1: as in cert-launch, a vibe launch (a seat-fallback route here) gets a NEW EMPTY directory per launch
+  // and --output-dir; the served model is read only from its export.json after the exit.
+  if (o.client === 'vibe') {
+    try { o.exportDir = io.mkdtempSync(path.join(runtime, 'launch-export-')); }
+    catch (error) { say(`EXPORT-DIR-FAILED code=${String((error && error.code) || 'UNKNOWN').replace(/[^A-Za-z0-9_]/g, '').slice(0, 40) || 'UNKNOWN'}; nothing was started`); return 2; }
+  }
+  const heartbeat = deps.heartbeat || repoPaths.heartbeatFor(runtime, say);
+  const hb = heartbeat.start(o.name);
+  const startedAt = (deps.now || (() => new Date()))().toISOString();
+  // A fixer seat gets the kernel servers (.ai/bin/lib/seat-mcp.cjs); the same plan reaches a fallback route built by cert-launch
+  const mcpSeat = { client: o.client, launchRole: 'fixer', worktree: o.worktree };
+  o.seatMcp = require('./cert-launch.cjs').seatMcpPlan(mcpSeat, work, io);
+  o.seatMcpConfigFile = mcpSeat.seatMcpConfigFile;
+  require('./cert-launch.cjs').writeSeatMcpLine(io, runtime, o.name, o.seatMcp.line);
+  const fixerInvocation = buildInvocation(o, work.env, packet);
+  if (o.client === 'claude' && (deps.seatFallback || assigned)) fixerInvocation.args[fixerInvocation.args.indexOf('--model') + 1] = o.model;
+  const invocation = o.client === 'claude' ? fixerInvocation : require('./cert-launch.cjs').buildInvocation({ ...o, instructionText: fixerInvocation.argText }, work.env, packet);
+  // The same read-only intake as author/certifier seats, before the client starts.
+  let intake = null;
+  try {
+    let launchId = null; try { launchId = require('../../.ai/bin/launch-record.cjs').buildLaunchRecord({ name: o.name, startedAt }).launchId; } catch { /* no id */ }
+    intake = require('../../tools/assign/launch-intake.cjs').capture({ launcher: 'fix-launch', name: o.name, launchId,
+      worktree: o.worktree, taskFile: o.taskFile || o.promptFile, base: o.selectionBase, role: packet ? packet.role : 'fixer', stageKind: 'kernel',
+      deviationReason: value(argv, 'deviation-reason'), confirmModel: value(argv, 'confirm-model'),
+      say, ownerExplicit: argv.includes('--client') || argv.includes('--model'),
+      operator: { client: o.client, model: o.model, effort: eff.effortUsed } },
+    { ...(deps.intake || {}), resolverShadow: deps.resolverShadow, runtimeDir: runtime, shadowDeps: { now: () => new Date(startedAt) } });
+  } catch { /* the shadow never blocks a launch */ }
+  if (intake?.selectionShadow.advice?.mode === 'assign' && intake.selectionShadow.advice.status === 'needs-operator-choice') {
+    heartbeat.stop(hb);
+    const reason = intake.selectionShadow.advice.reason;
+    settleLaunch(3);
+    try {
+      (deps.launchRecord || require('../../.ai/bin/launch-record.cjs')).writeLaunchRecord({
+        name: o.name, client: o.client, model: o.model, effort: eff.effortUsed, startedAt, ...require('../../.ai/bin/launch-record.cjs').wrapperFields(env, o.name),
+        ...require('../../.ai/bin/launch-record.cjs').recordPaths(o.worktree, o.promptFile),
+        role: intake.taskFrame.role, taskFrame: intake.taskFrame, selectionShadow: intake.selectionShadow,
+        exitCode: 3, failureClass: 'UNKNOWN', verdict: 'NONE', note: `launch-not-started needs-operator-choice reason=${reason}` });
+    } catch (e) { const line = recordFailedLine(e); io.appendFileSync(callFile, `${line}\n`, 'utf8'); (deps.error || console.error)(line); }
+    io.appendFileSync(callFile, `exit=SELECTION_REFUSED reason=${reason}\n`, 'utf8');
+    say(`SELECTION REFUSED needs-operator-choice reason=${reason}; nothing was started`); return 3;
+  }
+  // The client starts only through the one spawn point (seat-failover spawnClient): the route of o.client and o.model (claude and MODEL on the
+  // first launch, the fallback route of a switch) is recorded immediately before the spawn; a refused route starts nothing. The first route was
+  // already decided by seat-failover run before anything of the launch existed and is handed here; later spawns are decided here.
+  // The launch gate at the start (as in cert-launch.cjs): the packet is still the one of the kernel and of the head the worktree stands on now.
+  if (g && packet) {
+    const stale = PG.staleProblem({ worktree: o.worktree, packetPath: packet.packetPath, head: (git(['rev-parse', 'HEAD']).stdout || '').trim(), compiler: (deps.launchPacket || require('./launch-packet.cjs')).loadCompiler(o.worktree), io });
+    if (stale) { const stop = certLaunch.gateStop(stale, g); if (stop !== null) { heartbeat.stop(hb); return stop; } }
+  }
+  const result = spawnClient({ client: o.client, model: o.model, deps, env, say, io, callFile }, invocation, spawnSync);
+  heartbeat.stop(hb);
+  if (result.routeRefusal) {
+    const refusedMarker = done.replace(/_DONE$/, '_ROUTE_REFUSED');
+    io.appendFileSync(callFile, `marker=${refusedMarker}\n${refusedMarker} exit=3 reason=${result.routeRefusal.code} end=${(deps.now || (() => new Date()))().toISOString()}\n`, 'utf8');
+    say(`${refusedMarker} exit=3 reason=${result.routeRefusal.code}; the client was not started`);
+    return 3;
+  }
+  // After the exit the export file must be there; a vibe route that wrote no export.json proves no served model
+  // (PROTO-DEC-0215 item 1 reads only that file), so the launch is REFUSED with its named reason: an unproven vibe seat never stands.
+  let exportMissing = false;
+  if (o.client === 'vibe') {
+    try { exportMissing = !io.statSync(path.join(o.exportDir, 'export.json')).isFile(); }
+    catch { exportMissing = true; }
+  }
+  const exportMissingText = exportMissing ? 'VIBE-EXPORT-REFUSED reason=export-missing; the launch is not a verdict' : '';
+  const endedAt = (deps.now || (() => new Date()))().toISOString();
+  // PROTO-DEC-0169 item 4: served model from a source outside the report; advisory, never changes exit or marker.
+  // The ONE derivation path deriveForLaunch(context) reads the launch that really ran - the argv and the spawn
+  // environment this launcher started the client with (a seat-fallback route builds it through cert-launch buildInvocation, so a vibe route carries
+  // its alias environment and its --output-dir), the export directory, the streams apart - and returns requestedModelVia and the served-model proof
+  // TOGETHER. The claude -p text route prints no model line, so this records source=none until the client offers one. No call of requestedModelVia
+  // or deriveServedModel remains here.
+  let served = null; let servedFields = {}; let servedText = ''; let mismatch = null; let servedNote = '';
+  try {
+    const sm = deps.servedModel || require('./served-model.cjs');
+    // The stream fields are the BYTES spawnSync returned (encoding 'buffer'); the ONE derivation path is the only decode,
+    // and the decoded text below (the usage, the call file body) is what it returned AFTER the check. The record fields,
+    // the SERVED line and the note travel inside the one return (record, line, note).
+    served = sm.deriveForLaunch({ client: o.client, model: o.model, args: invocation.args, env: invocation.spawnOptions && invocation.spawnOptions.env, stdout: result.stdout, stderr: result.stderr, startedAt, endedAt, logDir: env.MIMOCODE_LOG_DIR, workdir: o.worktree, exportDir: o.exportDir, vibeModels: o.vibeModels });
+    servedFields = served.record || {}; servedText = served.line || '';
+    servedNote = served.note || '';
+    if (served.match === false && served.servedModel && served.confidence !== 'none') mismatch = served;
+  } catch { served = null; servedFields = {}; servedText = ''; mismatch = null; servedNote = ''; }
+  // PROBE-SERVED-MODEL: the named class of the mismatch (as in cert-launch.cjs)
+  const mismatchClass = mismatch ? (mismatch.mismatchClass || 'SERVED_MODEL_MISMATCH') : null;
+  const mismatchText = mismatch ? `SERVED_MODEL_MISMATCH requested=${o.model} served=${mismatch.servedModel} source=${mismatch.source} class=${mismatchClass}; the launch is not a verdict` : '';
+  // Tokens and cost (cost-record): claude is a flat-fee client (cost basis subscription); tokens only when the json format was asked for. Never changes the exit.
+  // The decoded text of the streams, produced after the check - never a decode of the launcher's own.
+  const decodedStreams = served && served.decoded ? served.decoded : {};
+  const captured = `${typeof decodedStreams.stdout === 'string' ? decodedStreams.stdout : ''}${typeof decodedStreams.stderr === 'string' ? decodedStreams.stderr : ''}`;
+  let usage = { fields: {}, info: {} }; let usageText = '';
+  try {
+    const writer = deps.usageTool || require('../../.ai/bin/launch-record.cjs');
+    usage = writer.usageRecordFields({ client: o.client, model: o.model, output: decodedStreams.stdout || '', startedAt, endedAt, env, workdir: o.worktree }, deps.usage || {});
+    usageText = (writer.usageLine && writer.usageLine(usage.fields)) || '';
+  } catch (e) { usage = { fields: unknownUsageFields(e), info: {} }; usageText = ''; }
+  const body = usage.info && typeof usage.info.resultText === 'string' ? usage.info.resultText : captured;
+  // The end of the fix round behind the launch gate (as in cert-launch.cjs): a final text whose last closing line is not the seat marker with
+  // _DONE or _BLOCKED and its reason is no verdict (marker NAME_NO_VERDICT, record failureClass NO_VERDICT, exit 3).
+  const authorEnded = g ? PG.authorEnd(usage.info && typeof usage.info.resultText === 'string' ? usage.info.resultText : (decodedStreams.stdout || ''), o.name) : undefined;
+  const authorMissing = authorEnded === null;
+  const authorText = authorMissing ? `AUTHOR-END verdict=none; the final text does not end with ${done} or the _BLOCKED marker, the launch is not a verdict` : '';
+  const marker = mismatch ? done.replace(/_DONE$/, '_SERVED_MODEL_MISMATCH') : exportMissing ? done.replace(/_DONE$/, '_EXPORT_MISSING') : authorMissing ? done.replace(/_DONE$/, '_NO_VERDICT') : done;
+  // AUTO-APPROVE: a failed run whose output ends on a permission prompt is APPROVAL_STALL (docs/ops/approval-stall.cjs); only a pattern id is printed
+  let stall = null;
+  try { stall = require('./approval-stall.cjs').approvalStall({ client: o.client, texts: [decodedStreams.stdout, decodedStreams.stderr], failed: result.status !== 0, registry: deps.approvalRegistry }); } catch { stall = null; }
+  const stallText = stall ? require('./approval-stall.cjs').stallLine(o.client, stall) : '';
+  // A failed round on a quota error of the client (the closed formats of quota-reset.cjs, read only from the client's own error records, as in
+  // cert-launch.cjs) is QUOTA with the reset time the record names.
+  let quota = null;
+  try {
+    if (result.status !== 0) quota = require('../../.ai/bin/accounting/lib/quota-reset.cjs').seatQuota({ client: o.client, stdout: decodedStreams.stdout, stderr: decodedStreams.stderr,
+      exitCode: result.status, at: endedAt, sessionId: usage.fields.calleeSession, sessionsDir: deps.usage && deps.usage.usageOptions ? deps.usage.usageOptions.sessionsDir : undefined, env });
+  } catch { quota = null; }
+  const quotaText = quota ? `QUOTA_REACHED client=${o.client} format=${quota.format} reset=${quota.resetAt || 'none'}` : '';
+  settleLaunch(mismatch || exportMissing || authorMissing ? 3 : (result.status === null ? 1 : result.status));
+  let recordFailed = '';
+  try {
+    const writer = deps.launchRecord || require('../../.ai/bin/launch-record.cjs');
+    const paths = require('../../.ai/bin/launch-record.cjs').recordPaths(o.worktree, o.promptFile);
+    // The argv this launcher really started the client with; a fix round is an author launch. requestedModelVia
+    // comes from the one derivation path (a fact of the real argv and spawn environment), never from a second partial computation here.
+    const provenance = { requestedModelVia: served ? served.requestedModelVia : undefined, launchRole: 'author' };
+    // The closed failureClass vocabulary has no export class (the protocol accounting file is out of this
+    // task's scope), so the refusal records UNKNOWN there; the note, the VIBE-EXPORT-REFUSED line and the EXPORT_MISSING
+    // marker carry the named reason.
+    writer.writeLaunchRecord({ client: o.client, model: o.model, effort: eff.effortUsed, role: packet ? packet.role : 'fixer', stage: packet ? packet.stage : 'execute', route: `cli:${o.client}`, name: o.name, ...paths, ...provenance, ...require('../../.ai/bin/launch-record.cjs').wrapperFields(env, o.name), head, workRootDir: work.dir, exitCode: mismatch || exportMissing || authorMissing ? 3 : result.status, startedAt, failureClass: mismatch ? mismatchClass : exportMissing ? 'UNKNOWN' : stall ? 'APPROVAL_STALL' : quota ? 'QUOTA' : authorMissing ? 'NO_VERDICT' : undefined, ...(quota && !mismatch && !exportMissing && !stall ? { quotaReset: quota } : {}),
+      // the bypass row first, so that the count of its uses survives a note cut to its length
+      note: [o.packetBypassUse || '', packet && packet.context ? `packet-context level=${packet.context.level} commit=${packet.context.commit}` : g && contextual && !contextual.context ? 'packet-context=off' : '', packet && packet.context && packet.context.trimmed > 0 ? `packet-trimmed=${packet.context.trimmed}` : '', authorEnded !== undefined ? `author-end=${authorEnded || 'NO_VERDICT'}` : '', mismatch ? `served-model-mismatch served=${mismatch.servedModel}` : '', exportMissing ? 'vibe-export-missing reason=export.json of the launch output directory is absent after the run' : '', stall ? `approval-stall pattern=${stall.id}` : '', servedNote, !usage.fields.tokens ? 'usage-unknown reason=no-complete-usage-evidence confidence=unknown' : ''].filter(Boolean).join(' ') || undefined,
+      ...(intake ? { taskClass: intake.taskFrame.tier, tier: intake.taskFrame.tier, riskClass: intake.taskFrame.riskClass, taskFrame: intake.taskFrame, selectionShadow: intake.selectionShadow } : { riskClass: 'A' }),
+      // the stream the architecture context of the round was made for, so the rounds of one stream can be counted
+      ...(packet && packet.context && contextual && contextual.stream ? { stream: contextual.stream } : {}),
+      ...(packet ? { packetHash: packet.packetHash, packetProfile: packet.profile, packetBytes: packet.bytes, packetEstTokens: packet.estTokens } : {}), ...(o.taskSha256 ? { taskSha256: `sha256:${o.taskSha256}` } : {}), ...servedFields, ...usage.fields });
+  } catch (e) { recordFailed = recordFailedLine(e); }
+  if (recordFailed) (deps.error || console.error)(recordFailed);
+  io.appendFileSync(callFile, `marker=${marker}\n${body}\n${stallText ? `${stallText}\n` : ''}${quotaText ? `${quotaText}\n` : ''}${authorText ? `${authorText}\n` : ''}${usageText ? `${usageText}\n` : ''}${mismatchText ? `${mismatchText}\n` : ''}${exportMissingText ? `${exportMissingText}\n` : ''}${servedText ? `${servedText}\n` : ''}${recordFailed ? `${recordFailed}\n` : ''}${marker} exit=${result.status} end=${endedAt}\n`, 'utf8');
+  (deps.usageWrite || (line => process.stdout.write(`\n${line}\n`)))(require('../../.ai/bin/accounting/lib/run-usage.cjs').frame(usage.fields));
+  if (stallText) say(stallText);
+  if (quotaText) say(quotaText);
+  if (usageText) say(usageText);
+  if (mismatchText) say(mismatchText);
+  if (exportMissingText) say(exportMissingText);
+  if (servedText) say(servedText);
+  if (authorText) say(authorText);
+  say(`${marker} exit=${result.status}`);
+  return mismatch || exportMissing || authorMissing ? 3 : (result.status === null ? 1 : result.status);
+  } finally {
+    settleLaunch(1);
+  }
+}
+
+module.exports = { DEFAULT_RUNTIME, value, options, effortFor, buildInvocation, main, launchOnce };
+if (require.main === module) process.exitCode = main(process.argv.slice(2));

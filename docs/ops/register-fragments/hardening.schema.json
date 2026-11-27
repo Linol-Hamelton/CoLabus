@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "register-hardening/1",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["sourceReport", "sourceHash", "findingId", "reader", "originalClass", "eligibilityClass", "reproFile", "caseId", "expected", "fixOwner", "deferredIn"],
+    "properties": {
+      "sourceReport": {"type": "string"},
+      "sourceHash": {"type": "string"},
+      "findingId": {"type": "string"},
+      "reader": {"type": "string"},
+      "originalClass": {"type": "string"},
+      "eligibilityClass": {"type": "string"},
+      "reproFile": {"type": "string"},
+      "caseId": {"type": "string"},
+      "expected": {"type": "string"},
+      "fixOwner": {"type": "string"},
+      "deferredIn": {"type": "string"},
+      "promotedBy": {
+        "type": "object", "additionalProperties": false,
+        "required": ["sourceReport", "sourceHash", "findingId", "reader"],
+        "properties": {"sourceReport": {"type": "string"}, "sourceHash": {"type": "string"}, "findingId": {"type": "string"}, "reader": {"type": "string"}}
+      },
+      "knownLimit": {
+        "type": "object", "additionalProperties": false, "required": ["id", "effect"],
+        "properties": {"id": {"type": "string"}, "effect": {"type": "string"}, "recipe": {"type": "string"}, "fixedIn": {"type": "string"}}
+      }
+    }
+  }
+}

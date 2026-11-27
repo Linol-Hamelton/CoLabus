@@ -1,0 +1,6 @@
+{
+  "schema": "write-boundary-allow/1",
+  "drive": "X:",
+  "note": "Set drive to the host work drive and add only top-level entries approved by the host owner, each with a reason. The example drive has no allowed entries.",
+  "allow": []
+}

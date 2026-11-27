@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "rule", "sources", "routes"],
+  "properties": {
+    "schema": { "type": "string", "enum": ["route-catalog/1"] },
+    "rule": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "sources": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["list", "sha256", "routes"],
+        "properties": {
+          "list": { "type": "string", "enum": ["kilo", "cline"] },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "routes": { "type": "integer", "minimum": 1, "maximum": 5000 }
+        }
+      }
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "list", "line", "client", "provider", "model", "effort", "effortPass", "group", "routeKind", "billing", "family"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^rl-[0-9a-f]{40}$" },
+          "list": { "type": "string", "enum": ["kilo", "cline"] },
+          "line": { "type": "integer", "minimum": 1 },
+          "client": { "type": "string", "enum": ["kilo", "cline"] },
+          "provider": { "type": "string", "enum": ["kilo", "cline", "deepseek", "nvidia", "openai-compatible"] },
+          "model": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9.:/_-]{0,159}$" },
+          "effort": { "type": "string", "enum": ["minimal", "low", "medium", "high", "xhigh", "max", "thinking", "tiered"] },
+          "effortPass": { "type": "string", "enum": ["--variant", "--thinking", "model-suffix"] },
+          "group": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+          "routeKind": { "type": "string", "enum": ["free", "direct-api", "subscription-proxy"] },
+          "billing": { "type": "string", "enum": ["free", "api-key", "subscription"] },
+          "family": { "type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" }
+        }
+      }
+    }
+  }
+}
